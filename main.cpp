@@ -3,9 +3,9 @@
 
 int main()
 {
-    Jogo meuJogo;
+    Jogo jogo_la_em_simao;
 
-    meuJogo.executar();
+    jogo_la_em_simao.executar();
     
     return 0;
 }
