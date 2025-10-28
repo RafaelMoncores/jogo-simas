@@ -5,14 +5,14 @@
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${workspaceFolder}/jogo_simas",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "Build SFML" // IMPORTANTE: Executa a task "Build SFML" antes de rodar
+            "preLaunchTask": "Build SFML" 
         }
     ]
 }

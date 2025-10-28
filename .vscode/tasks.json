@@ -7,16 +7,13 @@
             "command": "clang++",
             "args": [
                 "-std=c++17",
-                "-g", // Para incluir símbolos de depuração
-                "${file}", // O arquivo que está aberto (main.cpp)
-                "-o", // Para definir o nome do arquivo de saída
-                "${fileDirname}/${fileBasenameNoExtension}", // Saída (ex: MeuJogoSFML/main)
+                "-g", 
+                "${workspaceFolder}/*.cpp", 
+                "-o", 
+                "${workspaceFolder}/jogo_simas", 
                 
-                // --- Configuração do SFML ---
-                "-I/opt/homebrew/opt/sfml/include", // Onde estão os cabeçalhos
-                "-L/opt/homebrew/opt/sfml/lib",    // Onde estão as bibliotecas compiladas
-                
-                // --- Bibliotecas do SFML que queremos "linkar" ---
+                "-I/opt/homebrew/opt/sfml/include", 
+                "-L/opt/homebrew/opt/sfml/lib",    
                 "-lsfml-graphics",
                 "-lsfml-window",
                 "-lsfml-system"
