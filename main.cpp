@@ -1,28 +1,36 @@
 #include <SFML/Graphics.hpp>
-#include <optional> // Necessário para o novo pollEvent
+#include <optional> 
+#include <iostream> // Para std::cerr (nosso log de erro)
+#include <stdlib.h> // Para exit() (nosso sistema de "crashar" se der erro)
 
 int main()
 {
-    // Mudança 1: VideoMode agora espera um sf::Vector2u
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "Meu Jogo SFML!");
+    sf::RenderWindow window(sf::VideoMode({1200, 1400}), "Meu Jogo SFML!");
 
-    // Loop principal do jogo
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile("player.png"))
+    {
+        std::cerr << "ERRO FATAL: Nao foi possivel carregar 'player.png'" << std::endl;
+        std::cerr << "Certifique-se que o arquivo esta na mesma pasta do 'main.cpp'." << std::endl;
+        exit(1);
+    }
+
+    sf::Sprite playerSprite(playerTexture);
+
+    playerSprite.setPosition(sf::Vector2f(400.f, 300.f)); 
+
     while (window.isOpen())
     {
-        // Mudança 2: pollEvent() não recebe mais um argumento.
-        // Ele retorna um std::optional<sf::Event>
         while (auto event = window.pollEvent())
         {
-            // Mudança 3: Precisamos checar se o evento existe e usar ->
-            // Mudança 4: O 'type' foi substituído por 'is<T>()'
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
 
-        // Limpa a tela com a cor verde
         window.clear(sf::Color::Green);
 
-        // Exibe o que foi desenhado
+        window.draw(playerSprite);
+
         window.display();
     }
 
