@@ -1,38 +1,12 @@
-#include <SFML/Graphics.hpp>
-#include <optional> 
-#include <iostream> // Para std::cerr (nosso log de erro)
-#include <stdlib.h> // Para exit() (nosso sistema de "crashar" se der erro)
+#include "Jogo.hpp" // A única inclusão necessária
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({1200, 1400}), "Meu Jogo SFML!");
+    // Cria o objeto principal do jogo
+    Jogo meuJogo;
+    
+    // Inicia o loop principal
+    meuJogo.executar();
 
-    sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("player.png"))
-    {
-        std::cerr << "ERRO FATAL: Nao foi possivel carregar 'player.png'" << std::endl;
-        std::cerr << "Certifique-se que o arquivo esta na mesma pasta do 'main.cpp'." << std::endl;
-        exit(1);
-    }
-
-    sf::Sprite playerSprite(playerTexture);
-
-    playerSprite.setPosition(sf::Vector2f(400.f, 300.f)); 
-
-    while (window.isOpen())
-    {
-        while (auto event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
-
-        window.clear(sf::Color::Green);
-
-        window.draw(playerSprite);
-
-        window.display();
-    }
-
-    return 0;
+    return 0; // O jogo só chega aqui quando a janela é fechada
 }

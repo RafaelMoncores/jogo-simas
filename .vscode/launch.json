@@ -2,17 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(lldb) Launch",
+            "name": "(lldb) Launch Jogo (main)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            
+            "program": "${workspaceFolder}/main",
+            
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
+            
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "Build SFML" // IMPORTANTE: Executa a task "Build SFML" antes de rodar
+            "preLaunchTask": "Build Jogo (*.cpp)" 
         }
     ]
 }
