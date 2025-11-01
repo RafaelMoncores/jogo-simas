@@ -2,8 +2,8 @@
 
 int main()
 {
-    Jogo meuJogo;
-    meuJogo.executar();
+    Jogo jogo_la_em_simao;
+    jogo_la_em_simao.executar();
 
     return 0;
 }
