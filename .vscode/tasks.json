@@ -1,33 +1,29 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "build with SFML",
-      "type": "shell",
-      "command": "g++",
-      "args": [
-        "-g",
-        "code\\*.cpp",
-        "-I", "D:/Usuario/Documents/SFML/SFML-3.0.2/include",
-        "-L", "D:/Usuario/Documents/SFML/SFML-3.0.2/lib",
-        "-lsfml-graphics",
-        "-lsfml-window",
-        "-lsfml-system",
-        "-o", "${workspaceFolder}/output/projeto_simas.exe"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": ["$gcc"],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      }
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Jogo (*.cpp)",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-std=c++17",
+                "-g",
+                "${workspaceFolder}/code/*.cpp",
+                "-o",
+                "${workspaceFolder}/main",
+                "-I/opt/homebrew/opt/sfml/include",
+                "-L/opt/homebrew/opt/sfml/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
 }
