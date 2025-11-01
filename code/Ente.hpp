@@ -12,6 +12,6 @@ public:
 
     static void setGerenciadorGrafico(GerenciadorGrafico* p);
 
-    virtual void executar() = 0;
+    virtual void executar(float delta) = 0;
     virtual void desenhar() = 0;
 };

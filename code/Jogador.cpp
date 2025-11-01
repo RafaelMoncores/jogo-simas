@@ -2,12 +2,19 @@
 #include <iostream>
 #include <stdlib.h>
 #include <SFML/Window/Keyboard.hpp>
+#include <algorithm> // <-- ADICIONADO para std::clamp
+#include <cmath>     // <-- ADICIONADO para std::abs
 
 Jogador::Jogador() :
     Entidade(),
-    VELOCIDADE_LATERAL(0.5f),
-    FORCA_PULO(1.2f),
+    // --- MUDANÇA: Novas Constantes ---
+    VELOCIDADE_MAXIMA_LATERAL(350.0f),
+    ACELERACAO_LATERAL(900.0f),       // Acelera rápido
+    FRICCAO_LATERAL(1200.0f),         // Para rápido
+    FORCA_PULO(420.0f),
+    MULTIPLICADOR_PULO_CURTO(3.0f),
     podePular(false)
+    // REMOVIDO: travadoNoAr(false)
 {
     if (!textura.loadFromFile("player.png"))
     {
@@ -23,35 +30,74 @@ Jogador::~Jogador()
 {
 }
 
-void Jogador::processarInputs()
+void Jogador::processarInputs(float delta) // <-- RECEBE DELTA
 {
+    // --- 1. Movimento Horizontal (ACELERAÇÃO) ---
+    // Em vez de SETAR a velocidade, nós ACELERAMOS
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
-        velocidade.x -= VELOCIDADE_LATERAL;
+        velocidade.x -= ACELERACAO_LATERAL * delta;
     }
+    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
     {
-        velocidade.x += VELOCIDADE_LATERAL;
+        velocidade.x += ACELERACAO_LATERAL * delta;
     }
 
+    // --- 2. Lógica do Pulo (SEM MUDANÇA) ---
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && podePular)
     {
         velocidade.y = -FORCA_PULO; 
         podePular = false;
+        // REMOVIDO: Lógica do 'travadoNoAr'
     }
 }
 
-void Jogador::aplicarGravidade()
+void Jogador::aplicarFisica(float delta) // <-- RENOMEADO
 {
     if (sprite) 
     {
-        velocidade.y += G_ACCEL.y;
-        sprite->move(velocidade);
+        // --- 1. Pulo Variável (Gravidade) ---
+        // (Lógica anterior, sem mudança)
+        if (velocidade.y < 0.0f && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        {
+            velocidade.y += G_ACCEL.y * MULTIPLICADOR_PULO_CURTO * delta;
+        }
+        else
+        {
+            velocidade.y += G_ACCEL.y * delta;
+        }
 
-        // --- HACK: Simulação de Chão (TEMPORÁRIO) ---
-        // Isso é necessário para testar o pulo.
-        // Vamos fingir que o chão está na posição Y = 800
+        // --- 2. Fricção Horizontal (DESACELERAÇÃO) ---
+        bool noInputHorizontal = !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && 
+                               !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
+
+        // Só aplica fricção no chão (sensação clássica de plataforma)
+        if (podePular && noInputHorizontal)
+        {
+            if (std::abs(velocidade.x) > 0.1f)
+            {
+                // Aplica força de fricção na direção oposta
+                if (velocidade.x > 0.0f)
+                    velocidade.x -= FRICCAO_LATERAL * delta;
+                else
+                    velocidade.x += FRICCAO_LATERAL * delta;
+            }
+            // Se a velocidade for muito pequena, zera (para evitar "deslizar" para sempre)
+            if (std::abs(velocidade.x) < 0.5f)
+            {
+                velocidade.x = 0.0f;
+            }
+        }
         
+        // --- 3. Limite de Velocidade (Clamp) ---
+        velocidade.x = std::clamp(velocidade.x, -VELOCIDADE_MAXIMA_LATERAL, VELOCIDADE_MAXIMA_LATERAL);
+
+
+        // --- 4. Aplica o movimento final ---
+        sprite->move(velocidade * delta);
+
+        // --- 5. Lógica do Chão Falso ---
         float chaoFalso = 800.0f;
         sf::Vector2f pos = sprite->getPosition();
 
@@ -64,11 +110,10 @@ void Jogador::aplicarGravidade()
     }
 }
 
-void Jogador::executar()
-{   
-    velocidade.x = 0.0f;
-    processarInputs();
-    aplicarGravidade();
+void Jogador::executar(float delta)
+{
+    processarInputs(delta);
+    aplicarFisica(delta);
 }
 
 void Jogador::desenhar()
