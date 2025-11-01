@@ -27,27 +27,30 @@ void Jogo::executar()
     {
         pGG->limpar(sf::Color::Black);
 
+        float delta = relogio.restart().asSeconds();
+
         switch (estadoAtual)
         {
             case EstadoJogo::NoMenu:
             {
                 int acaoMenu = menu.executar();
-                if (acaoMenu == 1) // "Jogar"
+                if (acaoMenu == 1)
                 {
                     estadoAtual = EstadoJogo::Jogando;
                 }
-                else if (acaoMenu == 0) // "Sair"
+                else if (acaoMenu == 0)
                 {
                     pGG->fecharWindow();
                 }
-                // Se for -1, continua no menu
             }
             break;
         
             case EstadoJogo::Jogando:
             {
                 processarEventosJogando();
-                atualizar();  
+                
+                atualizar(delta);
+                
                 renderizar(); 
             }
             break;
@@ -57,12 +60,10 @@ void Jogo::executar()
             break;
         }
 
-        // 3. Exibe o frame
         pGG->exibir(); 
     }
 }
 
-// Eventos para QUANDO ESTIVER JOGANDO (não no menu)
 void Jogo::processarEventosJogando()
 {
     while (auto event = pGG->pollEvent())
@@ -71,13 +72,12 @@ void Jogo::processarEventosJogando()
         {
             pGG->fecharWindow();
         }
-        // TODO: Adicionar input do jogador (pulo, etc.)
     }
 }
 
-void Jogo::atualizar()
+void Jogo::atualizar(float delta)
 {
-    jogador1.executar();
+    jogador1.executar(delta);
 }
 
 void Jogo::renderizar()
