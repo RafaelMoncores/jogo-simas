@@ -1,0 +1,5 @@
+# Ignora todos os arquivos .json em qualquer pasta
+*.json
+
+# Ignora todas as pastas de debug .dSYM (e tudo dentro delas)
+*.dSYM/
