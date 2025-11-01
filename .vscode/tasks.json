@@ -8,7 +8,7 @@
             "args": [
                 "-std=c++17",
                 "-g",
-                "${workspaceFolder}/code/*.cpp",
+                "${workspaceFolder}/code/**/*.cpp",
                 "-o",
                 "${workspaceFolder}/main",
                 "-I/opt/homebrew/opt/sfml/include",

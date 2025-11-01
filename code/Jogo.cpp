@@ -1,5 +1,11 @@
 #include "Jogo.hpp"
 #include <iostream>
+#include "Entidades/Ente.hpp"
+
+using Gerenciadores::GerenciadorGrafico;
+using Entidades::Ente;
+using Entidades::Personagens::Jogador;
+using Estados::Menu;
 
 Jogo::Jogo() :
     pGG(nullptr),
@@ -18,6 +24,7 @@ Jogo::~Jogo()
 void Jogo::inicializar()
 {
     pGG = GerenciadorGrafico::getInstance();
+    
     Ente::setGerenciadorGrafico(pGG);
 }
 
