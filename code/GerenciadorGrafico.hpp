@@ -5,19 +5,31 @@
 
 class GerenciadorGrafico
 {
-private:
-    sf::RenderWindow window;
+    private:
+        // Instância estática para o Singleton
+        static GerenciadorGrafico* pInstancia;
+        sf::RenderWindow window;
 
-public:
-    GerenciadorGrafico();
-    ~GerenciadorGrafico();
+        // Construtor privado para impedir instanciação externa
+        GerenciadorGrafico();
 
-    bool isWindowOpen() const;
-    void fecharWindow();
-    
-    std::optional<sf::Event> pollEvent();
+    public:
+        ~GerenciadorGrafico();
 
-    void limpar(sf::Color cor = sf::Color::Green);
-    void desenhar(const sf::Drawable& desenhavel);
-    void exibir();
+        // Método de acesso à instância
+        static GerenciadorGrafico* getInstance();
+
+        // Prevenção de cópia
+        GerenciadorGrafico(const GerenciadorGrafico&) = delete;
+        GerenciadorGrafico& operator=(const GerenciadorGrafico&) = delete;
+
+        // Métodos de controle da janela
+        bool isWindowOpen() const;
+        void fecharWindow();
+        std::optional<sf::Event> pollEvent();
+
+        // Métodos de renderização
+        void limpar(sf::Color cor = sf::Color::Black);
+        void desenhar(const sf::Drawable& desenhavel);
+        void exibir();
 };

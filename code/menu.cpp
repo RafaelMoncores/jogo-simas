@@ -1,30 +1,25 @@
-#include "menu.hpp"
+#include "Menu.hpp"
 #include <iostream>
-#include <filesystem>
 
-Menu::Menu()
-: window(sf::VideoMode({1920u, 1080u}), "Menu SFML") // <-- SFML 3 usa VideoMode({w,h})
+Menu::Menu() :
+    pGG(GerenciadorGrafico::getInstance()) 
 {
     set_values();
 }
 
 void Menu::set_values()
 {
-    window.setPosition({0, 0});
 
     pos = 0;
     pressed = theselect = false;
 
-    // Carrega fonte: SFML3 usa openFromFile para fonts (migration guide).
     if (!font.openFromFile("PressStart2P-Regular.ttf")) {
         std::cerr << "Erro: nao foi possivel carregar fonte PressStart2P-Regular.ttf\n";
     }
 
-    // Carrega textura normalmente (loadFromFile ainda existe para textures)
     if (!texture.loadFromFile("menu.png")) {
         std::cerr << "Erro: nao foi possivel carregar imagem menu.png\n";
     } else {
-        // sf::Sprite não tem construtor padrão em SFML 3, tem que construir com a textura
         bg.emplace(texture);
     }
 
@@ -44,9 +39,8 @@ void Menu::set_values()
 
     texts.clear();
     texts.reserve(options.size());
-    // cria cada sf::Text com a font (sf::Text não tem default constructor em SFML3)
     for (std::size_t i = 0; i < options.size(); ++i) {
-        texts.emplace_back(font);              // construtor que recebe font
+        texts.emplace_back(font);
         texts[i].setString(options[i]);
         texts[i].setCharacterSize(sizes[i]);
         texts[i].setOutlineColor(sf::Color::Black);
@@ -58,104 +52,57 @@ void Menu::set_values()
         texts[1].setOutlineThickness(4.f);
         pos = 1;
     }
-
-    //winclose.setSize({23.f, 26.f});
-    //winclose.setPosition({1178.f, 39.f});
-    //winclose.setFillColor(sf::Color::Transparent);
 }
 
-void Menu::loop_events()
+int Menu::executar()
 {
-    // Processa todos os eventos (SFML 3: pollEvent retorna std::optional<sf::Event>)
-    while (const auto optEvent = window.pollEvent()) {
+    while (const auto optEvent = pGG->pollEvent()) {
         const auto &event = *optEvent;
 
-        // Fechar janela
         if (event.is<sf::Event::Closed>()) {
-            window.close();
-            return;
+            return 0;
         }
 
-        // Teclas: trate KeyPressed para uma ação por pressionamento
         if (event.is<sf::Event::KeyPressed>()) {
             const auto *kp = event.getIf<sf::Event::KeyPressed>();
             if (!kp) continue;
 
             switch (kp->code) {
                 case sf::Keyboard::Key::S:
-                    // desce — limite máximo é texts.size()-1 (última opção)
                     if (pos < texts.size() - 1) {
                         texts[pos].setOutlineThickness(0.f);
                         ++pos;
                         texts[pos].setOutlineThickness(4.f);
                     }
                     break;
-
                 case sf::Keyboard::Key::W:
-                    // sobe — note: se seu primeiro item selecionável é o índice 1, mantém 1 como mínimo
                     if (pos > 1) {
                         texts[pos].setOutlineThickness(0.f);
                         --pos;
                         texts[pos].setOutlineThickness(4.f);
                     }
                     break;
-
                 case sf::Keyboard::Key::Enter:
                     theselect = true;
-                    if (pos == 5) { // Quit (ajuste se o índice for outro)
-                        window.close();
-                    }
                     std::cout << options[pos] << '\n';
+                    
+                    if (pos == 5) {
+                        return 0;
+                    }
+                    if (pos == 1) {
+                        return 1;
+                    }
                     break;
-
                 default:
                     break;
             }
         }
+    }
 
-        // Clique do mouse — use o evento MouseButtonPressed (também evita polling)
-        if (event.is<sf::Event::MouseButtonPressed>()) {
-            const auto *mb = event.getIf<sf::Event::MouseButtonPressed>();
-            if (mb && mb->button == sf::Mouse::Button::Left) {
-                // posição do clique já vem no evento (relativa à janela)
-                sf::Vector2f clickPos = window.mapPixelToCoords(mb->position);
-                if (winclose.getGlobalBounds().contains(clickPos)) {
-                    window.close();
-                    return;
-                }
-            }
-        }
-
-        // (Opcional) atualize mouse_coord para uso fora dos eventos
-        if (event.is<sf::Event::MouseMoved>()) {
-            const auto *mm = event.getIf<sf::Event::MouseMoved>();
-            if (mm) {
-                pos_mouse = mm->position;
-                mouse_coord = window.mapPixelToCoords(pos_mouse);
-            }
-        }
-    } // fim while events
-
-    // Se você ainda usa verificações em tempo real (por exemplo hover), atualize aqui:
-    // pos_mouse = sf::Mouse::getPosition(window);
-    // mouse_coord = window.mapPixelToCoords(pos_mouse);
-}
-
-void Menu::draw_all()
-{
-    window.clear();
-    if (bg) window.draw(*bg);
+    if (bg) pGG->desenhar(*bg);
     for (auto &t : texts) {
-        window.draw(t);
+        pGG->desenhar(t);
     }
-    // window.draw(winclose); // descomente se quiser ver o retângulo do botão
-    window.display();
-}
-
-void Menu::run_menu()
-{
-    while (window.isOpen()) {
-        loop_events();
-        draw_all();
-    }
+    
+    return -1;
 }

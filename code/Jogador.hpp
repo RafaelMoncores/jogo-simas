@@ -1,20 +1,20 @@
 #pragma once
-
+#include "Entidade.hpp"
 #include <SFML/Graphics.hpp>
-#include "GerenciadorGrafico.hpp"
+#include <optional>
 
-class Jogador
+class Jogador : public Entidade
 {
-private:
-    sf::Texture textura;
-    sf::Sprite sprite;
+    private:
+        sf::Texture textura;
+        std::optional<sf::Sprite> sprite;
 
-    sf::RectangleShape formaDoJogador;
+        void aplicarGravidade();
 
-public:
-    Jogador();
-    ~Jogador();
+    public:
+        Jogador();
+        ~Jogador();
 
-    void atualizar();
-    void desenhar(GerenciadorGrafico& gerenciador);
+        virtual void executar() override;
+        virtual void desenhar() override;
 };

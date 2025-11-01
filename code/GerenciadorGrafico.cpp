@@ -1,12 +1,23 @@
 #include "GerenciadorGrafico.hpp"
 
+GerenciadorGrafico* GerenciadorGrafico::pInstancia = nullptr;
+
 GerenciadorGrafico::GerenciadorGrafico() : 
-    window(sf::VideoMode({1200, 1400}), "Meu Jogo SFML!")
+    window(sf::VideoMode({1920u, 1080u}), "VALEN")
 {
 }
 
 GerenciadorGrafico::~GerenciadorGrafico() 
 {
+}
+
+GerenciadorGrafico* GerenciadorGrafico::getInstance()
+{
+    if (pInstancia == nullptr)
+    {
+        pInstancia = new GerenciadorGrafico();
+    }
+    return pInstancia;
 }
 
 bool GerenciadorGrafico::isWindowOpen() const

@@ -4,25 +4,24 @@
 #include <optional>
 #include <vector>
 #include <string>
+#include "GerenciadorGrafico.hpp"
 
 class Menu {
 public:
     Menu();
     ~Menu() = default;
 
-    void run_menu();
+    int executar();
 
 private:
     void set_values();
-    void loop_events();
     void draw_all();
-
-    sf::RenderWindow window;
-    sf::RectangleShape winclose;
+    
+    GerenciadorGrafico* pGG;
 
     sf::Font font;
-    sf::Texture texture;                 // textura carregada
-    std::optional<sf::Sprite> bg;        // sprite construído somente depois que a texture é carregada
+    sf::Texture texture;
+    std::optional<sf::Sprite> bg;
 
     std::size_t pos{0};
     bool pressed{false};
@@ -32,7 +31,7 @@ private:
     sf::Vector2f mouse_coord;
 
     std::vector<std::string> options;
-    std::vector<sf::Text> texts;         // construímos cada sf::Text com a font após carregar a font
+    std::vector<sf::Text> texts;
     std::vector<sf::Vector2f> coords;
     std::vector<unsigned int> sizes;
 };
