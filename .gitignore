@@ -3,3 +3,8 @@
 
 # Ignora todas as pastas de debug .dSYM (e tudo dentro delas)
 *.dSYM/
+
+# Ignorar executáveis compilados
+main
+code/main
+code/jogo_simas
