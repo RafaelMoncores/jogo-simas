@@ -10,6 +10,7 @@ int main()
     //meuJogo.executar();
 
     Menu menu;
+    // novo comentário
     menu.run_menu();
 
     return 0; // O jogo só chega aqui quando a janela é fechada
