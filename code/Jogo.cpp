@@ -62,7 +62,6 @@ void Jogo::executar()
     }
 }
 
-// Eventos para QUANDO ESTIVER JOGANDO (não no menu)
 void Jogo::processarEventosJogando()
 {
     while (auto event = pGG->pollEvent())
@@ -71,7 +70,6 @@ void Jogo::processarEventosJogando()
         {
             pGG->fecharWindow();
         }
-        // TODO: Adicionar input do jogador (pulo, etc.)
     }
 }
 
