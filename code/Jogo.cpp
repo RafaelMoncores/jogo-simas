@@ -2,58 +2,85 @@
 #include <iostream>
 
 Jogo::Jogo() :
-    gerenciadorGrafico(),
+    pGG(nullptr),
     jogador1(),
-    relogio()
+    menu(),
+    estadoAtual(EstadoJogo::NoMenu) 
 {
-    // --- ADICIONE ESTA CONFIGURAÇÃO ---
-    testeQuadrado.setSize(sf::Vector2f(100.f, 100.f)); // Tamanho 100x100
-    testeQuadrado.setPosition(sf::Vector2f(50.f, 50.f)); // Posição (50, 50)
-    // --- FIM DA ADIÇÃO ---
+    inicializar();
 }
 
 Jogo::~Jogo()
 {
+    delete GerenciadorGrafico::getInstance();
+}
+
+void Jogo::inicializar()
+{
+    pGG = GerenciadorGrafico::getInstance();
+    Ente::setGerenciadorGrafico(pGG);
 }
 
 void Jogo::executar()
 {
-    while (gerenciadorGrafico.isWindowOpen())
+    while (pGG->isWindowOpen())
     {
-        processarEventos();
-        atualizar();
-        renderizar();
+        pGG->limpar(sf::Color::Black);
+
+        switch (estadoAtual)
+        {
+            case EstadoJogo::NoMenu:
+            {
+                int acaoMenu = menu.executar();
+                if (acaoMenu == 1) // "Jogar"
+                {
+                    estadoAtual = EstadoJogo::Jogando;
+                }
+                else if (acaoMenu == 0) // "Sair"
+                {
+                    pGG->fecharWindow();
+                }
+                // Se for -1, continua no menu
+            }
+            break;
+        
+            case EstadoJogo::Jogando:
+            {
+                processarEventosJogando();
+                atualizar();  
+                renderizar(); 
+            }
+            break;
+
+            case EstadoJogo::Pausado:
+                // TODO
+            break;
+        }
+
+        // 3. Exibe o frame
+        pGG->exibir(); 
     }
 }
 
-void Jogo::processarEventos()
+// Eventos para QUANDO ESTIVER JOGANDO (não no menu)
+void Jogo::processarEventosJogando()
 {
-    while (auto event = gerenciadorGrafico.pollEvent())
+    while (auto event = pGG->pollEvent())
     {
         if (event->is<sf::Event::Closed>())
         {
-            gerenciadorGrafico.fecharWindow();
+            pGG->fecharWindow();
         }
+        // TODO: Adicionar input do jogador (pulo, etc.)
     }
 }
 
 void Jogo::atualizar()
 {
-    jogador1.atualizar();
+    jogador1.executar();
 }
 
-// Lógica de desenho
 void Jogo::renderizar()
 {
-    std::cout << "Renderizando frame..." << std::endl;
-
-    gerenciadorGrafico.limpar();
-
-    // --- ADICIONE O DESENHO DO QUADRADO ---
-    std::cout << "  -> Desenhando QUADRADO..." << std::endl;
-    gerenciadorGrafico.desenhar(testeQuadrado);
-    // --- FIM DA ADIÇÃO ---
-
-    jogador1.desenhar(gerenciadorGrafico); // Esta linha já estava aqui
-    gerenciadorGrafico.exibir();
+    jogador1.desenhar();
 }

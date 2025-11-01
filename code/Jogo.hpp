@@ -2,21 +2,23 @@
 
 #include "GerenciadorGrafico.hpp"
 #include "Jogador.hpp"
-#include <SFML/Graphics.hpp>
+#include "Menu.hpp" 
 
 class Jogo
 {
 private:
-    GerenciadorGrafico gerenciadorGrafico;
+    enum class EstadoJogo { NoMenu, Jogando, Pausado };
+    
+    EstadoJogo estadoAtual;
+    GerenciadorGrafico* pGG;
     Jogador jogador1;
-    sf::Clock relogio; // (Se você já adicionou isso, ótimo)
+    Menu menu;
 
-    // O TESTE:
-    sf::RectangleShape testeQuadrado; // <-- ADICIONE ISTO
-
-    void processarEventos();
-    void atualizar(); // (ou void atualizar();)
+    void processarEventosJogando(); 
+    void atualizar();
     void renderizar();
+
+    void inicializar();
 
 public:
     Jogo();
