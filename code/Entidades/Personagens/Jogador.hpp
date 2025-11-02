@@ -1,5 +1,6 @@
 #pragma once
 #include "Personagem.hpp"
+#include "../Obstaculos/Obstaculo.hpp"
 #include <SFML/Graphics.hpp>
 #include <optional>
 #include <algorithm>
@@ -31,6 +32,12 @@ namespace Entidades
 
                     virtual void executar(float delta) override;
                     virtual void desenhar() override;
+
+                    virtual sf::FloatRect getBoundingBox() const override;
+                    void setPodePular(bool pode);
+                    void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra);
+
+                    void setPosition(sf::Vector2f pos);
             };
     }
 }
