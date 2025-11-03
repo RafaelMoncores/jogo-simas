@@ -15,5 +15,14 @@ namespace Entidades
         public:
             Entidade();
             virtual ~Entidade();
+
+            // 1. Lógica da entidade (movimento, IA, etc.)
+            virtual void executar(float delta) = 0;
+
+            // 2. Como a entidade se desenha
+            virtual void desenhar() = 0;
+
+            // 3. A "hitbox" da entidade
+            virtual sf::FloatRect getBoundingBox() const = 0;
     };
 }
