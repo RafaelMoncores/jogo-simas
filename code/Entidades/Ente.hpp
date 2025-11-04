@@ -16,5 +16,7 @@ namespace Entidades
 
             virtual void executar(float delta) = 0;
             virtual void desenhar() = 0;
+
+            virtual sf::FloatRect getBoundingBox() const = 0;
     };
 }

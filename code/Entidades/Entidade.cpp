@@ -4,7 +4,6 @@ namespace Entidades
 {
     Entidade::Entidade() :
         Ente(),
-        pCorpo(nullptr),
         velocidade({0.0f, 0.0f}),
         G_ACCEL({0.0f, 800.f})
     {

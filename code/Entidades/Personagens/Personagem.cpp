@@ -1,12 +1,22 @@
 #include "Personagem.hpp"
+#include <cmath>
+#include <algorithm>
+#include <iostream>
+#include <SFML/Window/Keyboard.hpp>
 
 namespace Entidades
 {
     namespace Personagens
     {
-        Personagem::Personagem(int vidas) :
+        Personagem::Personagem(int vidas, sf::Vector2f pos) :
             Entidade(),
-            num_vidas(vidas)
+            num_vidas(vidas),
+            sprite(),
+            posInicial(pos),
+            VELOCIDADE_MAXIMA_LATERAL(350.0f),
+            ACELERACAO_LATERAL(900.0f),
+            FRICCAO_LATERAL(1200.0f),
+            podePular(false)
         {
         }
 
@@ -17,16 +27,90 @@ namespace Entidades
         void Personagem::perderVida()
         {
             num_vidas--;
-            if (num_vidas < 0)
+            if (num_vidas < 0) num_vidas = 0;
+            
+            if(num_vidas > 0)
             {
-                num_vidas = 0;
+                std::cout << "Um personagem perdeu uma vida! Vidas restantes: " << getVidas() << std::endl;
+                setPosition(posInicial);
+                velocidade = {0.f, 0.f};
             }
-            // (Aqui, futuramente, se num_vidas == 0, "desativar" o personagem)
         }
 
         int Personagem::getVidas() const
         {
             return num_vidas;
+        }
+
+        void Personagem::setPosition(sf::Vector2f pos)
+        {
+            if (sprite)
+            {
+                sprite->setPosition(pos);
+            }   
+        }
+
+        void Personagem::desenhar()
+        {
+            if (pGG && sprite)
+            {
+                pGG->desenhar(*sprite);
+            }
+        }
+
+        sf::FloatRect Personagem::getBoundingBox() const
+        {
+            if (sprite)
+            {
+                return sprite->getGlobalBounds();
+            }
+            return {};
+        }
+
+        void Personagem::setPodePular(bool pode)
+        {
+            podePular = pode;
+        }
+
+        sf::Vector2f Personagem::getVelocidade() const
+        {
+            return velocidade;
+        }
+
+        void Personagem::aplicarFisica(float delta)
+        {
+            if (sprite)
+            {
+                velocidade.y += G_ACCEL.y * delta;
+
+                bool noInputHorizontal = !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) &&
+                                    !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
+
+                if (podePular && noInputHorizontal)
+                {
+                    if (std::abs(velocidade.x) > 0.1f)
+                    {
+                        if (velocidade.x > 0.0f)
+                            velocidade.x -= FRICCAO_LATERAL * delta;
+                        else
+                            velocidade.x += FRICCAO_LATERAL * delta;
+                    }
+                    if (std::abs(velocidade.x) < 0.5f)
+                    {
+                        velocidade.x = 0.0f;
+                    }
+                }
+                
+                velocidade.x = std::clamp(velocidade.x, -VELOCIDADE_MAXIMA_LATERAL, VELOCIDADE_MAXIMA_LATERAL);
+
+                sprite->move(velocidade * delta);
+                
+                float deathPlaneY = 1500.f;
+                if (sprite->getPosition().y > deathPlaneY)
+                {
+                    perderVida();
+                }
+            }
         }
     }
 }
