@@ -45,7 +45,7 @@ namespace Fases
         vidasText->setCharacterSize(30);
         vidasText->setFillColor(sf::Color::White);
         
-        vidasText->setPosition({10.f, 10.f}); 
+        vidasText->setPosition({50.f, 10.f}); 
         
         vidasText->setString("Vidas: ");
     }
