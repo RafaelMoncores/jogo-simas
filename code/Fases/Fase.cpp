@@ -1,5 +1,6 @@
 #include "Fase.hpp"
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
+#include "../Entidades/Obstaculos/Parede.hpp"
 #include <iostream>
 
 namespace Fases
@@ -7,7 +8,6 @@ namespace Fases
     Fase::Fase() :
         jogador1(nullptr)
     {
-        // Carrega o fundo
         if (!texFase.loadFromFile("fase_background.png"))
         {
             std::cerr << "Erro: nao foi possivel carregar imagem fase_background.png\n";
@@ -23,7 +23,6 @@ namespace Fases
 
     Fase::~Fase()
     {
-        // Limpar memória
         delete jogador1;
         for (auto* pObst : listaObstaculos)
         {
@@ -31,23 +30,28 @@ namespace Fases
         }
     }
 
-    // AQUI é onde você cria as plataformas
     void Fase::inicializar()
     {
-        // Limpa entidades antigas (se houver)
         if (jogador1) delete jogador1;
         for (auto* pObst : listaObstaculos) delete pObst;
         listaObstaculos.clear();
 
-        // Cria novas entidades
+        Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
+
         jogador1 = new Entidades::Personagens::Jogador();
-        jogador1->setPosition({0.f, 500.0f}); // Posição inicial
+        jogador1->setPosition({50.f, 500.0f});
 
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::Rampa;
+        using Entidades::Obstaculos::Parede;
 
-        // Adiciona plataformas
-        // DÊ OS TAMANHOS QUE QUISER AQUI: {Largura, Altura}
+        float larguraMundo = 1920.f;
+        float alturaMundo = 1080.f;
+        float espessuraMuro = 50.f;
+
+        listaObstaculos.push_back(new Parede({0.f, 0.f}, {espessuraMuro, alturaMundo}, "terra.png"));
+        listaObstaculos.push_back(new Parede({larguraMundo - espessuraMuro, 0.f}, {espessuraMuro, alturaMundo}, "terra.png"));
+
         int plat;
         int ramp;
         float cont_plat = 0;
@@ -223,20 +227,20 @@ namespace Fases
 
     void Fase::executar(float delta)
     {
-        // 1. Atualizar todas as entidades
         if(jogador1) jogador1->executar(delta);
         for (auto* pObst : listaObstaculos)
         {
             pObst->executar(delta);
         }
 
-        // 2. Verificar colisões
         gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos);
     }
 
     void Fase::desenhar()
     {
         Gerenciadores::GerenciadorGrafico* pGG = Gerenciadores::GerenciadorGrafico::getInstance();
+
+        pGG->aplicarView();
 
         // Desenha o fundo
         if (bgFase)
@@ -250,5 +254,7 @@ namespace Fases
         {
             pObst->desenhar();
         }
+
+        pGG->resetarView();
     }
 }

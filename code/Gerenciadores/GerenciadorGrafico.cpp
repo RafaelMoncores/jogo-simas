@@ -50,4 +50,21 @@ namespace Gerenciadores{
     {
         window.display();
     }
+
+    void GerenciadorGrafico::setViewBounds(float left, float top, float width, float height)
+    {
+        sf::FloatRect areaVisivel({left, top}, {width, height});
+        camera = sf::View(areaVisivel);
+        window.setView(camera);
+    }
+
+    void GerenciadorGrafico::aplicarView()
+    {
+        window.setView(camera);
+    }
+
+    void GerenciadorGrafico::resetarView()
+    {
+        window.setView(window.getDefaultView());
+    }
 }
