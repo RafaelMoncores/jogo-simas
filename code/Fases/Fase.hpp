@@ -4,6 +4,7 @@
 #include "../Gerenciadores/GerenciadorColisoes.hpp"
 #include "../Entidades/Obstaculos/Rampa.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
+#include "../Entidades/Personagens/Inimigo.hpp"
 #include <list>
 #include <SFML/Graphics.hpp>
 #include <optional>
@@ -15,6 +16,7 @@ namespace Fases
         private:
             Entidades::Personagens::Jogador* jogador1;
             std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
+            std::list<Entidades::Personagens::Inimigo*> listaInimigos;
             Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
             
             // Fundo (movido de Jogo para Fase)

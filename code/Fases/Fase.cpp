@@ -1,8 +1,10 @@
 #include "Fase.hpp"
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
+#include "../Entidades/Personagens/Slime.hpp"
 #include <iostream>
 #include <string>
+#include <random>
 
 namespace Fases
 {
@@ -31,6 +33,10 @@ namespace Fases
         {
             delete pObst;
         }
+        for (auto* pInim : listaInimigos)
+        {
+            delete pInim;
+        }
     }
 
     void Fase::inicializarUI()
@@ -56,6 +62,9 @@ namespace Fases
         for (auto* pObst : listaObstaculos) delete pObst;
         listaObstaculos.clear();
 
+        for (auto* pInim : listaInimigos) delete pInim;
+        listaInimigos.clear();
+
         Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
 
         jogador1 = new Entidades::Personagens::Jogador({50.f, 950.0f});
@@ -64,6 +73,7 @@ namespace Fases
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::Rampa;
         using Entidades::Obstaculos::Parede;
+        using Entidades::Personagens::Slime;
 
         float larguraMundo = 1920.f;
         float alturaMundo = 1080.f;
@@ -72,11 +82,17 @@ namespace Fases
         listaObstaculos.push_back(new Parede({0.f, 0.f}, {espessuraMuro, alturaMundo}, "terra.png"));
         listaObstaculos.push_back(new Parede({larguraMundo - espessuraMuro, 0.f}, {espessuraMuro, alturaMundo}, "terra.png"));
 
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, 1);
+
         int plat;
         int ramp;
         float cont_plat = 0;
         float cont_ramp_x = 0;
         float cont_ramp_y = 0;
+
+        float alturaSlime = 32.f;
 
         //aglomerado de plataformas 1
         for(plat=0;plat<8;plat++){
@@ -87,14 +103,18 @@ namespace Fases
         //aglomerado de plataformas 2
         cont_plat = 400;
         for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 950.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 950.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
             cont_plat+=50;
         }
 
         //aglomerado de plataformas 3
         cont_plat = 700;
         for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 900.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 900.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
             cont_plat+=50;
         }
         cont_ramp_x = 800;
@@ -104,12 +124,17 @@ namespace Fases
             cont_ramp_x+=50;
             cont_ramp_y-=50;
         }
-        listaObstaculos.push_back(new Plataforma({900.f, 800.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat3 = new Plataforma({900.f, 800.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat3);
 
         //aglomerado de plataformas 4
         cont_plat=600;
         for(plat=0;plat<4;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 750.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 750.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 2 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
 
@@ -123,15 +148,26 @@ namespace Fases
         }
         cont_plat=100;
         for(plat=0;plat<4;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 550.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 550.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 2 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
-        listaObstaculos.push_back(new Plataforma({450.f, 700.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat5 = new Plataforma({450.f, 700.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat5);
+        if (dis(gen) == 0)
+            listaInimigos.push_back(new Slime({450.f, 700.f - 2*alturaSlime}, pPlat5));
 
         //aglomerado de plataformas 6
         cont_plat=350;
         for(plat=0;plat<3;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 450.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 450.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 1 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         cont_ramp_x = 500;
@@ -141,12 +177,19 @@ namespace Fases
             cont_ramp_x+=50;
             cont_ramp_y-=50;
         }
-        listaObstaculos.push_back(new Plataforma({600.f, 350.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat6 = new Plataforma({600.f, 350.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat6);
+        if (dis(gen) == 0)
+            listaInimigos.push_back(new Slime({600.f, 350.f - 2*alturaSlime}, pPlat6));
 
         //aglomerado de plataformas 7
         cont_plat=200;
         for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 200.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 200.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 1 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         cont_ramp_x = 400;
@@ -156,20 +199,31 @@ namespace Fases
             cont_ramp_x-=50;
             cont_ramp_y-=50;
         }
-        listaObstaculos.push_back(new Plataforma({450.f, 300.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat7 = new Plataforma({450.f, 300.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat7);
+        if (dis(gen) == 0)
+                listaInimigos.push_back(new Slime({450.f, 300.f - 2*alturaSlime}, pPlat7));
 
-        //aglomerado de plataformas 8
+        // aglomerado de plataformas 8
         cont_plat=300;
         for(plat=0;plat<14;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 50.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 50.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 7 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         listaObstaculos.push_back(new Rampa({250, 50}, {50.f, 50.f}, true,"rampa.png"));
 
-        //aglomerado de plataformas 9
+        // aglomerado de plataformas 9
         cont_plat=1050;
         for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 200.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 200.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 2 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         cont_ramp_x = 1300;
@@ -179,19 +233,30 @@ namespace Fases
             cont_ramp_x+=50;
             cont_ramp_y-=50;
         }
-        listaObstaculos.push_back(new Plataforma({1450.f, 50.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat9 = new Plataforma({1450.f, 50.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat9);
+        if (dis(gen) == 0)
+            listaInimigos.push_back(new Slime({1450.f, 50.f - 2*alturaSlime}, pPlat9));
 
-        //aglomerado de plataformas 10
+        // aglomerado de plataformas 10
         cont_plat=1550;
         for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 100.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 100.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 1 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
 
-        //aglomerado de plataformas 11
+        // aglomerado de plataformas 11
         cont_plat=1300;
         for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 350.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 350.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 2 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         cont_ramp_x = 1550;
@@ -201,19 +266,30 @@ namespace Fases
             cont_ramp_x+=50;
             cont_ramp_y-=50;
         }
-        listaObstaculos.push_back(new Plataforma({1700, 200.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat11 = new Plataforma({1700, 200.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat11);
+        if (dis(gen) == 0)
+            listaInimigos.push_back(new Slime({1700.f, 200.f - 2*alturaSlime}, pPlat11));
 
-        //aglomerado de plataformas 12
+        // aglomerado de plataformas 12
         cont_plat=1550;
         for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 500.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 500.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 2 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
 
-        //aglomerado de plataformas 13
+        // aglomerado de plataformas 13
         cont_plat=1200;
         for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 700.f}, {50.f, 50.f},"plataforma.png"));
+            float platY = 700.f;
+            Plataforma* pPlat = new Plataforma({cont_plat, platY}, {50.f, 50.f},"plataforma.png");
+            listaObstaculos.push_back(pPlat);
+            if (plat == 1 && dis(gen) == 0)
+                listaInimigos.push_back(new Slime({cont_plat, platY - 2*alturaSlime}, pPlat));
             cont_plat+=50;
         }
         cont_ramp_x = 1300;
@@ -223,7 +299,10 @@ namespace Fases
             cont_ramp_x+=100;
             cont_ramp_y-=100;
         }
-        listaObstaculos.push_back(new Plataforma({1450, 550.f}, {50.f, 50.f},"plataforma.png"));
+        Plataforma* pPlat13 = new Plataforma({1450, 550.f}, {50.f, 50.f},"plataforma.png");
+        listaObstaculos.push_back(pPlat13);
+        if (dis(gen) == 0)
+            listaInimigos.push_back(new Slime({1450.f, 550.f - 2*alturaSlime}, pPlat13));
 
         //aglomerado de plataformas 14
         cont_plat=1900;
@@ -252,8 +331,12 @@ namespace Fases
         {
             pObst->executar(delta);
         }
+        for (auto* pInim : listaInimigos)
+        {
+            pInim->executar(delta);
+        }
 
-        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos);
+        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos);
 
         if (jogador1)
         {
@@ -291,6 +374,10 @@ namespace Fases
         for (auto* pObst : listaObstaculos)
         {
             pObst->desenhar();
+        }
+        for (auto* pInim : listaInimigos)
+        {
+            pInim->desenhar();
         }
 
         pGG->resetarView();
