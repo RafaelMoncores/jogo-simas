@@ -5,28 +5,32 @@
 #include "../Entidades/Obstaculos/Rampa.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
 #include <list>
-#include <SFML/Graphics.hpp> // Para o bgFase
+#include <SFML/Graphics.hpp>
+#include <optional>
 
 namespace Fases
 {
     class Fase
     {
-    private:
-        Entidades::Personagens::Jogador* jogador1;
-        std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
-        Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
-        
-        // Fundo (movido de Jogo para Fase)
-        sf::Texture texFase;
-        std::optional<sf::Sprite> bgFase;
+        private:
+            Entidades::Personagens::Jogador* jogador1;
+            std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
+            Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
+            
+            // Fundo (movido de Jogo para Fase)
+            sf::Texture texFase;
+            std::optional<sf::Sprite> bgFase;
 
+            sf::Font uiFont;
+            std::optional<sf::Text> vidasText;
+            void inicializarUI();
 
-    public:
-        Fase();
-        ~Fase();
+        public:
+            Fase();
+            ~Fase();
 
-        void inicializar(); // Cria jogador e plataformas
-        void executar(float delta);
-        void desenhar();
+            void inicializar();
+            void executar(float delta);
+            void desenhar();
     };
 }

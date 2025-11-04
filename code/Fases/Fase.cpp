@@ -2,6 +2,7 @@
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
 #include <iostream>
+#include <string>
 
 namespace Fases
 {
@@ -19,6 +20,8 @@ namespace Fases
             float scaleY = 1080.f / texFase.getSize().y;
             bgFase->setScale(sf::Vector2f(scaleX, scaleY));
         }
+
+        inicializarUI();
     }
 
     Fase::~Fase()
@@ -30,6 +33,22 @@ namespace Fases
         }
     }
 
+    void Fase::inicializarUI()
+    {
+        if (!uiFont.openFromFile("PressStart2P-Regular.ttf"))
+        {
+            std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
+        }
+
+        vidasText.emplace(uiFont); 
+        
+        vidasText->setCharacterSize(30);
+        vidasText->setFillColor(sf::Color::White);
+        
+        vidasText->setPosition({10.f, 10.f}); 
+        
+        vidasText->setString("Vidas: ");
+    }
     void Fase::inicializar()
     {
         if (jogador1) delete jogador1;
@@ -234,6 +253,11 @@ namespace Fases
         }
 
         gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos);
+
+        if (jogador1 && vidasText)
+        {
+            vidasText->setString("Vidas: " + std::to_string(jogador1->getVidas()));
+        }
     }
 
     void Fase::desenhar()
@@ -256,5 +280,10 @@ namespace Fases
         }
 
         pGG->resetarView();
+
+        if (vidasText)
+        {
+            pGG->desenhar(*vidasText);
+        }
     }
 }

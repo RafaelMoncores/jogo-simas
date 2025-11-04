@@ -11,8 +11,11 @@ namespace Entidades
                 int num_vidas;
             
             public:
-                Personagem();
+                Personagem(int vidas = 3);
                 virtual ~Personagem();
+
+                void perderVida();
+                int getVidas() const;
 
                 virtual void executar(float delta) = 0;
                 virtual void desenhar() = 0;
