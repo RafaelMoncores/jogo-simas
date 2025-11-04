@@ -14,7 +14,11 @@ namespace Entidades
         Jogador::Jogador(sf::Vector2f pos) :
             Personagem(3, pos),
             FORCA_PULO(420.0f),
-            MULTIPLICADOR_PULO_CURTO(3.0f)
+            MULTIPLICADOR_PULO_CURTO(3.0f),
+            direcao(1),
+            estaAtacando(false),
+            tempoAtaque(0.0f),
+            COOLDOWN_ATAQUE(0.3f)
         {
             if (!textura.loadFromFile("player.png"))
             {
@@ -37,6 +41,12 @@ namespace Entidades
                 velocidade.y = -FORCA_PULO;
                 podePular = false;
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !estaAtacando)
+            {
+                estaAtacando = true;
+                tempoAtaque = COOLDOWN_ATAQUE;
+                // (TODO: mudar para a animação do sprite para "atacando")
+            }
         }
 
         void Jogador::aplicarFisica(float delta)
@@ -54,6 +64,9 @@ namespace Entidades
 
                 bool inputEsquerda = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A);
                 bool inputDireita = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
+
+                if (inputEsquerda) direcao = -1;
+                if (inputDireita) direcao = 1;
 
                 if (inputEsquerda && !inputDireita)
                 {
@@ -81,15 +94,34 @@ namespace Entidades
                 float deathPlaneY = 1500.f;
                 if (sprite->getPosition().y > deathPlaneY)
                 {
-                    perderVida();
+                    perderVida(num_vidas);
                 }
             }
         }
 
         void Jogador::executar(float delta)
         {
+            if (estaAtacando)
+            {
+                tempoAtaque -= delta;
+                if (tempoAtaque <= 0.0f)
+                {
+                    estaAtacando = false;
+                    // (TODO: Mudar animação de volta para "idle" ou "walk")
+                }
+            }
             processarInputs(delta);
             aplicarFisica(delta);
+        }
+
+        bool Jogador::getEstaAtacando() const
+        {
+            return estaAtacando;
+        }
+
+        int Jogador::getDirecao() const
+        {
+            return direcao;
         }
 
         sf::FloatRect Jogador::getBoundingBox() const

@@ -24,14 +24,14 @@ namespace Entidades
         {
         }
 
-        void Personagem::perderVida()
+        void Personagem::perderVida(int dano)
         {
-            num_vidas--;
+            num_vidas -= dano;
             if (num_vidas < 0) num_vidas = 0;
             
             if(num_vidas > 0)
             {
-                std::cout << "Um personagem perdeu uma vida! Vidas restantes: " << getVidas() << std::endl;
+                std::cout << "Um personagem perdeu " << dano << " vida(s)! Vidas restantes: " << getVidas() << std::endl;
                 setPosition(posInicial);
                 velocidade = {0.f, 0.f};
             }
@@ -40,6 +40,11 @@ namespace Entidades
         int Personagem::getVidas() const
         {
             return num_vidas;
+        }
+
+        sf::Vector2f Personagem::getVelocidade() const
+        {
+            return velocidade;
         }
 
         void Personagem::setPosition(sf::Vector2f pos)
@@ -70,11 +75,6 @@ namespace Entidades
         void Personagem::setPodePular(bool pode)
         {
             podePular = pode;
-        }
-
-        sf::Vector2f Personagem::getVelocidade() const
-        {
-            return velocidade;
         }
 
         void Personagem::aplicarFisica(float delta)

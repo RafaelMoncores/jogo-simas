@@ -23,6 +23,8 @@ namespace Entidades
             
             sprite.emplace(textura); 
             sprite->setPosition(posInicial);
+
+            nivel_maldade = 1;
         }
 
         Slime::~Slime()

@@ -30,7 +30,7 @@ namespace Entidades
             Personagem(int vidas, sf::Vector2f pos);
             virtual ~Personagem();
 
-            void perderVida();
+            void perderVida(int dano = 1);
             int getVidas() const;
             void setPosition(sf::Vector2f pos);
 

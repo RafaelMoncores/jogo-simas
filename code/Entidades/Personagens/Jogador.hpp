@@ -13,12 +13,20 @@ namespace Entidades
                     const float FORCA_PULO;
                     const float MULTIPLICADOR_PULO_CURTO;
 
+                    int direcao;
+                    bool estaAtacando;
+                    float tempoAtaque;
+                    const float COOLDOWN_ATAQUE;
+
                     void processarInputs(float delta);
                     virtual void aplicarFisica(float delta) override;
 
                 public:
                     Jogador(sf::Vector2f pos);
                     ~Jogador();
+
+                    bool getEstaAtacando() const;
+                    int getDirecao() const;
 
                     virtual void executar(float delta) override;
                     virtual sf::FloatRect getBoundingBox() const override;

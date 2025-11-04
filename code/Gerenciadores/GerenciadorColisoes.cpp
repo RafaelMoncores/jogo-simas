@@ -70,7 +70,25 @@ namespace Gerenciadores
 
             if (velJogadorY > 0 && (peJogador - velJogadorY * 0.016f) < topoInimigo)
             {
-                pInim->perderVida();
+                pInim->perderVida(1);
+            }
+            else if (pJogador->getEstaAtacando())
+            {
+                float centroJogadorX = boundsJogador.position.x + boundsJogador.size.x / 2.f;
+                float centroInimigoX = boundsInim.position.x + boundsInim.size.x / 2.f;
+                float distH = centroInimigoX - centroJogadorX;
+                int dirJ = pJogador->getDirecao();
+
+                bool olhandoParaInimigo = (dirJ > 0 && distH > 0) || (dirJ < 0 && distH < 0);
+
+                if (olhandoParaInimigo)
+                {
+                    pInim->perderVida(1);
+                }
+                else
+                {
+                    pInim->danificar(pJogador);
+                }
             }
             else
             {
