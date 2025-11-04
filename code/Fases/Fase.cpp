@@ -45,10 +45,11 @@ namespace Fases
         vidasText->setCharacterSize(30);
         vidasText->setFillColor(sf::Color::White);
         
-        vidasText->setPosition({50.f, 10.f}); 
+        vidasText->setPosition({60.f, 10.f}); 
         
         vidasText->setString("Vidas: ");
     }
+    
     void Fase::inicializar()
     {
         if (jogador1) delete jogador1;
@@ -57,8 +58,8 @@ namespace Fases
 
         Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
 
-        jogador1 = new Entidades::Personagens::Jogador();
-        jogador1->setPosition({50.f, 500.0f});
+        jogador1 = new Entidades::Personagens::Jogador({50.f, 950.0f});
+        jogador1->setPosition({50.f, 950.0f});
 
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::Rampa;
@@ -254,9 +255,22 @@ namespace Fases
 
         gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos);
 
-        if (jogador1 && vidasText)
+        if (jogador1)
         {
-            vidasText->setString("Vidas: " + std::to_string(jogador1->getVidas()));
+            if (vidasText)
+            {
+                vidasText->setString("Vidas: " + std::to_string(jogador1->getVidas()));
+            }
+
+            if (jogador1->getVidas() <= 0)
+            {
+                std::cout << "Sem vidas! Reiniciando a fase..." << std::endl;
+                inicializar();
+            }
+        }
+        else if (vidasText)
+        {
+            vidasText->setString("Vidas: 0");
         }
     }
 

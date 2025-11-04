@@ -11,14 +11,15 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Jogador::Jogador() :
+        Jogador::Jogador(sf::Vector2f pos) :
             Personagem(),
             VELOCIDADE_MAXIMA_LATERAL(350.0f),
             ACELERACAO_LATERAL(900.0f),
             FRICCAO_LATERAL(1200.0f),
             FORCA_PULO(420.0f),
             MULTIPLICADOR_PULO_CURTO(3.0f),
-            podePular(false)
+            podePular(false),
+            posInicial(pos)
         {
             if (!textura.loadFromFile("player.png"))
             {
@@ -27,7 +28,7 @@ namespace Entidades
             }
 
             sprite.emplace(textura);
-            sprite->setPosition({400.0f, 300.0f}); 
+            sprite->setPosition(posInicial); 
         }
 
         Jogador::~Jogador()
@@ -87,6 +88,17 @@ namespace Entidades
                 velocidade.x = std::clamp(velocidade.x, -VELOCIDADE_MAXIMA_LATERAL, VELOCIDADE_MAXIMA_LATERAL);
 
                 sprite->move(velocidade * delta);
+
+                float deathPlaneY = 1500.f;
+
+                if (sprite->getPosition().y > deathPlaneY)
+                {
+                    perderVida();
+                    std::cout << "Jogador caiu! Vidas restantes: " << getVidas() << std::endl;
+
+                    setPosition(posInicial);
+                    velocidade = {0.f, 0.f};
+                }
             }
         }
 

@@ -22,12 +22,13 @@ namespace Entidades
                     const float MULTIPLICADOR_PULO_CURTO;
 
                     bool podePular;
+                    sf::Vector2f posInicial;
 
                     void aplicarFisica(float delta);
                     void processarInputs(float delta);
 
                 public:
-                    Jogador();
+                    Jogador(sf::Vector2f pos = {400.0f, 300.f});
                     ~Jogador();
 
                     virtual void executar(float delta) override;
