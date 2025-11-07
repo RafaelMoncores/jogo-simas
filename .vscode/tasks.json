@@ -1,29 +1,53 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Build Jogo (*.cpp)",
-            "type": "shell",
-            "command": "clang++",
-            "args": [
-                "-std=c++17",
-                "-g",
-                "${workspaceFolder}/code/**/*.cpp",
-                "-o",
-                "${workspaceFolder}/main",
-                "-I/opt/homebrew/opt/sfml/include",
-                "-L/opt/homebrew/opt/sfml/lib",
-                "-lsfml-graphics",
-                "-lsfml-window",
-                "-lsfml-system"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$gcc"
-            ]
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build with SFML",
+      "type": "shell",
+      "command": "C:/mingw64/bin/g++.exe",
+      "args": [
+        "-g",
+        "-std=c++17",
+        "${workspaceFolder}/code/main.cpp",
+        "${workspaceFolder}/code/Jogo.cpp",
+        "${workspaceFolder}/code/Listas/ListaEntidades.cpp",
+        "${workspaceFolder}/code/Gerenciadores/GerenciadorGrafico.cpp",
+        "${workspaceFolder}/code/Gerenciadores/GerenciadorColisoes.cpp",
+        "${workspaceFolder}/code/Listas/ListaInimigos.cpp",
+        "${workspaceFolder}/code/Listas/ListaObstaculos.cpp",
+        "${workspaceFolder}/code/Estados/Menu.cpp",
+        "${workspaceFolder}/code/Entidades/Ente.cpp",
+        "${workspaceFolder}/code/Entidades/Entidade.cpp",
+        "${workspaceFolder}/code/Entidades/Personagens/Jogador.cpp",
+        "${workspaceFolder}/code/Entidades/Personagens/Personagem.cpp",
+        "${workspaceFolder}/code/Entidades/Personagens/Inimigo.cpp",
+        "${workspaceFolder}/code/Entidades/Personagens/Slime.cpp",
+        "${workspaceFolder}/code/Entidades/Obstaculos/Obstaculo.cpp",
+        "${workspaceFolder}/code/Entidades/Obstaculos/Plataforma.cpp",
+        "${workspaceFolder}/code/Entidades/Obstaculos/Rampa.cpp",
+        "${workspaceFolder}/code/Entidades/Obstaculos/Parede.cpp",
+        "${workspaceFolder}/code/Fases/Fase.cpp",
+
+        "-I", "${workspaceFolder}/code",
+        "-I", "D:/Usuario/Documents/SFML/SFML-3.0.2/include",
+        "-L", "D:/Usuario/Documents/SFML/SFML-3.0.2/lib",
+        "-o", "${workspaceFolder}/output/projeto_simas.exe",
+        "-lsfml-graphics",
+        "-lsfml-window",
+        "-lsfml-system"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
 }
