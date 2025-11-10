@@ -13,6 +13,9 @@ namespace Entidades
                     const float FORCA_PULO;
                     const float MULTIPLICADOR_PULO_CURTO;
 
+                    bool estaNaRampa;
+                    bool rampaSobeEsquerda; // Para sabermos a direção do "slide"
+
                     void processarInputs(float delta);
                     virtual void aplicarFisica(float delta) override;
 
