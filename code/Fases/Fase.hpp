@@ -5,7 +5,10 @@
 #include "../Entidades/Obstaculos/Rampa.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
 #include "../Entidades/Personagens/Inimigo.hpp"
-#include <list>
+//#include <list>
+#include "../Listas/ListaObstaculos.hpp"
+#include "../Listas/ListaInimigos.hpp"
+#include "../Listas/ListaEntidades.hpp"
 #include <SFML/Graphics.hpp>
 #include <optional>
 
@@ -15,8 +18,14 @@ namespace Fases
     {
         private:
             Entidades::Personagens::Jogador* jogador1;
-            std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
-            std::list<Entidades::Personagens::Inimigo*> listaInimigos;
+
+            //std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
+            //std::list<Entidades::Personagens::Inimigo*> listaInimigos;
+
+            Listas::ListaObstaculos listaObstaculos;
+            Listas::ListaInimigos listaInimigos;
+            Listas::ListaEntidades listaEntidades;
+
             Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
             
             // Fundo (movido de Jogo para Fase)
@@ -25,7 +34,9 @@ namespace Fases
 
             sf::Font uiFont;
             std::optional<sf::Text> vidasText;
+
             void inicializarUI();
+            void construirNivel1();
 
         public:
             Fase();

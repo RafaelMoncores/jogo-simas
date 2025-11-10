@@ -1,5 +1,7 @@
 #include "GerenciadorColisoes.hpp"
 #include "../Entidades/Personagens/Inimigo.hpp"
+#include "../Listas/ListaObstaculos.hpp"
+#include "../Listas/ListaInimigos.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
 namespace Gerenciadores
@@ -9,28 +11,39 @@ namespace Gerenciadores
 
     void GerenciadorColisoes::verificarColisoes(
         Entidades::Personagens::Jogador* pJogador,
-        std::list<Entidades::Obstaculos::Obstaculo*>* pObstaculos,
-        std::list<Entidades::Personagens::Inimigo*>* pInimigos)
+        Listas::ListaObstaculos* pObstaculos,
+        Listas::ListaInimigos* pInimigos)
     {
         if (!pJogador) return;
 
         pJogador->setPodePular(false);
-        for (auto* pObst : *pObstaculos)
+        for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
         {
+            Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();
+            if (pObst == NULL) break;
             tratarColisao(pJogador, pObst);
         }
 
-        for (auto* pInim : *pInimigos)
+        for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
         {
+            Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
+            if (pInim == NULL) break;
+
             pInim->setPodePular(false);
-            for (auto* pObst : *pObstaculos)
+            
+            // Loop C++03 aninhado
+            for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
             {
+                Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();
+                if (pObst == NULL) break;
                 tratarColisao(pInim, pObst);
             }
         }
 
-        for (auto* pInim : *pInimigos)
+        for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
         {
+            Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
+            if (pInim == NULL) break;
             tratarColisao(pJogador, pInim);
         }
     }
