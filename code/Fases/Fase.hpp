@@ -34,7 +34,9 @@ namespace Fases
 
             sf::Font uiFont;
             std::optional<sf::Text> vidasText;
+
             void inicializarUI();
+            void construirNivel1();
 
         public:
             Fase();
