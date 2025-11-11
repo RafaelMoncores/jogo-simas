@@ -1,4 +1,4 @@
-#include "Slime.hpp"
+#include "Gosma.hpp"
 #include <iostream>
 #include <stdlib.h>
 
@@ -6,7 +6,7 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Slime::Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ) :
+        Gosma::Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ) :
             Inimigo(1, pos),
             pPlataforma(pPlat),
             tempoEspera(2.0f),
@@ -17,9 +17,9 @@ namespace Entidades
             pJogador(pJ),
             raio_deteccao(250.0f)
         {
-            if (!textura.loadFromFile("slime.png"))
+            if (!textura.loadFromFile("gosma.png"))
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'slime.png'" << std::endl;
+                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'Gosma.png'" << std::endl;
                 exit(1);
             }
             
@@ -29,11 +29,11 @@ namespace Entidades
             nivel_maldade = 1;
         }
 
-        Slime::~Slime()
+        Gosma::~Gosma()
         {
         }
 
-        void Slime::processarAI(float delta)
+        void Gosma::processarAI(float delta)
         {
             if (num_vidas <= 0) return;
             if (!pPlataforma || !sprite || !pJogador) return;
@@ -45,17 +45,17 @@ namespace Entidades
 
                 if (tempoTotal >= tempoEspera)
                 {
-                    sf::Vector2f posSlime = sprite->getPosition();
+                    sf::Vector2f posGosma = sprite->getPosition();
                     sf::Vector2f posPlayer = pJogador->getBoundingBox().position;
                     
                     float dist = std::sqrt(
-                        std::pow(posSlime.x - posPlayer.x, 2) + 
-                        std::pow(posSlime.y - posPlayer.y, 2)
+                        std::pow(posGosma.x - posPlayer.x, 2) + 
+                        std::pow(posGosma.y - posPlayer.y, 2)
                     );
 
                     if (dist < raio_deteccao)
                     {
-                        if (posPlayer.x < posSlime.x)
+                        if (posPlayer.x < posGosma.x)
                             direcaoPulo = -1;
                         else
                             direcaoPulo = 1; 
@@ -63,7 +63,7 @@ namespace Entidades
                     else
                     {
                         sf::FloatRect boundsPlat = pPlataforma->getBoundingBox();
-                        float xAtual = posSlime.x;
+                        float xAtual = posGosma.x;
                         float xCentroPlataforma = boundsPlat.position.x + (boundsPlat.size.x / 2.f); 
                         
                         if (xAtual < xCentroPlataforma) direcaoPulo = 1;
@@ -78,7 +78,7 @@ namespace Entidades
             }
         }
         
-        void Slime::aplicarFisica(float delta)
+        void Gosma::aplicarFisica(float delta)
         {
             if (sprite) 
             {
@@ -95,7 +95,7 @@ namespace Entidades
             }
         }
 
-        void Slime::executar(float delta)
+        void Gosma::executar(float delta)
         {
             if (num_vidas <= 0)
             {
@@ -109,13 +109,13 @@ namespace Entidades
             aplicarFisica(delta);
         }
 
-        void Slime::danificar(Personagem* pOutro)
+        void Gosma::danificar(Personagem* pOutro)
         {
             if (num_vidas <= 0) return;
             pOutro->perderVida();
         }
 
-        void Slime::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
+        void Gosma::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
         {
             if (num_vidas <= 0) return;
             if (!sprite) return;
@@ -164,12 +164,12 @@ namespace Entidades
             }
         }
 
-        void Slime::salvarDataBuffer()
+        void Gosma::salvarDataBuffer()
         {
             Inimigo::salvarDataBuffer();
         }
 
-        void Slime::salvar()
+        void Gosma::salvar()
         {
             Inimigo::salvar();
         }

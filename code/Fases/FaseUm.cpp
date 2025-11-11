@@ -3,7 +3,7 @@
 #include "../Entidades/Obstaculos/Plataforma.hpp"
 #include "../Entidades/Obstaculos/Rampa.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
-#include "../Entidades/Personagens/Slime.hpp"
+#include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
 
 
@@ -15,9 +15,9 @@ namespace Fases
 {
     FaseUm::FaseUm() :
         Fase(),
-        pChao2_slime(nullptr),
-        pPlat1_slime(nullptr),
-        pPlat4_slime(nullptr),
+        pChao2_Gosma(nullptr),
+        pPlat1_Gosma(nullptr),
+        pPlat4_Gosma(nullptr),
         maxInimMedios(10)
     {
     }
@@ -28,9 +28,9 @@ namespace Fases
 
     void FaseUm::criarObstaculos()
     {
-        pChao2_slime = nullptr;
-        pPlat1_slime = nullptr;
-        pPlat4_slime = nullptr;
+        pChao2_Gosma = nullptr;
+        pPlat1_Gosma = nullptr;
+        pPlat4_Gosma = nullptr;
     
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::Rampa;
@@ -53,17 +53,17 @@ namespace Fases
         listaObstaculos.incluir(pChao1);
         listaEntidades.incluir(pChao1); 
 
-        pChao2_slime = new Plataforma({1700.f, 350.f}, {150.f, 50.f}, texPlat);
-        listaObstaculos.incluir(pChao2_slime);
-        listaEntidades.incluir(pChao2_slime); 
+        pChao2_Gosma = new Plataforma({1700.f, 350.f}, {150.f, 50.f}, texPlat);
+        listaObstaculos.incluir(pChao2_Gosma);
+        listaEntidades.incluir(pChao2_Gosma); 
 
         randP = rand() % 6 + 1;
         std::cout << randP << std::endl;
 
         if(randP <= 3){
-            pPlat1_slime = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat1_slime);
-            listaEntidades.incluir(pPlat1_slime);
+            pPlat1_Gosma = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat1_Gosma);
+            listaEntidades.incluir(pPlat1_Gosma);
 
             Plataforma* pPlat2 = new Plataforma({1050.f, 350.f}, {200.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat2);
@@ -73,9 +73,9 @@ namespace Fases
             listaObstaculos.incluir(pPlat3);
             listaEntidades.incluir(pPlat3);
         }else if(randP == 4){
-            pPlat1_slime = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat1_slime);
-            listaEntidades.incluir(pPlat1_slime);
+            pPlat1_Gosma = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat1_Gosma);
+            listaEntidades.incluir(pPlat1_Gosma);
 
             Plataforma* pPlat2 = new Plataforma({1050.f, 350.f}, {200.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat2);
@@ -85,13 +85,13 @@ namespace Fases
             listaObstaculos.incluir(pPlat3);
             listaEntidades.incluir(pPlat3);
 
-            pPlat4_slime = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat4_slime);
-            listaEntidades.incluir(pPlat4_slime);
+            pPlat4_Gosma = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat4_Gosma);
+            listaEntidades.incluir(pPlat4_Gosma);
         }else if(randP == 5){
-            pPlat1_slime = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat1_slime);
-            listaEntidades.incluir(pPlat1_slime);
+            pPlat1_Gosma = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat1_Gosma);
+            listaEntidades.incluir(pPlat1_Gosma);
 
             Plataforma* pPlat2 = new Plataforma({1050.f, 350.f}, {200.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat2);
@@ -101,17 +101,17 @@ namespace Fases
             listaObstaculos.incluir(pPlat3);
             listaEntidades.incluir(pPlat3);
 
-            pPlat4_slime = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat4_slime);
-            listaEntidades.incluir(pPlat4_slime);
+            pPlat4_Gosma = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat4_Gosma);
+            listaEntidades.incluir(pPlat4_Gosma);
 
             Plataforma* pPlat5 = new Plataforma({1100.f, 600.f}, {100.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat5);
             listaEntidades.incluir(pPlat5);
         }else{
-            pPlat1_slime = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat1_slime);
-            listaEntidades.incluir(pPlat1_slime);
+            pPlat1_Gosma = new Plataforma({500.f, 500.f}, {200.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat1_Gosma);
+            listaEntidades.incluir(pPlat1_Gosma);
 
             Plataforma* pPlat2 = new Plataforma({1050.f, 350.f}, {200.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat2);
@@ -121,9 +121,9 @@ namespace Fases
             listaObstaculos.incluir(pPlat3);
             listaEntidades.incluir(pPlat3);
 
-            pPlat4_slime = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
-            listaObstaculos.incluir(pPlat4_slime);
-            listaEntidades.incluir(pPlat4_slime);
+            pPlat4_Gosma = new Plataforma({750.f, 700.f}, {250.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlat4_Gosma);
+            listaEntidades.incluir(pPlat4_Gosma);
 
             Plataforma* pPlat5 = new Plataforma({1100.f, 600.f}, {100.f, 50.f}, texPlat);
             listaObstaculos.incluir(pPlat5);
@@ -210,34 +210,34 @@ namespace Fases
 
     void FaseUm::criarInimigos()
     {
-        using Entidades::Personagens::Slime;
+        using Entidades::Personagens::Gosma;
         using Entidades::Personagens::Vampiro;
 
-        if (pChao2_slime && (rand() % 2 == 0))
+        if (pChao2_Gosma && (rand() % 2 == 0))
         {
             sf::Vector2f pos = {1720.f, 300.f};
-            Slime* pSlime = new Slime(pos, pChao2_slime, jogador1);
+            Gosma* pGosma = new Gosma(pos, pChao2_Gosma, jogador1);
             
-            listaInimigos.incluir(pSlime);
-            listaEntidades.incluir(pSlime);
+            listaInimigos.incluir(pGosma);
+            listaEntidades.incluir(pGosma);
         }
 
-        if (pPlat1_slime) 
+        if (pPlat1_Gosma) 
         {
             sf::Vector2f pos = {520.f, 450.f};
-            Slime* pSlime = new Slime(pos, pPlat1_slime, jogador1);
+            Gosma* pGosma = new Gosma(pos, pPlat1_Gosma, jogador1);
             
-            listaInimigos.incluir(pSlime);
-            listaEntidades.incluir(pSlime);
+            listaInimigos.incluir(pGosma);
+            listaEntidades.incluir(pGosma);
         }
         
-        if (pPlat4_slime)
+        if (pPlat4_Gosma)
         {
             sf::Vector2f pos = {770.f, 650.f};
-            Slime* pSlime = new Slime(pos, pPlat4_slime, jogador1);
+            Gosma* pGosma = new Gosma(pos, pPlat4_Gosma, jogador1);
             
-            listaInimigos.incluir(pSlime);
-            listaEntidades.incluir(pSlime);
+            listaInimigos.incluir(pGosma);
+            listaEntidades.incluir(pGosma);
         }
 
         Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f);

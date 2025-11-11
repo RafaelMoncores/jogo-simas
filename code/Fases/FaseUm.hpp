@@ -6,9 +6,9 @@ namespace Fases
     class FaseUm : public Fase
     {
         private:
-            Entidades::Obstaculos::Plataforma* pChao2_slime;
-            Entidades::Obstaculos::Plataforma* pPlat1_slime;
-            Entidades::Obstaculos::Plataforma* pPlat4_slime;
+            Entidades::Obstaculos::Plataforma* pChao2_Gosma;
+            Entidades::Obstaculos::Plataforma* pPlat1_Gosma;
+            Entidades::Obstaculos::Plataforma* pPlat4_Gosma;
         protected:
             virtual void criarObstaculos() override;
             virtual void criarInimigos() override;

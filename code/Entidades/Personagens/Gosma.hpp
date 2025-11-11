@@ -8,7 +8,7 @@ namespace Entidades
 {
     namespace Personagens
     {
-        class Slime : public Inimigo
+        class Gosma : public Inimigo
         {
         private:
             sf::Texture textura;
@@ -27,8 +27,8 @@ namespace Entidades
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ);
-            ~Slime();
+            Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ);
+            ~Gosma();
 
             virtual void executar(float delta) override;
             virtual void danificar(Personagem* pOutro) override;
