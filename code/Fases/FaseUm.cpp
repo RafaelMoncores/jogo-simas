@@ -4,6 +4,8 @@
 #include "../Entidades/Obstaculos/Rampa.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
 #include "../Entidades/Personagens/Slime.hpp"
+#include "../Entidades/Personagens/Vampiro.hpp"
+
 
 #include <iostream>
 #include <cstdlib>
@@ -208,6 +210,7 @@ namespace Fases
     void FaseUm::criarInimigos()
     {
         using Entidades::Personagens::Slime;
+        using Entidades::Personagens::Vampiro;
 
         if (pChao2_slime && (rand() % 2 == 0))
         {
@@ -235,5 +238,13 @@ namespace Fases
             listaInimigos.incluir(pSlime);
             listaEntidades.incluir(pSlime);
         }
+
+        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f);
+        listaInimigos.incluir(pVamp1);
+        listaEntidades.incluir(pVamp1);
+
+        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f);
+        listaInimigos.incluir(pVamp2);
+        listaEntidades.incluir(pVamp2);
     }
 }
