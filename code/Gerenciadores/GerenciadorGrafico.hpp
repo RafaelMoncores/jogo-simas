@@ -3,6 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
+namespace Entidades { 
+    class Ente; 
+}
+
 namespace Gerenciadores{
     class GerenciadorGrafico
     {
@@ -35,6 +39,7 @@ namespace Gerenciadores{
             void limpar(sf::Color cor = sf::Color::Black);
             void desenhar(const sf::Drawable& desenhavel);
             void exibir();
+            void desenha(Entidades::Ente* pE);
 
             // Configura a câmera para mostrar uma região específica do mundo
             void setViewBounds(float left, float top, float width, float height);

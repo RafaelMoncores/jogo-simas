@@ -1,4 +1,5 @@
 #include "GerenciadorGrafico.hpp"
+#include "../Entidades/Ente.hpp"
 
 namespace Gerenciadores{
     GerenciadorGrafico* GerenciadorGrafico::pInstancia = nullptr;
@@ -44,6 +45,14 @@ namespace Gerenciadores{
     void GerenciadorGrafico::desenhar(const sf::Drawable& desenhavel)
     {
         window.draw(desenhavel);
+    }
+
+    void GerenciadorGrafico::desenha(Entidades::Ente* pE)
+    {
+        if (pE)
+        {
+            pE->desenhar();
+        }
     }
 
     void GerenciadorGrafico::exibir()

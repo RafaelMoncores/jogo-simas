@@ -7,6 +7,7 @@ namespace Entidades
     {
         protected:
             static Gerenciadores::GerenciadorGrafico* pGG;
+            sf::Drawable* pFig;
 
         public:
             Ente();

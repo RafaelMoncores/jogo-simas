@@ -9,6 +9,11 @@ namespace Entidades
         protected:
             sf::Vector2f velocidade;
             const sf::Vector2f G_ACCEL;
+            int x;
+            int y;
+            std::ostream* buffer;
+
+            virtual void salvarDataBuffer();
 
         public:
             Entidade();
@@ -17,5 +22,6 @@ namespace Entidades
             virtual void executar(float delta) override = 0;
             virtual void desenhar() override = 0;
             virtual sf::FloatRect getBoundingBox() const override = 0;
+            virtual void salvar();
     };
 }
