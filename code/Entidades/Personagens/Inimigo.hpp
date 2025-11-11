@@ -17,6 +17,10 @@ namespace Entidades
             virtual void danificar(Personagem* pOutro) = 0;
             virtual void executar(float delta) override = 0;
             virtual void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra) override = 0;
+
+            virtual void salvarDataBuffer() override;
+            virtual void salvar() override;
+            virtual void colidir() override;
         };
     }
 }

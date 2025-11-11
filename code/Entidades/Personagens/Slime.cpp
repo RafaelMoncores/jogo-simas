@@ -163,5 +163,20 @@ namespace Entidades
                 velocidade.x = 0.f;
             }
         }
+
+        void Slime::salvarDataBuffer()
+        {
+            Inimigo::salvarDataBuffer();
+        }
+
+        void Slime::salvar()
+        {
+            Inimigo::salvar();
+        }
+
+        void Slime::colidir()
+        {
+            Inimigo::colidir();
+        }
     }
 }

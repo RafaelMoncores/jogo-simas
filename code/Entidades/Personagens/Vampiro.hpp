@@ -33,6 +33,10 @@ namespace Entidades
             virtual void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra) override;
             
             virtual sf::FloatRect getBoundingBox() const override;
+
+            virtual void salvarDataBuffer() override;
+            virtual void salvar() override;
+            virtual void colidir() override;
         };
     }
 }

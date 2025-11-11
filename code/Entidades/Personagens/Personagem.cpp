@@ -83,6 +83,20 @@ namespace Entidades
             podePular = pode;
         }
 
+        void Personagem::salvarDataBuffer()
+        {
+            Entidade::salvarDataBuffer();
+        }
+
+        void Personagem::salvar()
+        {
+            Entidade::salvar();
+        }
+
+        void Personagem::colidir()
+        {
+        }
+
         void Personagem::aplicarFisica(float delta)
         {
             if (sprite)

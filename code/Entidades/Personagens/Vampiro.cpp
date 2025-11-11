@@ -102,5 +102,20 @@ namespace Entidades
             }
             return {};
         }
+
+        void Vampiro::salvarDataBuffer()
+        {
+            Inimigo::salvarDataBuffer();
+        }
+
+        void Vampiro::salvar()
+        {
+            Inimigo::salvar();
+        }
+
+        void Vampiro::colidir()
+        {
+            Inimigo::colidir();
+        }
     }
 }

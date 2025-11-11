@@ -25,6 +25,8 @@ namespace Entidades
                 bool podePular;
 
                 virtual void aplicarFisica(float delta);
+                virtual void salvarDataBuffer() override;
+                
             
             public:
                 Personagem(int vidas, sf::Vector2f pos);
@@ -40,6 +42,9 @@ namespace Entidades
                 sf::Vector2f getVelocidade() const;
 
                 virtual void fazerBounce(float forcaBounce);
+
+                virtual void salvar() override;
+                virtual void colidir();
 
                 virtual void executar(float delta) override = 0;
                 virtual void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra) = 0;

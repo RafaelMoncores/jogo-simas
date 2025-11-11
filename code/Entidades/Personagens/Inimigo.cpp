@@ -13,5 +13,20 @@ namespace Entidades
         Inimigo::~Inimigo()
         {
         }
+
+        void Inimigo::salvarDataBuffer()
+        {
+            Personagem::salvarDataBuffer();
+        }
+
+        void Inimigo::salvar()
+        {
+            Personagem::salvar();
+        }
+
+        void Inimigo::colidir()
+        {
+            Personagem::colidir();
+        }
     }
 }
