@@ -23,10 +23,5 @@ namespace Entidades
         {
             Personagem::salvar();
         }
-
-        void Inimigo::colidir()
-        {
-            Personagem::colidir();
-        }
     }
 }

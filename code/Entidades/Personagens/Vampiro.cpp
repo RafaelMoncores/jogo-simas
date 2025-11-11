@@ -86,7 +86,7 @@ namespace Entidades
             pOutro->perderVida(1); 
         }
 
-        void Vampiro::resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra)
+        void Vampiro::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
         {
             if (num_vidas <= 0) return;
             return;
@@ -111,11 +111,6 @@ namespace Entidades
         void Vampiro::salvar()
         {
             Inimigo::salvar();
-        }
-
-        void Vampiro::colidir()
-        {
-            Inimigo::colidir();
         }
     }
 }

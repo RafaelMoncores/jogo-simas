@@ -9,7 +9,7 @@ namespace Entidades
         Parede::Parede(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura) :
             Obstaculo()
         {
-            danoso = false;
+            danoso = true;
             if (!textura.loadFromFile(caminhoTextura))
             {
                 std::cerr << "ERRO FATAL: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
@@ -48,7 +48,12 @@ namespace Entidades
 
         void Parede::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
-            return;
+            pJogador->colidir(this, getBoundingBox());
+            
+            if (danoso)
+            {
+                pJogador->perderVida(1);
+            }
         }
     }
 }

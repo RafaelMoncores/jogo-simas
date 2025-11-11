@@ -69,8 +69,6 @@ namespace Listas{
 
         while (pAux != NULL) {
             pProximo = pAux->getPRoximo();
-            // NOTA: Deleta apenas o 'Elemento' (nó),
-            // NÃO deleta o 'pInfo' (as Entidades).
         
             delete pAux; 
             pAux = pProximo;

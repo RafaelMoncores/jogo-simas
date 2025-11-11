@@ -115,7 +115,7 @@ namespace Entidades
             pOutro->perderVida();
         }
 
-        void Slime::resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra)
+        void Slime::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
         {
             if (num_vidas <= 0) return;
             if (!sprite) return;
@@ -172,11 +172,6 @@ namespace Entidades
         void Slime::salvar()
         {
             Inimigo::salvar();
-        }
-
-        void Slime::colidir()
-        {
-            Inimigo::colidir();
         }
     }
 }

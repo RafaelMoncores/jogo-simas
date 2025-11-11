@@ -182,7 +182,7 @@ namespace Entidades
             return {};
         }
 
-        void Jogador::resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra)
+        void Jogador::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
         {
             if (!sprite) return;
             sf::FloatRect boundsPropria = getBoundingBox();

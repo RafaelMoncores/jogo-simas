@@ -44,10 +44,9 @@ namespace Entidades
                 virtual void fazerBounce(float forcaBounce);
 
                 virtual void salvar() override;
-                virtual void colidir();
 
                 virtual void executar(float delta) override = 0;
-                virtual void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra) = 0;
+                virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) = 0;
         };
     }
 }

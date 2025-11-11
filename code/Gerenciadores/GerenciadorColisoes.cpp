@@ -55,7 +55,7 @@ namespace Gerenciadores
 
         if (boundsJogador.findIntersection(boundsObst))
         {
-            pJogador->resolverColisao(pObst, boundsObst);
+            pObst->obstaculizar(pJogador);
         }
     }
 
@@ -66,7 +66,7 @@ namespace Gerenciadores
 
         if (boundsInim.findIntersection(boundsObst))
         {
-            pInim->resolverColisao(pObst, boundsObst);
+            pInim->colidir(pObst, boundsObst);
         }
     }
 
@@ -93,14 +93,14 @@ namespace Gerenciadores
             {
                 pInim->perderVida(1);
                 pJogador->fazerBounce(250.0f);
-                pJogador->resolverColisao(pInim, boundsInim);
+                pJogador->colidir(pInim, boundsInim);
             }
             else
             {
                 pInim->danificar(pJogador);
                 
-                pJogador->resolverColisao(pInim, boundsInim);
-                pInim->resolverColisao(pJogador, boundsJogador);
+                pJogador->colidir(pInim, boundsInim);
+                pInim->colidir(pJogador, boundsJogador);
             }
         }
     }

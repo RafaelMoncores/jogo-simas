@@ -61,7 +61,7 @@ namespace Entidades
 
         void Rampa::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
-            return;
+            pJogador->colidir(this, getBoundingBox());
         }
     }
 }

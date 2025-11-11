@@ -93,10 +93,6 @@ namespace Entidades
             Entidade::salvar();
         }
 
-        void Personagem::colidir()
-        {
-        }
-
         void Personagem::aplicarFisica(float delta)
         {
             if (sprite)

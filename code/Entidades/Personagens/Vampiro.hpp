@@ -30,13 +30,12 @@ namespace Entidades
             virtual void executar(float delta) override;
             virtual void danificar(Personagem* pOutro) override;
             
-            virtual void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra) override;
+            virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
             
             virtual sf::FloatRect getBoundingBox() const override;
 
             virtual void salvarDataBuffer() override;
             virtual void salvar() override;
-            virtual void colidir() override;
         };
     }
 }

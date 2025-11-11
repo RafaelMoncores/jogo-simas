@@ -56,7 +56,7 @@ namespace Entidades
         }
         void Plataforma::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
-            return;
+            pJogador->colidir(this, getBoundingBox());
         }
     }
 }
