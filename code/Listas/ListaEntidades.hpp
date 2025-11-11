@@ -18,6 +18,7 @@ namespace Listas{
         void limpar();
 
         // Métodos de iteração 
+        void percorrer();
         void irParaPrimeiro();
         void irParaProximo();
         Entidades::Entidade* getAtual() const;

@@ -7,6 +7,7 @@
 namespace Fases
 {
     Fase::Fase() :
+        Ente(),
         jogador1(nullptr)
     {
         if (!texFase.loadFromFile("fase_background.png"))
@@ -126,5 +127,15 @@ namespace Fases
         
         pGG->resetarView();
         if (vidasText) pGG->desenhar(*vidasText);
+    }
+
+    sf::FloatRect Fase::getBoundingBox() const
+    {
+        return sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}); 
+    }
+
+    void Fase::salvar()
+    {
+        // Método de persistência (ainda não implementado)
     }
 }

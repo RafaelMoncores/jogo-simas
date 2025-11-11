@@ -1,4 +1,5 @@
 #pragma once
+#include "../Entidades/Ente.hpp"
 #include "../Entidades/Personagens/Jogador.hpp"
 #include "../Entidades/Obstaculos/Plataforma.hpp"
 #include "../Gerenciadores/GerenciadorColisoes.hpp"
@@ -14,7 +15,7 @@
 
 namespace Fases
 {
-    class Fase
+    class Fase : public Entidades::Ente
     {
         protected: 
             Entidades::Personagens::Jogador* jogador1;
@@ -35,13 +36,18 @@ namespace Fases
 
             virtual void criarObstaculos() = 0;
             virtual void criarInimigos() = 0;
+            virtual void criarPlataformas() = 0;
+            virtual void PosarInimigos() = 0;
+            virtual void PosarObstaculos() = 0;
 
         public:
             Fase();
             virtual ~Fase();
 
             void inicializar();
-            void executar(float delta);
-            void desenhar();
+            virtual void executar(float delta) override;
+            virtual void desenhar() override;
+            virtual sf::FloatRect getBoundingBox() const override;
+            virtual void salvar();
     };
 }

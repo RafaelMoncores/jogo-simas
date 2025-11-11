@@ -20,6 +20,10 @@ namespace Listas
         LEs.limpar();
     }
 
+    void ListaEntidades::percorrer()
+    {
+    }
+
     void ListaEntidades::irParaPrimeiro() {
         LEs.irParaPrimeiro();
     }

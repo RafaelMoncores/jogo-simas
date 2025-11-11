@@ -17,7 +17,8 @@ namespace Fases
         Fase(),
         pChao2_slime(nullptr),
         pPlat1_slime(nullptr),
-        pPlat4_slime(nullptr)
+        pPlat4_slime(nullptr),
+        maxInimMedios(10)
     {
     }
 
@@ -246,5 +247,35 @@ namespace Fases
         Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f);
         listaInimigos.incluir(pVamp2);
         listaEntidades.incluir(pVamp2);
+    }
+
+    void FaseUm::criarPlataformas()
+    {
+        // Método "casca" para cumprir o UML.
+        // A lógica principal já está em criarObstaculos().
+    }
+
+    void FaseUm::PosarInimigos()
+    {
+        // Método "casca" para cumprir o UML.
+        // A lógica principal já está em criarInimigos().
+    }
+
+    void FaseUm::PosarObstaculos()
+    {
+        // Método "casca" para cumprir o UML.
+        // A lógica principal já está em criarObstaculos().
+    }
+
+    void FaseUm::criarInimMedios()
+    {
+        // Método "casca" para cumprir o UML. [cite: 191]
+        // (Você pode mover a criação dos Vampiros para cá se quiser)
+    }
+
+    void FaseUm::criarObstMedios()
+    {
+        // Método "casca" para cumprir o UML. [cite: 192]
+        // (Você pode mover a criação das Rampas para cá se quiser)
     }
 }
