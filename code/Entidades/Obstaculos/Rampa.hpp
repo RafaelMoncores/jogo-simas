@@ -4,27 +4,28 @@
 #include <optional>
 #include <string>
 
+namespace Entidades { namespace Personagens { class Jogador; } }
+
 namespace Entidades
 {
     namespace Obstaculos
     {
         class Rampa : public Obstaculo
         {
-        private:
-            std::optional<sf::Sprite> sprite;
-            sf::Texture textura;
-            bool sobeDaEsquerda; // true = '/', false = '\'
+            private:
+                std::optional<sf::Sprite> sprite;
+                sf::Texture textura;
+                bool sobeDaEsquerda;
+                float largura;
 
-        public:
-            // Construtor agora recebe 'sobeEsq'
-            Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura);
-            ~Rampa();
+            public:
+                Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura);
+                ~Rampa();
 
-            virtual void desenhar() override;
-            virtual sf::FloatRect getBoundingBox() const override;
-
-            // Métodos para a colisão
-            bool getSobeDaEsquerda() const;
+                virtual void desenhar() override;
+                virtual sf::FloatRect getBoundingBox() const override;
+                bool getSobeDaEsquerda() const;
+                virtual void obstaculizar(Personagens::Jogador* pJogador) override;
         };
     }
 }

@@ -1,4 +1,5 @@
 #include "Rampa.hpp"
+#include "../Personagens/Jogador.hpp"
 #include <iostream>
 #include <string>
 
@@ -8,9 +9,10 @@ namespace Entidades
     {
         Rampa::Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura) :
             Obstaculo(),
-            sobeDaEsquerda(sobeEsq)
+            sobeDaEsquerda(sobeEsq),
+            largura(size.x)
         {
-            // Crie uma imagem "rampa.png" (ou "rampa_sobe.png")
+            danoso = false;
             if (!textura.loadFromFile(caminhoTextura)) 
             {
                 std::cerr << "ERRO: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
@@ -19,16 +21,13 @@ namespace Entidades
             sprite.emplace(textura);
             sprite->setPosition(pos);
 
-            // Escala o sprite para o tamanho desejado
             sf::Vector2f texSize = static_cast<sf::Vector2f>(textura.getSize());
             float scaleX = size.x / texSize.x;
             float scaleY = size.y / texSize.y;
 
-            // Se for uma rampa que desce ('\'), inverta o X da textura
             if (!sobeDaEsquerda)
             {
                 scaleX *= -1.f;
-                // E ajuste a posição, pois inverter a textura a move
                 sprite->setPosition({pos.x + size.x, pos.y});
             }
             
@@ -58,6 +57,11 @@ namespace Entidades
         bool Rampa::getSobeDaEsquerda() const
         {
             return sobeDaEsquerda;
+        }
+
+        void Rampa::obstaculizar(Personagens::Jogador* pJogador)
+        {
+            return;
         }
     }
 }

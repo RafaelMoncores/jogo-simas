@@ -1,4 +1,5 @@
 #include "Parede.hpp"
+#include "../Personagens/Jogador.hpp"
 #include <iostream>
 
 namespace Entidades
@@ -8,6 +9,7 @@ namespace Entidades
         Parede::Parede(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura) :
             Obstaculo()
         {
+            danoso = false;
             if (!textura.loadFromFile(caminhoTextura))
             {
                 std::cerr << "ERRO FATAL: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
@@ -42,6 +44,11 @@ namespace Entidades
         sf::FloatRect Parede::getBoundingBox() const
         {
             return corpo.getGlobalBounds();
+        }
+
+        void Parede::obstaculizar(Personagens::Jogador* pJogador)
+        {
+            return;
         }
     }
 }
