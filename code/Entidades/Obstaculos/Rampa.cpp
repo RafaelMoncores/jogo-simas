@@ -59,7 +59,7 @@ namespace Entidades
             return sobeDaEsquerda;
         }
 
-        void Rampa::obstaculizar(Personagens::Jogador* pJogador)
+        void Rampa::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
             return;
         }

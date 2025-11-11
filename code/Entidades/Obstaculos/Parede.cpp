@@ -46,7 +46,7 @@ namespace Entidades
             return corpo.getGlobalBounds();
         }
 
-        void Parede::obstaculizar(Personagens::Jogador* pJogador)
+        void Parede::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
             return;
         }

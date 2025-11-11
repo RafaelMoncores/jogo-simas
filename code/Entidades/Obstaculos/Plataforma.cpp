@@ -54,5 +54,9 @@ namespace Entidades
             }
             return {};
         }
+        void Plataforma::obstaculizar(Entidades::Personagens::Jogador* pJogador)
+        {
+            return;
+        }
     }
 }
