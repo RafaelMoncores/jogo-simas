@@ -1,5 +1,6 @@
 #pragma once
 #include "Inimigo.hpp"
+#include "Jogador.hpp"
 #include "../Obstaculos/Plataforma.hpp"
 #include "../Obstaculos/Rampa.hpp"
 
@@ -19,11 +20,14 @@ namespace Entidades
             const float FORCA_PULO_INIMIGO;
             const float VELOCIDADE_LATERAL_INIMIGO;
 
+            Entidades::Personagens::Jogador* pJogador;
+            const float raio_deteccao;
+
             void processarAI(float delta);
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat);
+            Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ);
             ~Slime();
 
             virtual void executar(float delta) override;

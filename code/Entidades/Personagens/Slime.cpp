@@ -6,14 +6,16 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Slime::Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat) :
+        Slime::Slime(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ) :
             Inimigo(1, pos),
             pPlataforma(pPlat),
             tempoEspera(2.0f),
             tempoTotal(0.0f),
             direcaoPulo(1),
             FORCA_PULO_INIMIGO(350.0f),
-            VELOCIDADE_LATERAL_INIMIGO(100.0f)
+            VELOCIDADE_LATERAL_INIMIGO(100.0f),
+            pJogador(pJ),
+            raio_deteccao(100.0f)
         {
             if (!textura.loadFromFile("slime.png"))
             {
@@ -33,7 +35,7 @@ namespace Entidades
 
         void Slime::processarAI(float delta)
         {
-            if (!pPlataforma || !sprite) return;
+            if (!pPlataforma || !sprite || !pJogador) return;
 
             if (podePular)
             {
@@ -42,18 +44,29 @@ namespace Entidades
 
                 if (tempoTotal >= tempoEspera)
                 {
-                    sf::FloatRect boundsPlat = pPlataforma->getBoundingBox();
-                    float xAtual = sprite->getPosition().x;
+                    sf::Vector2f posSlime = sprite->getPosition();
+                    sf::Vector2f posPlayer = pJogador->getBoundingBox().position;
                     
-                    float xCentroPlataforma = boundsPlat.position.x + (boundsPlat.size.x / 2.f); 
+                    float dist = std::sqrt(
+                        std::pow(posSlime.x - posPlayer.x, 2) + 
+                        std::pow(posSlime.y - posPlayer.y, 2)
+                    );
 
-                    if (xAtual < xCentroPlataforma)
+                    if (dist < raio_deteccao)
                     {
-                        direcaoPulo = 1;
+                        if (posPlayer.x < posSlime.x)
+                            direcaoPulo = -1;
+                        else
+                            direcaoPulo = 1; 
                     }
                     else
                     {
-                        direcaoPulo = -1;
+                        sf::FloatRect boundsPlat = pPlataforma->getBoundingBox();
+                        float xAtual = posSlime.x;
+                        float xCentroPlataforma = boundsPlat.position.x + (boundsPlat.size.x / 2.f); 
+                        
+                        if (xAtual < xCentroPlataforma) direcaoPulo = 1;
+                        else direcaoPulo = -1;
                     }
 
                     velocidade.y = -FORCA_PULO_INIMIGO;

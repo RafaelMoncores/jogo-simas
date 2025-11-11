@@ -16,11 +16,8 @@ namespace Fases
 {
     class Fase
     {
-        private:
+        protected: 
             Entidades::Personagens::Jogador* jogador1;
-
-            //std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
-            //std::list<Entidades::Personagens::Inimigo*> listaInimigos;
 
             Listas::ListaObstaculos listaObstaculos;
             Listas::ListaInimigos listaInimigos;
@@ -28,7 +25,6 @@ namespace Fases
 
             Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
             
-            // Fundo (movido de Jogo para Fase)
             sf::Texture texFase;
             std::optional<sf::Sprite> bgFase;
 
@@ -36,11 +32,13 @@ namespace Fases
             std::optional<sf::Text> vidasText;
 
             void inicializarUI();
-            void construirNivel1();
+
+            virtual void criarObstaculos() = 0;
+            virtual void criarInimigos() = 0;
 
         public:
             Fase();
-            ~Fase();
+            virtual ~Fase();
 
             void inicializar();
             void executar(float delta);

@@ -3,6 +3,8 @@
 #include "Entidades/Ente.hpp"
 #include "Entidades/Personagens/Jogador.hpp"
 
+#include "Fases/FaseUm.hpp"
+
 using Gerenciadores::GerenciadorGrafico;
 using Entidades::Ente;
 using Estados::Menu;
@@ -10,12 +12,9 @@ using Fases::Fase;
 
 Jogo::Jogo() :
     pGG(nullptr),
-    //jogador1(),
     menu(),
     pFaseAtual(nullptr),
-    estadoAtual(EstadoJogo::NoMenu)
-    //texFase(),      
-    //bgFase()        
+    estadoAtual(EstadoJogo::NoMenu) 
 {
     inicializar();
 }
@@ -51,7 +50,7 @@ void Jogo::executar()
                     estadoAtual = EstadoJogo::Jogando;
                     if (!pFaseAtual)
                     {
-                        pFaseAtual = new Fase();
+                        pFaseAtual = new Fases::FaseUm();
                     }
                     pFaseAtual->inicializar(); 
                     estadoAtual = EstadoJogo::Jogando;

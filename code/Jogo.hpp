@@ -3,7 +3,7 @@
 #include "Gerenciadores/GerenciadorGrafico.hpp"
 #include "Entidades/Personagens/Jogador.hpp"
 #include "Estados/Menu.hpp"
-#include "Fases/Fase.hpp"
+#include "Fases/FaseUm.hpp"
 #include <SFML/System/Clock.hpp>
 
 class Jogo
@@ -15,7 +15,7 @@ class Jogo
         Gerenciadores::GerenciadorGrafico* pGG;
         //Entidades::Personagens::Jogador jogador1;
         Estados::Menu menu;
-        Fases::Fase* pFaseAtual;
+        Fases::FaseUm* pFaseAtual;
         sf::Clock relogio;
 
         //sf::Texture texFase;

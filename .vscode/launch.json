@@ -1,18 +1,21 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug SFML",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/output/projeto_simas.exe",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "externalConsole": true,
-      "preLaunchTask": "build with SFML",
-      "MIMode": "gdb",
-      "miDebuggerPath": "C:/mingw64/bin/gdb.exe"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(lldb) Launch Jogo (main)",
+            "type": "cppdbg",
+            "request": "launch",
+            
+            "program": "${workspaceFolder}/main",
+            
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build Jogo (*.cpp)" 
+        }
+    ]
 }
