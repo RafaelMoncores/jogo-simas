@@ -15,7 +15,7 @@ namespace Entidades
             FORCA_PULO_INIMIGO(350.0f),
             VELOCIDADE_LATERAL_INIMIGO(100.0f),
             pJogador(pJ),
-            raio_deteccao(100.0f)
+            raio_deteccao(250.0f)
         {
             if (!textura.loadFromFile("slime.png"))
             {
@@ -35,6 +35,7 @@ namespace Entidades
 
         void Slime::processarAI(float delta)
         {
+            if (num_vidas <= 0) return;
             if (!pPlataforma || !sprite || !pJogador) return;
 
             if (podePular)
@@ -96,17 +97,27 @@ namespace Entidades
 
         void Slime::executar(float delta)
         {
+            if (num_vidas <= 0)
+            {
+                if (sprite)
+                {
+                    sprite.reset();
+                }
+                return;
+            }
             processarAI(delta);
             aplicarFisica(delta);
         }
 
         void Slime::danificar(Personagem* pOutro)
         {
+            if (num_vidas <= 0) return;
             pOutro->perderVida();
         }
 
         void Slime::resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra)
         {
+            if (num_vidas <= 0) return;
             if (!sprite) return;
             sf::FloatRect boundsPropria = getBoundingBox();
 

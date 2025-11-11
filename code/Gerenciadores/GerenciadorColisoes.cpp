@@ -77,35 +77,30 @@ namespace Gerenciadores
 
         if (boundsJogador.findIntersection(boundsInim))
         {
-            float peJogador = boundsJogador.position.y + boundsJogador.size.y;
-            float topoInimigo = boundsInim.position.y;
             float velJogadorY = pJogador->getVelocidade().y;
 
-            if (velJogadorY > 0 && (peJogador - velJogadorY * 0.016f) < topoInimigo)
+            sf::Vector2f centroJogador(boundsJogador.position.x + boundsJogador.size.x / 2.f, boundsJogador.position.y + boundsJogador.size.y / 2.f);
+            sf::Vector2f centroInimigo(boundsInim.position.x + boundsInim.size.x / 2.f, boundsInim.position.y + boundsInim.size.y / 2.f);
+            sf::Vector2f distCentros(centroJogador.x - centroInimigo.x, centroJogador.y - centroInimigo.y);
+            
+            float somaMeiasLarguras = boundsJogador.size.x / 2.f + boundsInim.size.x / 2.f;
+            float somaMeiasAlturas = boundsJogador.size.y / 2.f + boundsInim.size.y / 2.f;
+            
+            float overlapX = somaMeiasLarguras - std::abs(distCentros.x);
+            float overlapY = somaMeiasAlturas - std::abs(distCentros.y);
+            
+            if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
             {
                 pInim->perderVida(1);
-            }
-            else if (pJogador->getEstaAtacando())
-            {
-                float centroJogadorX = boundsJogador.position.x + boundsJogador.size.x / 2.f;
-                float centroInimigoX = boundsInim.position.x + boundsInim.size.x / 2.f;
-                float distH = centroInimigoX - centroJogadorX;
-                int dirJ = pJogador->getDirecao();
-
-                bool olhandoParaInimigo = (dirJ > 0 && distH > 0) || (dirJ < 0 && distH < 0);
-
-                if (olhandoParaInimigo)
-                {
-                    pInim->perderVida(1);
-                }
-                else
-                {
-                    pInim->danificar(pJogador);
-                }
+                pJogador->fazerBounce(250.0f);
+                pJogador->resolverColisao(pInim, boundsInim);
             }
             else
             {
                 pInim->danificar(pJogador);
+                
+                pJogador->resolverColisao(pInim, boundsInim);
+                pInim->resolverColisao(pJogador, boundsJogador);
             }
         }
     }

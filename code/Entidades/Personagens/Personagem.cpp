@@ -35,6 +35,10 @@ namespace Entidades
                 setPosition(posInicial);
                 velocidade = {0.f, 0.f};
             }
+            else
+            {
+                velocidade = {0.f, 0.f};
+            }
         }
 
         int Personagem::getVidas() const
@@ -57,6 +61,7 @@ namespace Entidades
 
         void Personagem::desenhar()
         {
+            if (num_vidas <= 0) return;
             if (pGG && sprite)
             {
                 pGG->desenhar(*sprite);
@@ -65,6 +70,7 @@ namespace Entidades
 
         sf::FloatRect Personagem::getBoundingBox() const
         {
+            if (num_vidas <= 0) return{};
             if (sprite)
             {
                 return sprite->getGlobalBounds();
@@ -111,6 +117,11 @@ namespace Entidades
                     perderVida();
                 }
             }
+        }
+
+        void Personagem::fazerBounce(float forcaBounce)
+        {
+            velocidade.y = -forcaBounce; 
         }
     }
 }

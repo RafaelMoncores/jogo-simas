@@ -54,44 +54,38 @@ namespace Entidades
 
         void Jogador::aplicarFisica(float delta)
         {
-            // --- FATOR DE LENTIDÃO ---
-            const float FATOR_LENTIDAO_RAMPA = 0.15f; // (Pode testar com 0.0f agora)
+            const float FATOR_LENTIDAO_RAMPA = 0.15f;
             float modificadorAceleracao = 0.7f; 
 
-            // 1. INPUT HORIZONTAL
             bool inputEsquerda = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A);
             bool inputDireita = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
             bool noInputHorizontal = !inputEsquerda && !inputDireita;
 
-            // --- LÓGICA DE LENTIDÃO (Correta) ---
             if (estaNaRampa)
             {
-                // Se estiver a tentar subir...
-                if ((rampaSobeEsquerda && inputDireita) || // Subindo a rampa '/'
-                    (!rampaSobeEsquerda && inputEsquerda))  // Subindo a rampa '\'
+                if ((rampaSobeEsquerda && inputDireita) ||
+                    (!rampaSobeEsquerda && inputEsquerda))
                 {
-                    // ...aplique a lentidão.
                     modificadorAceleracao = FATOR_LENTIDAO_RAMPA;
                 }
             }
 
-            // Aplica o input de aceleração, JÁ MODIFICADO pelo fator de lentidão
             if (inputEsquerda)
             {
                 velocidade.x -= ACELERACAO_LATERAL * modificadorAceleracao * delta;
+                direcao = -1;
             }
             if (inputDireita)
             {
                 velocidade.x += ACELERACAO_LATERAL * modificadorAceleracao * delta;
+                direcao = 1;
             }
 
-            // 2. LÓGICA DO PULO CURTO (Sem alteração)
             if (velocidade.y < 0.0f && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
             {
                 velocidade.y += G_ACCEL.y * MULTIPLICADOR_PULO_CURTO * delta;
             }
 
-            // 3. GRAVIDADE (Sem alteração)
             velocidade.y += G_ACCEL.y * delta;
 
             
@@ -182,8 +176,6 @@ namespace Entidades
                 float ajusteLargura = 48.0f;
                 bounds.position.x += ajusteLargura / 2.f;
                 bounds.size.x -= ajusteLargura;
-                float ajusteAltura = 10.0f;
-                bounds.size.y -= ajusteAltura;
 
                 return bounds;
             }
