@@ -1,15 +1,35 @@
-# Ignora todos os arquivos .json em qualquer pasta
+# ===================================
+# VSCode
+# ===================================
+# Ignora toda a pasta .vscode e tudo dentro dela
 .vscode/
-*.json
 
-# Ignora todas as pastas de debug .dSYM (e tudo dentro delas)
-*.dSYM/
-
-# Ignorar executáveis compilados
-main
-code/main
-code/jogo_simas
+# ===================================
+# Compilação / Binários
+# ===================================
+# Diretórios comuns de build
 build/
 bin/
+out/
+
+# Executáveis compilados (Linux, macOS, Windows)
 *.exe
 *.out
+*.app
+*.dll
+*.so
+*.dylib
+
+# Arquivos objeto e intermediários
+*.o
+*.obj
+*.a
+*.lib
+
+# ===================================
+# Debug e logs
+# ===================================
+*.log
+*.dSYM/
+*.pdb
+*.idb
