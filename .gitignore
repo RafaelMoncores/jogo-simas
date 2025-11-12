@@ -1,4 +1,5 @@
 # Ignora todos os arquivos .json em qualquer pasta
+.vscode/
 *.json
 
 # Ignora todas as pastas de debug .dSYM (e tudo dentro delas)
@@ -8,3 +9,7 @@
 main
 code/main
 code/jogo_simas
+build/
+bin/
+*.exe
+*.out
