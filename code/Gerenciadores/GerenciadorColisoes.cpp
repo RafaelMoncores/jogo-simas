@@ -98,9 +98,6 @@ namespace Gerenciadores
             else
             {
                 pInim->danificar(pJogador);
-                
-                pJogador->colidir(pInim, boundsInim);
-                pInim->colidir(pJogador, boundsJogador);
             }
         }
     }

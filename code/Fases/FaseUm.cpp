@@ -45,7 +45,7 @@ namespace Fases
         srand(time(nullptr));
         
         std::string texPlat = "plataforma.png";
-        std::string texRamp = "rampa.png";
+        std::string texTrampolim = "trampolim.png";
         std::string texParede = "terra.png";
 
 
@@ -140,52 +140,54 @@ namespace Fases
         randR = rand() % 5 + 1;
         std::cout << randR << std::endl;
 
+        float forcaRebote = 600.f;
+
         if(randR <= 3){
-            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
         }else if(randR == 4){
-            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
 
-            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp4);
             listaEntidades.incluir(pRamp4);
         }else{
-            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
 
-            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp4);
             listaEntidades.incluir(pRamp4);
 
-            Trampolim* pRamp5 = new Trampolim({1650.f, 550.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp5 = new Trampolim({1650.f, 550.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pRamp5);
             listaEntidades.incluir(pRamp5);
         }
