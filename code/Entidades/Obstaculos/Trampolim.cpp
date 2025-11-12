@@ -1,4 +1,4 @@
-#include "Rampa.hpp"
+#include "Trampolim.hpp"
 #include "../Personagens/Jogador.hpp"
 #include <iostream>
 #include <string>
@@ -7,7 +7,7 @@ namespace Entidades
 {
     namespace Obstaculos
     {
-        Rampa::Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura) :
+        Trampolim::Trampolim(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura) :
             Obstaculo(),
             sobeDaEsquerda(sobeEsq),
             largura(size.x),
@@ -36,9 +36,9 @@ namespace Entidades
             sprite->setScale({scaleX, scaleY});
         }
 
-        Rampa::~Rampa() {}
+        Trampolim::~Trampolim() {}
 
-        void Rampa::desenhar()
+        void Trampolim::desenhar()
         {
             if (pGG && sprite)
             {
@@ -46,17 +46,17 @@ namespace Entidades
             }
         }
 
-        sf::FloatRect Rampa::getBoundingBox() const
+        sf::FloatRect Trampolim::getBoundingBox() const
         {
             return sf::FloatRect(m_pos, m_size);
         }
 
-        bool Rampa::getSobeDaEsquerda() const
+        bool Trampolim::getSobeDaEsquerda() const
         {
             return sobeDaEsquerda;
         }
 
-        void Rampa::obstaculizar(Entidades::Personagens::Jogador* pJogador)
+        void Trampolim::obstaculizar(Entidades::Personagens::Jogador* pJogador)
         {
             pJogador->colidir(this, getBoundingBox());
         }

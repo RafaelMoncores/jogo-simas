@@ -10,7 +10,7 @@ namespace Entidades
 {
     namespace Obstaculos
     {
-        class Rampa : public Obstaculo
+        class Trampolim : public Obstaculo
         {
             private:
                 std::optional<sf::Sprite> sprite;
@@ -21,8 +21,8 @@ namespace Entidades
                 sf::Vector2f m_size;
 
             public:
-                Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura);
-                ~Rampa();
+                Trampolim(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura);
+                ~Trampolim();
 
                 virtual void desenhar() override;
                 virtual sf::FloatRect getBoundingBox() const override;

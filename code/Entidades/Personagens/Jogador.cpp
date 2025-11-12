@@ -1,6 +1,6 @@
 #include "Jogador.hpp"
 #include "../Obstaculos/Plataforma.hpp"
-#include "../Obstaculos/Rampa.hpp"
+#include "../Obstaculos/Trampolim.hpp"
 #include <iostream>
 #include <stdlib.h>
 #include <SFML/Window/Keyboard.hpp>
@@ -16,7 +16,7 @@ namespace Entidades
             Personagem(3, pos),
             FORCA_PULO(420.0f),
             MULTIPLICADOR_PULO_CURTO(3.0f),
-            estaNaRampa(false),
+            estaNaTrampolim(false),
             rampaSobeEsquerda(false),
             direcao(1),
             estaAtacando(false),
@@ -61,7 +61,7 @@ namespace Entidades
             bool inputDireita = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
             bool noInputHorizontal = !inputEsquerda && !inputDireita;
 
-            if (estaNaRampa)
+            if (estaNaTrampolim)
             {
                 if ((rampaSobeEsquerda && inputDireita) ||
                     (!rampaSobeEsquerda && inputEsquerda))
@@ -88,7 +88,7 @@ namespace Entidades
 
             velocidade.y += G_ACCEL.y * delta;
 
-            if (estaNaRampa) 
+            if (estaNaTrampolim) 
             {
                 // ESTAMOS NA RAMPA
                 const float FORCA_SLIDE_RAMPA = 10.0f; // O seu valor de slide
@@ -96,12 +96,12 @@ namespace Entidades
                 // SÓ APLIQUE O SLIDE SE O JOGADOR ESTIVER PARADO
                 if (noInputHorizontal)
                 {
-                    // Rampa '/' (sobe da esquerda) -> desliza para a ESQUERDA (negativo)
+                    // Trampolim '/' (sobe da esquerda) -> desliza para a ESQUERDA (negativo)
                     if (rampaSobeEsquerda) 
                     {
                         velocidade.x -= FORCA_SLIDE_RAMPA * delta; // <--- CORRIGIDO
                     }
-                    // Rampa '\' (sobe da direita) -> desliza para a DIREITA (positivo)
+                    // Trampolim '\' (sobe da direita) -> desliza para a DIREITA (positivo)
                     else 
                     {
                         velocidade.x += FORCA_SLIDE_RAMPA * delta; // <--- CORRIGIDO
@@ -198,29 +198,29 @@ namespace Entidades
 
             if (overlapX <= 0 || overlapY <= 0) return;
 
-            if (auto* pRampa = dynamic_cast<Obstaculos::Rampa*>(pOutra))
+            if (auto* pTrampolim = dynamic_cast<Obstaculos::Trampolim*>(pOutra))
             {
                 // --- INÍCIO DA LÓGICA DA RAMPA ---
                 
                 // Função interna para calcular a altura Y exata da rampa em um ponto X
-                auto calcularAlturaRampa = [&](float pontoX) -> float {
+                auto calcularAlturaTrampolim = [&](float pontoX) -> float {
                     float xRelativo = pontoX - boundsOutra.position.x;
-                    float pctRampa = std::clamp(xRelativo / boundsOutra.size.x, 0.f, 1.f);
+                    float pctTrampolim = std::clamp(xRelativo / boundsOutra.size.x, 0.f, 1.f);
                     float alturaNoPonto;
 
-                    if (pRampa->getSobeDaEsquerda()) {
-                        // Rampa '/'
-                        alturaNoPonto = boundsOutra.size.y * (1.f - pctRampa);
+                    if (pTrampolim->getSobeDaEsquerda()) {
+                        // Trampolim '/'
+                        alturaNoPonto = boundsOutra.size.y * (1.f - pctTrampolim);
                     }
                     else {
-                        // Rampa '\'
-                        alturaNoPonto = boundsOutra.size.y * pctRampa;
+                        // Trampolim '\'
+                        alturaNoPonto = boundsOutra.size.y * pctTrampolim;
                     }
                     return boundsOutra.position.y + alturaNoPonto;
                 };
 
                 // Calcula a altura "correta" do chão da rampa
-                float yTopoRampa = calcularAlturaRampa(centroProprio.x);
+                float yTopoTrampolim = calcularAlturaTrampolim(centroProprio.x);
                 
                 // Pega a posição dos "pés" do jogador
                 float peY = boundsPropria.position.y + boundsPropria.size.y;
@@ -233,11 +233,11 @@ namespace Entidades
                 // (Aumentei a tolerância para "pegar" o jogador mais facilmente)
                 float stepUpTolerance = 5.f; 
                 
-                if (peY >= (yTopoRampa - stepUpTolerance) && velocidade.y >= 0)
+                if (peY >= (yTopoTrampolim - stepUpTolerance) && velocidade.y >= 0)
                 {
                     // "Eleve o boneco para a linha da diagonal"
                     // Calcula a nova posição Y exata do *topo* do sprite
-                    float newPlayerY = yTopoRampa - boundsPropria.size.y;
+                    float newPlayerY = yTopoTrampolim - boundsPropria.size.y;
                     
                     // FORÇA a posição do jogador para a altura correta
                     // (Mantém a posição X que ele já tinha)
@@ -246,8 +246,8 @@ namespace Entidades
                     // O resto da lógica
                     velocidade.y = 0.f;
                     podePular = true;
-                    estaNaRampa = true;
-                    rampaSobeEsquerda = pRampa->getSobeDaEsquerda();
+                    estaNaTrampolim = true;
+                    rampaSobeEsquerda = pTrampolim->getSobeDaEsquerda();
                 }
                 else
                 {
@@ -277,7 +277,7 @@ namespace Entidades
                             sprite->move({ 0.f, -overlapY });
                             velocidade.y = 0.f;
                             podePular = true;
-                            estaNaRampa = false; // Garante que não está mais na rampa
+                            estaNaTrampolim = false; // Garante que não está mais na rampa
                         }
                     }
                 }

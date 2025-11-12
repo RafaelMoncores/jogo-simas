@@ -132,7 +132,7 @@ namespace Entidades
 
             if (overlapX <= 0 || overlapY <= 0) return;
 
-            if (dynamic_cast<Obstaculos::Rampa*>(pOutra))
+            if (dynamic_cast<Obstaculos::Trampolim*>(pOutra))
             {
                 if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
                 else { sprite->move({ -overlapX, 0.f }); }

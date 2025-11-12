@@ -42,6 +42,7 @@ namespace Entidades
                 sf::Vector2f getVelocidade() const;
 
                 virtual void fazerBounce(float forcaBounce);
+                virtual void aplicarRepel(sf::Vector2f forcaRepel);
 
                 virtual void salvar() override;
 

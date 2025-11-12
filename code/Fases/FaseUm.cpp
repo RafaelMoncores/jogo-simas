@@ -1,7 +1,7 @@
 #include "FaseUm.hpp"
 
 #include "../Entidades/Obstaculos/Plataforma.hpp"
-#include "../Entidades/Obstaculos/Rampa.hpp"
+#include "../Entidades/Obstaculos/Trampolim.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
@@ -33,7 +33,7 @@ namespace Fases
         pPlat4_Gosma = nullptr;
     
         using Entidades::Obstaculos::Plataforma;
-        using Entidades::Obstaculos::Rampa;
+        using Entidades::Obstaculos::Trampolim;
         using Entidades::Obstaculos::Parede;
 
         float larguraMundo = 1900.f; 
@@ -141,51 +141,51 @@ namespace Fases
         std::cout << randR << std::endl;
 
         if(randR <= 3){
-            Rampa* pRamp1 = new Rampa({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Rampa* pRamp2 = new Rampa({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
         }else if(randR == 4){
-            Rampa* pRamp1 = new Rampa({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Rampa* pRamp2 = new Rampa({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
 
-            Rampa* pRamp4 = new Rampa({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp4);
             listaEntidades.incluir(pRamp4);
         }else{
-            Rampa* pRamp1 = new Rampa({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp1 = new Trampolim({800.f, 450.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp1);
             listaEntidades.incluir(pRamp1);
 
-            Rampa* pRamp2 = new Rampa({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp2 = new Trampolim({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
-            Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
+            Trampolim* pRamp3 = new Trampolim({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
 
-            Rampa* pRamp4 = new Rampa({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp4 = new Trampolim({1300.f, 500.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp4);
             listaEntidades.incluir(pRamp4);
 
-            Rampa* pRamp5 = new Rampa({1650.f, 550.f}, {50.f, 50.f}, true, texRamp);
+            Trampolim* pRamp5 = new Trampolim({1650.f, 550.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp5);
             listaEntidades.incluir(pRamp5);
         }
@@ -276,6 +276,6 @@ namespace Fases
     void FaseUm::criarObstMedios()
     {
         // Método "casca" para cumprir o UML. [cite: 192]
-        // (Você pode mover a criação das Rampas para cá se quiser)
+        // (Você pode mover a criação das Trampolims para cá se quiser)
     }
 }

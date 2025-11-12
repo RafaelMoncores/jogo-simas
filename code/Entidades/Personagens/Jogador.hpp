@@ -13,7 +13,7 @@ namespace Entidades
                     const float FORCA_PULO;
                     const float MULTIPLICADOR_PULO_CURTO;
 
-                    bool estaNaRampa;
+                    bool estaNaTrampolim;
                     bool rampaSobeEsquerda; // Para sabermos a direção do "slide"
 
                     int direcao;

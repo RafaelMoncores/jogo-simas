@@ -133,5 +133,10 @@ namespace Entidades
         {
             velocidade.y = -forcaBounce; 
         }
+
+        void Personagem::aplicarRepel(sf::Vector2f forcaRepel)
+        {
+            velocidade = forcaRepel;
+        }
     }
 }

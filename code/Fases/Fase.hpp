@@ -3,7 +3,7 @@
 #include "../Entidades/Personagens/Jogador.hpp"
 #include "../Entidades/Obstaculos/Plataforma.hpp"
 #include "../Gerenciadores/GerenciadorColisoes.hpp"
-#include "../Entidades/Obstaculos/Rampa.hpp"      
+#include "../Entidades/Obstaculos/Trampolim.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
 #include "../Entidades/Personagens/Inimigo.hpp"
 //#include <list>
