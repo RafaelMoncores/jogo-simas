@@ -17,6 +17,8 @@ namespace Entidades
                 sf::Texture textura;
                 bool sobeDaEsquerda;
                 float largura;
+                sf::Vector2f m_pos;
+                sf::Vector2f m_size;
 
             public:
                 Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura);

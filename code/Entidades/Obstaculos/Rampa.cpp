@@ -10,7 +10,9 @@ namespace Entidades
         Rampa::Rampa(sf::Vector2f pos, sf::Vector2f size, bool sobeEsq, std::string caminhoTextura) :
             Obstaculo(),
             sobeDaEsquerda(sobeEsq),
-            largura(size.x)
+            largura(size.x),
+            m_pos(pos),
+            m_size(size)
         {
             danoso = false;
             if (!textura.loadFromFile(caminhoTextura)) 
@@ -46,12 +48,7 @@ namespace Entidades
 
         sf::FloatRect Rampa::getBoundingBox() const
         {
-            if (sprite)
-            {
-                // Retorna o retângulo que contém a rampa
-                return sprite->getGlobalBounds();
-            }
-            return {};
+            return sf::FloatRect(m_pos, m_size);
         }
 
         bool Rampa::getSobeDaEsquerda() const

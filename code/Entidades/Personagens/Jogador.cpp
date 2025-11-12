@@ -54,7 +54,7 @@ namespace Entidades
 
         void Jogador::aplicarFisica(float delta)
         {
-            const float FATOR_LENTIDAO_RAMPA = 0.15f;
+            const float FATOR_LENTIDAO_RAMPA = 0.30f;
             float modificadorAceleracao = 0.7f; 
 
             bool inputEsquerda = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A);
@@ -88,13 +88,10 @@ namespace Entidades
 
             velocidade.y += G_ACCEL.y * delta;
 
-            
-            // 4. LÓGICA DE FRICÇÃO (Atrito) E SLIDE (Deslizamento) - CORRIGIDA
-            
             if (estaNaRampa) 
             {
                 // ESTAMOS NA RAMPA
-                const float FORCA_SLIDE_RAMPA = 20.0f; // O seu valor de slide
+                const float FORCA_SLIDE_RAMPA = 10.0f; // O seu valor de slide
 
                 // SÓ APLIQUE O SLIDE SE O JOGADOR ESTIVER PARADO
                 if (noInputHorizontal)
@@ -201,73 +198,99 @@ namespace Entidades
 
             if (overlapX <= 0 || overlapY <= 0) return;
 
-            if (auto* pRampa = dynamic_cast<Obstaculos::Rampa*>(pOutra)){
-                float peY = boundsPropria.position.y + boundsPropria.size.y;
-                float peX_esq = boundsPropria.position.x;
-                float peX_dir = boundsPropria.position.x + boundsPropria.size.x;
+            if (auto* pRampa = dynamic_cast<Obstaculos::Rampa*>(pOutra))
+            {
+                // --- INÍCIO DA LÓGICA DA RAMPA ---
+                
+                // Função interna para calcular a altura Y exata da rampa em um ponto X
                 auto calcularAlturaRampa = [&](float pontoX) -> float {
-
                     float xRelativo = pontoX - boundsOutra.position.x;
                     float pctRampa = std::clamp(xRelativo / boundsOutra.size.x, 0.f, 1.f);
                     float alturaNoPonto;
 
-                    if (pRampa->getSobeDaEsquerda()){
+                    if (pRampa->getSobeDaEsquerda()) {
+                        // Rampa '/'
                         alturaNoPonto = boundsOutra.size.y * (1.f - pctRampa);
                     }
-
-                    else{
+                    else {
+                        // Rampa '\'
                         alturaNoPonto = boundsOutra.size.y * pctRampa;
                     }
                     return boundsOutra.position.y + alturaNoPonto;
                 };
 
+                // Calcula a altura "correta" do chão da rampa
                 float yTopoRampa = calcularAlturaRampa(centroProprio.x);
-                float overlapRampa = peY - yTopoRampa;
+                
+                // Pega a posição dos "pés" do jogador
+                float peY = boundsPropria.position.y + boundsPropria.size.y;
 
-                float stepUpTolerance = 2.f; // 2 pixels de tolerância
-                if (overlapRampa > -stepUpTolerance && velocidade.y >= 0){
-                    sprite->move({ 0.f, -overlapRampa });
+                // --- MUDANÇA PRINCIPAL AQUI ---
+                // Condição:
+                // 1. O jogador está caindo ou parado (velocidade.y >= 0)
+                // 2. Os pés do jogador estão *perto ou abaixo* da linha da rampa
+                
+                // (Aumentei a tolerância para "pegar" o jogador mais facilmente)
+                float stepUpTolerance = 5.f; 
+                
+                if (peY >= (yTopoRampa - stepUpTolerance) && velocidade.y >= 0)
+                {
+                    // "Eleve o boneco para a linha da diagonal"
+                    // Calcula a nova posição Y exata do *topo* do sprite
+                    float newPlayerY = yTopoRampa - boundsPropria.size.y;
+                    
+                    // FORÇA a posição do jogador para a altura correta
+                    // (Mantém a posição X que ele já tinha)
+                    sprite->setPosition({ posAtual.x, newPlayerY });
+
+                    // O resto da lógica
                     velocidade.y = 0.f;
                     podePular = true;
-
                     estaNaRampa = true;
                     rampaSobeEsquerda = pRampa->getSobeDaEsquerda();
                 }
-                else{
-                    if (overlapY < overlapX){
-                        if (distCentros.y > 0){
-                            sprite->move({ 0.f, overlapY });
-                            velocidade.y = 0.f;
-                        }
-                    }
-                    else{
-                        if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
-                        else { sprite->move({ -overlapX, 0.f }); }
-                        velocidade.x = 0.f;
-                    }
+                else
+                {
+                    // O jogador está pulando por *baixo* da rampa.
+                    // Trata a colisão apenas como horizontal.
+                    if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
+                    else { sprite->move({ -overlapX, 0.f }); }
+                    velocidade.x = 0.f;
                 }
             }
             else{
-                if (overlapY < overlapX){
-                    if (distCentros.y > 0){
+
+                if (overlapY < overlapX)
+                {
+                    // Colisão Vertical
+                    if (distCentros.y > 0)
+                    {
+                        // Colidiu com o teto
                         sprite->move({ 0.f, overlapY });
                         velocidade.y = 0.f;
                     }
-                    else{
-                        if (velocidade.y >= 0){
+                    else
+                    {
+                        // Colidiu com o chão
+                        if (velocidade.y >= 0)
+                        {
                             sprite->move({ 0.f, -overlapY });
                             velocidade.y = 0.f;
                             podePular = true;
-                            estaNaRampa = false;
+                            estaNaRampa = false; // Garante que não está mais na rampa
                         }
                     }
                 }
-                else{
+                else
+                {
+                    // Colisão Horizontal
                     float peJogador = boundsPropria.position.y + boundsPropria.size.y;
                     float topoPlataforma = boundsOutra.position.y;
 
-                    if (peJogador <= topoPlataforma + 1.f) { /* Ignora (quina) */ }
-                    else{
+                    // Ignora colisão horizontal se for só uma "quina"
+                    if (peJogador <= topoPlataforma + 1.f) { /* Ignora */ }
+                    else
+                    {
                         if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
                         else { sprite->move({ -overlapX, 0.f }); }
                         velocidade.x = 0.f;
