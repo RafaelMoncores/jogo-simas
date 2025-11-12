@@ -1,4 +1,5 @@
 #include "Plataforma.hpp"
+#include "../Personagens/Jogador.hpp"
 #include <iostream>
 
 namespace Entidades
@@ -6,8 +7,10 @@ namespace Entidades
     namespace Obstaculos
     {
         Plataforma::Plataforma(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura) :
-            Obstaculo()
+            Obstaculo(),
+            altura((int)size.y)
         {
+            danoso = false;
             if (!textura.loadFromFile(caminhoTextura)) 
             {
                 std::cerr << "ERRO: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
@@ -50,6 +53,10 @@ namespace Entidades
                 return sprite->getGlobalBounds();
             }
             return {};
+        }
+        void Plataforma::obstaculizar(Entidades::Personagens::Jogador* pJogador)
+        {
+            pJogador->colidir(this, getBoundingBox());
         }
     }
 }

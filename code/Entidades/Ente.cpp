@@ -4,7 +4,8 @@ namespace Entidades
 {
     Gerenciadores::GerenciadorGrafico* Ente::pGG = nullptr;
 
-    Ente::Ente()
+    Ente::Ente() :
+        pFig(nullptr)
     {
     }
 

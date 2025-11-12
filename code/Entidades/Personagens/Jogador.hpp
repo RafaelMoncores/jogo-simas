@@ -1,9 +1,6 @@
 #pragma once
 #include "Personagem.hpp"
-#include "../Obstaculos/Obstaculo.hpp"
-#include <SFML/Graphics.hpp>
-#include <optional>
-#include <algorithm>
+// Obstaculo.hpp agora é incluído no .cpp
 
 namespace Entidades
 {
@@ -13,31 +10,30 @@ namespace Entidades
             {
                 private:
                     sf::Texture textura;
-                    std::optional<sf::Sprite> sprite;
-
-                    const float VELOCIDADE_MAXIMA_LATERAL;
-                    const float ACELERACAO_LATERAL;
-                    const float FRICCAO_LATERAL;
                     const float FORCA_PULO;
                     const float MULTIPLICADOR_PULO_CURTO;
 
-                    bool podePular;
+                    bool estaNaTrampolim;
+                    bool rampaSobeEsquerda; // Para sabermos a direção do "slide"
 
-                    void aplicarFisica(float delta);
+                    int direcao;
+                    bool estaAtacando;
+                    float tempoAtaque;
+                    const float COOLDOWN_ATAQUE;
+
                     void processarInputs(float delta);
+                    virtual void aplicarFisica(float delta) override;
 
                 public:
-                    Jogador();
+                    Jogador(sf::Vector2f pos);
                     ~Jogador();
 
+                    bool getEstaAtacando() const;
+                    int getDirecao() const;
+
                     virtual void executar(float delta) override;
-                    virtual void desenhar() override;
-
                     virtual sf::FloatRect getBoundingBox() const override;
-                    void setPodePular(bool pode);
-                    void resolverColisao(Entidade* pOutra, sf::FloatRect boundsOutra);
-
-                    void setPosition(sf::Vector2f pos);
+                    virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
             };
     }
 }

@@ -3,6 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
+namespace Entidades { 
+    class Ente; 
+}
+
 namespace Gerenciadores{
     class GerenciadorGrafico
     {
@@ -10,6 +14,8 @@ namespace Gerenciadores{
             // Instância estática para o Singleton
             static GerenciadorGrafico* pInstancia;
             sf::RenderWindow window;
+
+            sf::View camera;
 
             // Construtor privado para impedir instanciação externa
             GerenciadorGrafico();
@@ -33,5 +39,12 @@ namespace Gerenciadores{
             void limpar(sf::Color cor = sf::Color::Black);
             void desenhar(const sf::Drawable& desenhavel);
             void exibir();
+            void desenha(Entidades::Ente* pE);
+
+            // Configura a câmera para mostrar uma região específica do mundo
+            void setViewBounds(float left, float top, float width, float height);
+            void aplicarView();
+            // Reseta a câmera para a padrão (para o Menu/UI)
+            void resetarView();
     };
 }

@@ -101,6 +101,8 @@ namespace Estados
             }
         }
 
+        pGG->resetarView();
+
         if (bg) pGG->desenhar(*bg);
         for (auto &t : texts) {
             pGG->desenhar(t);

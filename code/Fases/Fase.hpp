@@ -1,32 +1,53 @@
 #pragma once
+#include "../Entidades/Ente.hpp"
 #include "../Entidades/Personagens/Jogador.hpp"
 #include "../Entidades/Obstaculos/Plataforma.hpp"
 #include "../Gerenciadores/GerenciadorColisoes.hpp"
-#include "../Entidades/Obstaculos/Rampa.hpp"      
+#include "../Entidades/Obstaculos/Trampolim.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
-#include <list>
-#include <SFML/Graphics.hpp> // Para o bgFase
+#include "../Entidades/Personagens/Inimigo.hpp"
+//#include <list>
+#include "../Listas/ListaObstaculos.hpp"
+#include "../Listas/ListaInimigos.hpp"
+#include "../Listas/ListaEntidades.hpp"
+#include <SFML/Graphics.hpp>
+#include <optional>
 
 namespace Fases
 {
-    class Fase
+    class Fase : public Entidades::Ente
     {
-    private:
-        Entidades::Personagens::Jogador* jogador1;
-        std::list<Entidades::Obstaculos::Obstaculo*> listaObstaculos;
-        Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
-        
-        // Fundo (movido de Jogo para Fase)
-        sf::Texture texFase;
-        std::optional<sf::Sprite> bgFase;
+        protected: 
+            Entidades::Personagens::Jogador* jogador1;
 
+            Listas::ListaObstaculos listaObstaculos;
+            Listas::ListaInimigos listaInimigos;
+            Listas::ListaEntidades listaEntidades;
 
-    public:
-        Fase();
-        ~Fase();
+            Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
+            
+            sf::Texture texFase;
+            std::optional<sf::Sprite> bgFase;
 
-        void inicializar(); // Cria jogador e plataformas
-        void executar(float delta);
-        void desenhar();
+            sf::Font uiFont;
+            std::optional<sf::Text> vidasText;
+
+            void inicializarUI();
+
+            virtual void criarObstaculos() = 0;
+            virtual void criarInimigos() = 0;
+            virtual void criarPlataformas() = 0;
+            virtual void PosarInimigos() = 0;
+            virtual void PosarObstaculos() = 0;
+
+        public:
+            Fase();
+            virtual ~Fase();
+
+            void inicializar();
+            virtual void executar(float delta) override;
+            virtual void desenhar() override;
+            virtual sf::FloatRect getBoundingBox() const override;
+            virtual void salvar();
     };
 }

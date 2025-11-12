@@ -7,22 +7,21 @@ namespace Entidades
     class Entidade : public Ente
     {
         protected:
-            sf::Sprite* pCorpo;
             sf::Vector2f velocidade;
-            
             const sf::Vector2f G_ACCEL;
+            int x;
+            int y;
+            std::ostream* buffer;
+
+            virtual void salvarDataBuffer();
 
         public:
             Entidade();
             virtual ~Entidade();
 
-            // 1. Lógica da entidade (movimento, IA, etc.)
-            virtual void executar(float delta) = 0;
-
-            // 2. Como a entidade se desenha
-            virtual void desenhar() = 0;
-
-            // 3. A "hitbox" da entidade
-            virtual sf::FloatRect getBoundingBox() const = 0;
+            virtual void executar(float delta) override = 0;
+            virtual void desenhar() override = 0;
+            virtual sf::FloatRect getBoundingBox() const override = 0;
+            virtual void salvar();
     };
 }

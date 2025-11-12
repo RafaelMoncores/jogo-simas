@@ -1,13 +1,15 @@
 #include "Fase.hpp"
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 #include <iostream>
+#include <string>
+#include <cstdlib>
 
 namespace Fases
 {
     Fase::Fase() :
+        Ente(),
         jogador1(nullptr)
     {
-        // Carrega o fundo
         if (!texFase.loadFromFile("fase_background.png"))
         {
             std::cerr << "Erro: nao foi possivel carregar imagem fase_background.png\n";
@@ -19,236 +21,121 @@ namespace Fases
             float scaleY = 1080.f / texFase.getSize().y;
             bgFase->setScale(sf::Vector2f(scaleX, scaleY));
         }
+
+        inicializarUI();
     }
 
     Fase::~Fase()
-    {
-        // Limpar memória
-        delete jogador1;
-        for (auto* pObst : listaObstaculos)
+    {   
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
-            delete pObst;
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+            delete pE;
         }
+        
+        listaObstaculos.limpar();
+        listaInimigos.limpar();
+        listaEntidades.limpar();
+        
+        jogador1 = nullptr;
     }
 
-    // AQUI é onde você cria as plataformas
+    void Fase::inicializarUI()
+    {
+        if (!uiFont.openFromFile("PressStart2P-Regular.ttf"))
+        {
+            std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
+        }
+
+        vidasText.emplace(uiFont); 
+        vidasText->setCharacterSize(30);
+        vidasText->setFillColor(sf::Color::White);
+        vidasText->setPosition({60.f, 10.f}); 
+        vidasText->setString("Vidas: ");
+    }
+    
     void Fase::inicializar()
     {
-        // Limpa entidades antigas (se houver)
-        if (jogador1) delete jogador1;
-        for (auto* pObst : listaObstaculos) delete pObst;
-        listaObstaculos.clear();
-
-        // Cria novas entidades
-        jogador1 = new Entidades::Personagens::Jogador();
-        jogador1->setPosition({0.f, 500.0f}); // Posição inicial
-
-        using Entidades::Obstaculos::Plataforma;
-        using Entidades::Obstaculos::Rampa;
-
-        // Adiciona plataformas
-        // DÊ OS TAMANHOS QUE QUISER AQUI: {Largura, Altura}
-        int plat;
-        int ramp;
-        float cont_plat = 0;
-        float cont_ramp_x = 0;
-        float cont_ramp_y = 0;
-
-        //aglomerado de plataformas 1
-        for(plat=0;plat<8;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 1050.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
+        {
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+            delete pE;
         }
-
-        //aglomerado de plataformas 2
-        cont_plat = 400;
-        for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 950.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-
-        //aglomerado de plataformas 3
-        cont_plat = 700;
-        for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 900.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 800;
-        cont_ramp_y = 850;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, true,"rampa.png"));
-            cont_ramp_x+=50;
-            cont_ramp_y-=50;
-        }
-        listaObstaculos.push_back(new Plataforma({900.f, 800.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 4
-        cont_plat=600;
-        for(plat=0;plat<4;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 750.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-
-        //aglomerado de plataformas 5
-        cont_ramp_x = 400;
-        cont_ramp_y = 650;
-        for(ramp=0;ramp<3;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, false,"rampa.png"));
-            cont_ramp_x-=50;
-            cont_ramp_y-=50;
-        }
-        cont_plat=100;
-        for(plat=0;plat<4;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 550.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        listaObstaculos.push_back(new Plataforma({450.f, 700.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 6
-        cont_plat=350;
-        for(plat=0;plat<3;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 450.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 500;
-        cont_ramp_y = 400;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, true,"rampa.png"));
-            cont_ramp_x+=50;
-            cont_ramp_y-=50;
-        }
-        listaObstaculos.push_back(new Plataforma({600.f, 350.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 7
-        cont_plat=200;
-        for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 200.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 400;
-        cont_ramp_y = 250;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, false,"rampa.png"));
-            cont_ramp_x-=50;
-            cont_ramp_y-=50;
-        }
-        listaObstaculos.push_back(new Plataforma({450.f, 300.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 8
-        cont_plat=300;
-        for(plat=0;plat<14;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 50.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        listaObstaculos.push_back(new Rampa({250, 50}, {50.f, 50.f}, true,"rampa.png"));
-
-        //aglomerado de plataformas 9
-        cont_plat=1050;
-        for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 200.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 1300;
-        cont_ramp_y = 150;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, true,"rampa.png"));
-            cont_ramp_x+=50;
-            cont_ramp_y-=50;
-        }
-        listaObstaculos.push_back(new Plataforma({1450.f, 50.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 10
-        cont_plat=1550;
-        for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 100.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-
-        //aglomerado de plataformas 11
-        cont_plat=1300;
-        for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 350.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 1550;
-        cont_ramp_y = 300;
-        for(ramp=0;ramp<3;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, true,"rampa.png"));
-            cont_ramp_x+=50;
-            cont_ramp_y-=50;
-        }
-        listaObstaculos.push_back(new Plataforma({1700, 200.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 12
-        cont_plat=1550;
-        for(plat=0;plat<5;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 500.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-
-        //aglomerado de plataformas 13
-        cont_plat=1200;
-        for(plat=0;plat<2;plat++){
-            listaObstaculos.push_back(new Plataforma({cont_plat, 700.f}, {50.f, 50.f},"plataforma.png"));
-            cont_plat+=50;
-        }
-        cont_ramp_x = 1300;
-        cont_ramp_y = 650;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, true,"rampa.png"));
-            cont_ramp_x+=100;
-            cont_ramp_y-=100;
-        }
-        listaObstaculos.push_back(new Plataforma({1450, 550.f}, {50.f, 50.f},"plataforma.png"));
-
-        //aglomerado de plataformas 14
-        cont_plat=1900;
-        for(plat=0;plat<12;plat++){
-            if(plat!=8){
-                listaObstaculos.push_back(new Plataforma({cont_plat, 1000.f}, {50.f, 50.f},"plataforma.png"));        
-            }   
-            cont_plat-=50;        
-        }
-        cont_ramp_x = 1300;
-        cont_ramp_y = 950;
-        for(ramp=0;ramp<2;ramp++){
-            listaObstaculos.push_back(new Rampa({cont_ramp_x, cont_ramp_y}, {50.f, 50.f}, false,"rampa.png"));
-            cont_ramp_x-=100;
-            cont_ramp_y-=100;
-        }
-        listaObstaculos.push_back(new Plataforma({1100, 800.f}, {50.f, 50.f},"plataforma.png"));
-
         
-    }
+        listaObstaculos.limpar();
+        listaInimigos.limpar();
+        listaEntidades.limpar();
+        
+        jogador1 = nullptr;
 
+        Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
+
+        jogador1 = new Entidades::Personagens::Jogador({0.f, 550.0f});
+        jogador1->setPosition({0.f, 550.0f});
+        
+        listaEntidades.incluir(jogador1); 
+
+        criarObstaculos();
+        criarInimigos();
+    }
+    
     void Fase::executar(float delta)
     {
-        // 1. Atualizar todas as entidades
-        if(jogador1) jogador1->executar(delta);
-        for (auto* pObst : listaObstaculos)
+        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos);
+
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
-            pObst->executar(delta);
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+            pE->executar(delta); 
         }
 
-        // 2. Verificar colisões
-        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos);
+        if (jogador1)
+        {
+            if (vidasText)
+            {
+                vidasText->setString("Vidas: " + std::to_string(jogador1->getVidas()));
+            }
+
+            if (jogador1->getVidas() <= 0)
+            {
+                std::cout << "Sem vidas! Reiniciando a fase..." << std::endl;
+                inicializar();
+            }
+        }
+        else if (vidasText)
+        {
+            vidasText->setString("Vidas: 0");
+        }
     }
 
     void Fase::desenhar()
     {
         Gerenciadores::GerenciadorGrafico* pGG = Gerenciadores::GerenciadorGrafico::getInstance();
 
-        // Desenha o fundo
-        if (bgFase)
-        {
-            pGG->desenhar(*bgFase);
-        }
+        pGG->aplicarView();
+        if (bgFase) pGG->desenhar(*bgFase);
 
-        // Desenha as entidades
-        if(jogador1) jogador1->desenhar();
-        for (auto* pObst : listaObstaculos)
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
-            pObst->desenhar();
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+            pE->desenhar();
         }
+        
+        pGG->resetarView();
+        if (vidasText) pGG->desenhar(*vidasText);
+    }
+
+    sf::FloatRect Fase::getBoundingBox() const
+    {
+        return sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}); 
+    }
+
+    void Fase::salvar()
+    {
+        // Método de persistência (ainda não implementado)
     }
 }
