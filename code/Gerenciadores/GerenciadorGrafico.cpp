@@ -5,8 +5,11 @@ namespace Gerenciadores{
     GerenciadorGrafico* GerenciadorGrafico::pInstancia = nullptr;
 
     GerenciadorGrafico::GerenciadorGrafico() : 
-        window(sf::VideoMode({1920u, 1080u}), "VALEN")
+        window(sf::VideoMode({1920u, 1080u}), "VALEN"),
+        viewRect({0.f,0.f},{1920.f,1080.f}),
+        uiView(viewRect)
     {
+        
     }
 
     GerenciadorGrafico::~GerenciadorGrafico() 
@@ -74,6 +77,6 @@ namespace Gerenciadores{
 
     void GerenciadorGrafico::resetarView()
     {
-        window.setView(window.getDefaultView());
+        window.setView(uiView);
     }
 }

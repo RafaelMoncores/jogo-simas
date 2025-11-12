@@ -16,6 +16,8 @@ namespace Gerenciadores{
             sf::RenderWindow window;
 
             sf::View camera;
+            sf::FloatRect viewRect;
+            sf::View uiView;
 
             // Construtor privado para impedir instanciação externa
             GerenciadorGrafico();

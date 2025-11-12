@@ -149,6 +149,10 @@ namespace Fases
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
 
+            Plataforma* pPlatAux = new Plataforma({1000.f, 450.f}, {50.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlatAux);
+            listaEntidades.incluir(pPlatAux);
+
             Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
             listaEntidades.incluir(pRamp3);
@@ -160,6 +164,10 @@ namespace Fases
             Rampa* pRamp2 = new Rampa({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
+
+            Plataforma* pPlatAux = new Plataforma({1000.f, 450.f}, {50.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlatAux);
+            listaEntidades.incluir(pPlatAux);
 
             Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
@@ -176,6 +184,10 @@ namespace Fases
             Rampa* pRamp2 = new Rampa({950.f, 450.f}, {50.f, 50.f}, true, texRamp);
             listaObstaculos.incluir(pRamp2);
             listaEntidades.incluir(pRamp2);
+
+            Plataforma* pPlatAux = new Plataforma({1000.f, 450.f}, {50.f, 50.f}, texPlat);
+            listaObstaculos.incluir(pPlatAux);
+            listaEntidades.incluir(pPlatAux);
 
             Rampa* pRamp3 = new Rampa({1350.f, 500.f}, {50.f, 50.f}, false, texRamp);
             listaObstaculos.incluir(pRamp3);
@@ -194,11 +206,11 @@ namespace Fases
         std::cout << randW << std::endl;
 
         if(randW == 1){
-            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 350.f}, texParede);
+            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 300.f}, texParede);
             listaObstaculos.incluir(pParede1);
             listaEntidades.incluir(pParede1);
         }else{
-            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 350.f}, texParede);
+            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 300.f}, texParede);
             listaObstaculos.incluir(pParede1);
             listaEntidades.incluir(pParede1);
 

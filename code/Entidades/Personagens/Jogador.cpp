@@ -129,8 +129,11 @@ namespace Entidades
             
             if (sprite)
             {
+                // Salva posição antes de mover — usado depois pelo sistema de colisão
+                previousPosition = sprite->getPosition();
+
                 sprite->move(velocidade * delta);
-                
+
                 float deathPlaneY = 1500.f;
                 if (sprite->getPosition().y > deathPlaneY)
                 {
@@ -184,10 +187,7 @@ namespace Entidades
             if (!sprite) return;
             sf::FloatRect boundsPropria = getBoundingBox();
 
-
-            sf::Vector2f posAtual = sprite->getPosition();
             sf::Vector2f centroProprio(boundsPropria.position.x + boundsPropria.size.x / 2.f, boundsPropria.position.y + boundsPropria.size.y / 2.f);
-
             sf::Vector2f centroOutra(boundsOutra.position.x + boundsOutra.size.x / 2.f, boundsOutra.position.y + boundsOutra.size.y / 2.f);
             sf::Vector2f distCentros(centroProprio.x - centroOutra.x, centroProprio.y - centroOutra.y);
 
@@ -200,102 +200,131 @@ namespace Entidades
 
             if (auto* pRampa = dynamic_cast<Obstaculos::Rampa*>(pOutra))
             {
-                // --- INÍCIO DA LÓGICA DA RAMPA ---
-                
-                // Função interna para calcular a altura Y exata da rampa em um ponto X
+                // --- INÍCIO DA LÓGICA DA RAMPA (melhorada) ---
                 auto calcularAlturaRampa = [&](float pontoX) -> float {
+                    // força o pontoX para dentro da largura da rampa — evita pct fora de [0,1]
                     float xRelativo = pontoX - boundsOutra.position.x;
-                    float pctRampa = std::clamp(xRelativo / boundsOutra.size.x, 0.f, 1.f);
+                    xRelativo = std::clamp(xRelativo, 0.f, boundsOutra.size.x);
+                    float pctRampa = xRelativo / boundsOutra.size.x;
                     float alturaNoPonto;
-
-                    if (pRampa->getSobeDaEsquerda()) {
-                        // Rampa '/'
+                    if (pRampa->getSobeDaEsquerda()){
                         alturaNoPonto = boundsOutra.size.y * (1.f - pctRampa);
-                    }
-                    else {
-                        // Rampa '\'
+                    } else {
                         alturaNoPonto = boundsOutra.size.y * pctRampa;
                     }
                     return boundsOutra.position.y + alturaNoPonto;
                 };
 
-                // Calcula a altura "correta" do chão da rampa
-                float yTopoRampa = calcularAlturaRampa(centroProprio.x);
-                
-                // Pega a posição dos "pés" do jogador
                 float peY = boundsPropria.position.y + boundsPropria.size.y;
 
-                // --- MUDANÇA PRINCIPAL AQUI ---
-                // Condição:
-                // 1. O jogador está caindo ou parado (velocidade.y >= 0)
-                // 2. Os pés do jogador estão *perto ou abaixo* da linha da rampa
-                
-                // (Aumentei a tolerância para "pegar" o jogador mais facilmente)
-                float stepUpTolerance = 5.f; 
-                
-                if (peY >= (yTopoRampa - stepUpTolerance) && velocidade.y >= 0)
-                {
-                    // "Eleve o boneco para a linha da diagonal"
-                    // Calcula a nova posição Y exata do *topo* do sprite
-                    float newPlayerY = yTopoRampa - boundsPropria.size.y;
-                    
-                    // FORÇA a posição do jogador para a altura correta
-                    // (Mantém a posição X que ele já tinha)
-                    sprite->setPosition({ posAtual.x, newPlayerY });
+                // amostrar nos dois "pés" do jogador (evita teleporte quando o jogador entra no meio)
+                float leftFootX  = boundsPropria.position.x + 1.f;
+                float rightFootX = boundsPropria.position.x + boundsPropria.size.x - 1.f;
 
-                    // O resto da lógica
+                float yLeft  = calcularAlturaRampa(leftFootX);
+                float yRight = calcularAlturaRampa(rightFootX);
+
+                float overlapLeft  = peY - yLeft;
+                float overlapRight = peY - yRight;
+
+                // usaremos a penetração máxima de um dos pés para decidir a correção vertical
+                float overlapRampa = std::max(overlapLeft, overlapRight);
+                float stepUpTolerance = 2.f;
+
+                // Se um dos pés estiver perto/penetrando a superfície e estivermos caindo
+                if (overlapRampa > -stepUpTolerance &&
+                    (velocidade.y >= 0.f || (velocidade.y < 0.f && overlapRampa > 0.f)))
+                {
+                    if (overlapRampa > 0.f)
+                    {
+                        // corrige o jogador para ficar sobre a rampa
+                        sprite->move({ 0.f, -overlapRampa });
+                    }
                     velocidade.y = 0.f;
                     podePular = true;
+
                     estaNaRampa = true;
                     rampaSobeEsquerda = pRampa->getSobeDaEsquerda();
                 }
                 else
                 {
-                    // O jogador está pulando por *baixo* da rampa.
-                    // Trata a colisão apenas como horizontal.
-                    if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
-                    else { sprite->move({ -overlapX, 0.f }); }
-                    velocidade.x = 0.f;
-                }
-            }
-            else{
+                    // O jogador bateu na lateral/por baixo da rampa.
+                    // Evitamos "grudar" na quina: se no frame anterior o pé estava acima da rampa,
+                    // permitimos um pequeno step-up em vez de empurrar horizontalmente.
+                    float previousBottom = previousPosition.y + boundsPropria.size.y;
 
-                if (overlapY < overlapX)
-                {
-                    // Colisão Vertical
-                    if (distCentros.y > 0)
+                    // yMin é a parte mais alta da rampa sob o jogador (usada como referência)
+                    float yMinUnderPlayer = std::min(yLeft, yRight);
+
+                    if (previousBottom <= yMinUnderPlayer + stepUpTolerance && overlapRampa > -stepUpTolerance)
                     {
-                        // Colidiu com o teto
-                        sprite->move({ 0.f, overlapY });
-                        velocidade.y = 0.f;
-                    }
-                    else
-                    {
-                        // Colidiu com o chão
-                        if (velocidade.y >= 0)
+                        // permitimos subir um pouco — trata como pé encontrando a rampa
+                        if (overlapRampa > 0.f)
                         {
-                            sprite->move({ 0.f, -overlapY });
+                            sprite->move({ 0.f, -overlapRampa });
                             velocidade.y = 0.f;
                             podePular = true;
-                            estaNaRampa = false; // Garante que não está mais na rampa
+                            estaNaRampa = true;
+                            rampaSobeEsquerda = pRampa->getSobeDaEsquerda();
+                        }
+                        else
+                        {
+                            // caso extremo: nada a fazer verticalmente -> empurrar horizontal leve
+                            if (distCentros.x > 0) sprite->move({ overlapX * 0.5f, 0.f });
+                            else sprite->move({ -overlapX * 0.5f, 0.f });
+                            velocidade.x = 0.f;
                         }
                     }
-                }
-                else
-                {
-                    // Colisão Horizontal
-                    float peJogador = boundsPropria.position.y + boundsPropria.size.y;
-                    float topoPlataforma = boundsOutra.position.y;
-
-                    // Ignora colisão horizontal se for só uma "quina"
-                    if (peJogador <= topoPlataforma + 1.f) { /* Ignora */ }
                     else
                     {
+                        // colisão lateral "normal" -> empurra horizontalmente
                         if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
                         else { sprite->move({ -overlapX, 0.f }); }
                         velocidade.x = 0.f;
                     }
                 }
+                // --- FIM DA LÓGICA DA RAMPA ---
+            }
+            else
+            {
+                // --- INÍCIO DA LÓGICA AABB (Plataforma/Parede) ---
+                // (Bug 2)
+                
+                float stepUpTolerance = 2.f; // A mesma tolerância é necessária aqui
+
+                if (overlapY < overlapX)
+                {
+                    // Colisão Vertical
+                    if (distCentros.y < 0) // Colidiu com o CHÃO
+                    {
+                        // Só aplique a colisão com o chão se:
+                        // 1. Estivermos a cair (vel.y >= 0)
+                        // 2. Estivermos perto da superfície (overlapY > -tol)
+                        if (velocidade.y >= 0 && overlapY > -stepUpTolerance)
+                        {
+                            if (overlapY > 0) // Só mova se estiver afundado
+                            {
+                                sprite->move({ 0.f, -overlapY });
+                            }
+                            velocidade.y = 0.f;
+                            podePular = true;
+                            estaNaRampa = false; 
+                        }
+                    }
+                    else // Colidiu com o TETO
+                    {
+                        sprite->move({ 0.f, overlapY });
+                        velocidade.y = 0.f;
+                    }
+                }
+                else
+                {
+                    // Colisão Horizontal (Parede)
+                    if (distCentros.x > 0) { sprite->move({ overlapX, 0.f }); }
+                    else { sprite->move({ -overlapX, 0.f }); }
+                    velocidade.x = 0.f;
+                }
+                // --- FIM DA LÓGICA AABB ---
             }
         }
     }

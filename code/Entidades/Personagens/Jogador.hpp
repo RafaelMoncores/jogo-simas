@@ -16,6 +16,8 @@ namespace Entidades
                     bool estaNaRampa;
                     bool rampaSobeEsquerda; // Para sabermos a direção do "slide"
 
+                    sf::Vector2f previousPosition{};
+
                     int direcao;
                     bool estaAtacando;
                     float tempoAtaque;

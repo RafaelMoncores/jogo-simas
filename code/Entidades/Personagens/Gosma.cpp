@@ -1,4 +1,5 @@
 #include "Gosma.hpp"
+#include <math.h>
 #include <iostream>
 #include <stdlib.h>
 
