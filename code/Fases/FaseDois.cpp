@@ -6,7 +6,7 @@
 #include "../Entidades/Obstaculos/Parede.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
-
+#include "../Entidades/Personagens/Dragao.hpp"
 
 #include <iostream>
 #include <cstdlib>
@@ -220,6 +220,8 @@ namespace Fases
     void FaseDois::criarInimigos()
     {
         using Entidades::Personagens::Gosma;
+        using Entidades::Personagens::Vampiro;
+        using Entidades::Personagens::Dragao;
 
         int randG = 0;
         srand(time(nullptr));
@@ -289,8 +291,11 @@ namespace Fases
             listaEntidades.incluir(pGosma5);
         }
 
+        sf::Vector2f posDragao = {1000.f, 100.f};
         
-
+        Dragao* pDragao = new Dragao(posDragao);
+        listaInimigos.incluir(pDragao);
+        listaEntidades.incluir(pDragao);
     }
 
     void FaseDois::criarPlataformas()
