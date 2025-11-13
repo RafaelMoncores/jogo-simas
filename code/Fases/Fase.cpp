@@ -8,7 +8,8 @@ namespace Fases
 {
     Fase::Fase() :
         Ente(),
-        jogador1(nullptr)
+        jogador1(nullptr),
+        faseConcluida(false)
     {
         if (!texFase.loadFromFile("fase_background.png"))
         {
@@ -92,6 +93,11 @@ namespace Fases
             pE->executar(delta); 
         }
 
+        if (jogador1 && jogador1->getCompletouFase())
+        {
+            faseConcluida = true;
+        }
+
         if (jogador1)
         {
             if (vidasText)
@@ -109,6 +115,11 @@ namespace Fases
         {
             vidasText->setString("Vidas: 0");
         }
+    }
+
+    bool Fase::getFaseConcluida() const
+    {
+        return faseConcluida;
     }
 
     void Fase::desenhar()

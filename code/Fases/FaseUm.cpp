@@ -1,6 +1,7 @@
 #include "FaseUm.hpp"
 
 #include "../Entidades/Obstaculos/Plataforma.hpp"
+#include "../Entidades/Obstaculos/PlataformaFinal.hpp"
 #include "../Entidades/Obstaculos/Trampolim.hpp"
 #include "../Entidades/Obstaculos/Parede.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
@@ -33,6 +34,7 @@ namespace Fases
         pPlat4_Gosma = nullptr;
     
         using Entidades::Obstaculos::Plataforma;
+        using Entidades::Obstaculos::PlataformaFinal;
         using Entidades::Obstaculos::Trampolim;
         using Entidades::Obstaculos::Parede;
 
@@ -53,7 +55,7 @@ namespace Fases
         listaObstaculos.incluir(pChao1);
         listaEntidades.incluir(pChao1); 
 
-        pChao2_Gosma = new Plataforma({1700.f, 350.f}, {150.f, 50.f}, texPlat);
+        pChao2_Gosma = new PlataformaFinal({1700.f, 350.f}, {150.f, 50.f}, texPlat);
         listaObstaculos.incluir(pChao2_Gosma);
         listaEntidades.incluir(pChao2_Gosma); 
 

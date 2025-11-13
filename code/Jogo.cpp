@@ -70,6 +70,14 @@ void Jogo::executar()
                 {
                     pFaseAtual->executar(delta);
                 }
+
+                if (pFaseAtual && pFaseAtual->getFaseConcluida())
+                {
+                    estadoAtual = EstadoJogo::NoMenu;
+                    
+                    delete pFaseAtual;
+                    pFaseAtual = nullptr;
+                }
                 
                 renderizar(); 
             }
