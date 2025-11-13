@@ -3,8 +3,7 @@
 #include "Gerenciadores/GerenciadorGrafico.hpp"
 #include "Entidades/Personagens/Jogador.hpp"
 #include "Estados/Menu.hpp"
-#include "Fases/FaseUm.hpp"
-#include "Fases/FaseDois.hpp"
+#include "Fases/Fase.hpp"
 #include <SFML/System/Clock.hpp>
 
 class Jogo
@@ -14,18 +13,12 @@ class Jogo
         
         EstadoJogo estadoAtual;
         Gerenciadores::GerenciadorGrafico* pGG;
-        //Entidades::Personagens::Jogador jogador1;
         Estados::Menu menu;
-        Fases::FaseDois* pFaseAtual;//=====================
+        Fases::Fase* pFaseAtual;
         sf::Clock relogio;
 
-        //sf::Texture texFase;
-        //std::optional<sf::Sprite> bgFase;
-
         void processarEventosJogando(); 
-        //void atualizar(float delta);
         void renderizar();
-
         void inicializar();
 
     public:

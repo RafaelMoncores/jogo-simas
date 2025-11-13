@@ -37,6 +37,16 @@ namespace Gerenciadores{
         return window.pollEvent();
     }
 
+    sf::RenderWindow& GerenciadorGrafico::getWindow()
+    {
+        return window;
+    }
+
+    sf::Vector2f GerenciadorGrafico::mapPixelToCoords(sf::Vector2i pixelPos)
+    {
+        return window.mapPixelToCoords(pixelPos);
+    }
+
     void GerenciadorGrafico::limpar(sf::Color cor)
     {
         window.clear(cor);

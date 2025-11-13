@@ -4,6 +4,7 @@
 #include "Entidades/Personagens/Jogador.hpp"
 
 #include "Fases/FaseUm.hpp"
+#include "Fases/FaseDois.hpp"
 
 using Gerenciadores::GerenciadorGrafico;
 using Entidades::Ente;
@@ -45,19 +46,23 @@ void Jogo::executar()
             case EstadoJogo::NoMenu:
             {
                 int acaoMenu = menu.executar();
-                if (acaoMenu == 1)
+                if (acaoMenu == 0)
                 {
-                    estadoAtual = EstadoJogo::Jogando;
-                    if (!pFaseAtual)
-                    {
-                        pFaseAtual = new Fases::FaseDois();
-                    }
+                    pGG->fecharWindow();
+                }
+                else if (acaoMenu == 1)
+                {
+                    if(pFaseAtual) { delete pFaseAtual; pFaseAtual = nullptr; }
+                    pFaseAtual = new Fases::FaseUm();
                     pFaseAtual->inicializar(); 
                     estadoAtual = EstadoJogo::Jogando;
                 }
-                else if (acaoMenu == 0)
+                else if (acaoMenu == 2)
                 {
-                    pGG->fecharWindow();
+                    if(pFaseAtual) { delete pFaseAtual; pFaseAtual = nullptr; }
+                    pFaseAtual = new Fases::FaseDois();
+                    pFaseAtual->inicializar(); 
+                    estadoAtual = EstadoJogo::Jogando;
                 }
             }
             break;

@@ -9,20 +9,9 @@ namespace Fases
     Fase::Fase() :
         Ente(),
         jogador1(nullptr),
-        faseConcluida(false)
+        faseConcluida(false),
+        posJogadorInicial(0.f, 0.f)
     {
-        if (!texFase.loadFromFile("tileSets/fase2/fase_background.png"))
-        {
-            std::cerr << "Erro: nao foi possivel carregar imagem fase_background.png\n";
-        }
-        else
-        {
-            bgFase.emplace(texFase);
-            float scaleX = 1920.f / texFase.getSize().x;
-            float scaleY = 1080.f / texFase.getSize().y;
-            bgFase->setScale(sf::Vector2f(scaleX, scaleY));
-        }
-
         inicializarUI();
     }
 
@@ -73,8 +62,8 @@ namespace Fases
 
         Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
 
-        jogador1 = new Entidades::Personagens::Jogador({0.f, 1000.0f});//550
-        jogador1->setPosition({0.f, 1000.0f});//550
+        jogador1 = new Entidades::Personagens::Jogador(posJogadorInicial);
+        jogador1->setPosition(posJogadorInicial);
         
         listaEntidades.incluir(jogador1); 
 

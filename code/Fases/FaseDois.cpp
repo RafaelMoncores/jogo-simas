@@ -20,6 +20,19 @@ namespace Fases
         pChao_F(nullptr),
         maxChefoes(1)
     {
+        posJogadorInicial = {0.f, 1000.0f};
+
+        if (!texFase.loadFromFile("tileSets/fase2/fase_background.png"))
+        {
+            std::cerr << "Erro: FaseDois nao carregou background\n";
+        }
+        else
+        {
+            bgFase.emplace(texFase);
+            float scaleX = 1920.f / texFase.getSize().x;
+            float scaleY = 1080.f / texFase.getSize().y;
+            bgFase->setScale(sf::Vector2f(scaleX, scaleY));
+        }
     }
 
     FaseDois::~FaseDois()

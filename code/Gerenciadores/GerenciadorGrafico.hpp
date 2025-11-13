@@ -35,6 +35,9 @@ namespace Gerenciadores{
             void fecharWindow();
             std::optional<sf::Event> pollEvent();
 
+            sf::RenderWindow& getWindow();
+            sf::Vector2f mapPixelToCoords(sf::Vector2i pixelPos);
+
             // Métodos de renderização
             void limpar(sf::Color cor = sf::Color::Black);
             void desenhar(const sf::Drawable& desenhavel);

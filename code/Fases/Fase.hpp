@@ -20,6 +20,8 @@ namespace Fases
         protected: 
             Entidades::Personagens::Jogador* jogador1;
 
+            sf::Vector2f posJogadorInicial;
+
             Listas::ListaObstaculos listaObstaculos;
             Listas::ListaInimigos listaInimigos;
             Listas::ListaEntidades listaEntidades;
