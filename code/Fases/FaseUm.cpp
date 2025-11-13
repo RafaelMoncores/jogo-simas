@@ -21,6 +21,19 @@ namespace Fases
         pPlat4_Gosma(nullptr),
         maxInimMedios(10)
     {
+        posJogadorInicial = {0.f, 550.0f};
+
+        if (!texFase.loadFromFile("tileSets/fase1/fase_background.png"))
+        {
+            std::cerr << "Erro: FaseUm nao carregou background\n";
+        }
+        else
+        {
+            bgFase.emplace(texFase);
+            float scaleX = 1920.f / texFase.getSize().x;
+            float scaleY = 1080.f / texFase.getSize().y;
+            bgFase->setScale(sf::Vector2f(scaleX, scaleY));
+        }
     }
 
     FaseUm::~FaseUm()

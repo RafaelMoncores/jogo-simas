@@ -16,7 +16,11 @@ namespace Estados
             int executar();
 
         private:
-            void set_values();
+            enum class EstadoMenu { MenuPrincipal, MenuNiveis };
+            EstadoMenu estadoAtualMenu;
+            
+            void set_values_principal();
+            void set_values_niveis();
             
             Gerenciadores::GerenciadorGrafico* pGG;
 
