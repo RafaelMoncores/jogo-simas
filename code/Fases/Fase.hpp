@@ -32,6 +32,8 @@ namespace Fases
             sf::Font uiFont;
             std::optional<sf::Text> vidasText;
 
+            bool faseConcluida;
+
             void inicializarUI();
 
             virtual void criarObstaculos() = 0;
@@ -46,6 +48,7 @@ namespace Fases
 
             void inicializar();
             virtual void executar(float delta) override;
+            bool getFaseConcluida() const;
             virtual void desenhar() override;
             virtual sf::FloatRect getBoundingBox() const override;
             virtual void salvar();

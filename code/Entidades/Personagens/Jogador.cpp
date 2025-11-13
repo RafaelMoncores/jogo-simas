@@ -1,5 +1,6 @@
 #include "Jogador.hpp"
 #include "../Obstaculos/Plataforma.hpp"
+#include "../Obstaculos/PlataformaFinal.hpp"
 #include "../Obstaculos/Trampolim.hpp"
 #include <iostream>
 #include <stdlib.h>
@@ -19,7 +20,8 @@ namespace Entidades
             direcao(1),
             estaAtacando(false),
             tempoAtaque(0.0f),
-            COOLDOWN_ATAQUE(0.3f)
+            COOLDOWN_ATAQUE(0.3f),
+            completouFase(false)
         {
             if (!textura.loadFromFile("player.png"))
             {
@@ -128,6 +130,11 @@ namespace Entidades
             return estaAtacando;
         }
 
+        bool Jogador::getCompletouFase() const
+        {
+            return completouFase;
+        }
+
         int Jogador::getDirecao() const
         {
             return direcao;
@@ -177,10 +184,28 @@ namespace Entidades
                 {
                     if (velocidade.y >= 0)
                     {
+                        // --- LÓGICA DE CONCLUSÃO DE FASE ---
+                        // Tenta converter o obstáculo para PlataformaFinal
+                        if (auto* pFinal = dynamic_cast<Obstaculos::PlataformaFinal*>(pOutra))
+                        {
+                            // Pega o centro X do jogador
+                            float xJogador = centroProprio.x;
+                            
+                            // Calcula o "meio" da plataforma (os 50% centrais)
+                            float meioInicio = boundsOutra.position.x + (boundsOutra.size.x * 0.25f);
+                            float meioFim = boundsOutra.position.x + (boundsOutra.size.x * 0.75f);
+
+                            // Se o jogador está no meio...
+                            if (xJogador > meioInicio && xJogador < meioFim)
+                            {
+                                completouFase = true; // Sinaliza que a fase terminou!
+                                velocidade = {0.f, 0.f}; // Para o jogador
+                                return; // Interrompe a física normal
+                            }
+                        }
                         sprite->move({ 0.f, -overlapY });
                         velocidade.y = 0.f;
                         podePular = true;
-                        // estaNaTrampolim = false; // (Removido)
                     }
                 }
             }
