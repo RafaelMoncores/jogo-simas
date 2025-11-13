@@ -31,6 +31,9 @@ namespace Entidades
 
         void Parede::executar(float delta)
         {
+            velocidade.y -= G_ACCEL.y * delta;
+            velocidade.y += G_ACCEL.y * delta;
+            corpo.move(velocidade * delta);
         }
 
         void Parede::desenhar()

@@ -29,7 +29,9 @@ namespace Entidades
 
         void Trampolim::executar(float delta) 
         { 
-            // É um bloco estático
+            velocidade.y -= G_ACCEL.y * delta;
+            velocidade.y += G_ACCEL.y * delta;
+            corpo.move(velocidade * delta);
         }
 
         void Trampolim::desenhar()

@@ -47,6 +47,7 @@ namespace Entidades
             tempoTotal += delta;
             
             processarAI(delta);
+            velocidade.y -= G_ACCEL.y * delta;
             aplicarFisica(delta);
         }
         
@@ -73,6 +74,7 @@ namespace Entidades
         void Vampiro::aplicarFisica(float delta)
         {
             if (!sprite || num_vidas <= 0) return;
+            velocidade.y += G_ACCEL.y * delta;
 
             float newX = sprite->getPosition().x + (velocidade.x * delta);
             float newY = posInicial.y + (AMPLITUDE_SENOIDE * std::sin(FREQUENCIA_SENOIDE * tempoTotal));

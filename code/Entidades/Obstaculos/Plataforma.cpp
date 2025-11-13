@@ -33,9 +33,15 @@ namespace Entidades
 
         Plataforma::~Plataforma() {}
 
-        // Plataformas estáticas não fazem nada no executar
         void Plataforma::executar(float delta)
         {
+            velocidade.y -= G_ACCEL.y * delta; 
+            
+            velocidade.y += G_ACCEL.y * delta;
+            if (sprite)
+            {
+                sprite->move(velocidade * delta);
+            }
         }
 
         void Plataforma::desenhar()
