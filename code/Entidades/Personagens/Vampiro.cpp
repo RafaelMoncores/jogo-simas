@@ -16,7 +16,7 @@ namespace Entidades
             LIMITE_ESQUERDA(50.0f),
             LIMITE_DIREITA(1870.0f)
         {
-            if (!textura.loadFromFile("vampiro.png"))
+            if (!textura.loadFromFile("tileSets/vampiro.png"))
             {
                 std::cerr << "ERRO FATAL: Nao foi possivel carregar 'vampiro.png'" << std::endl;
                 exit(1);

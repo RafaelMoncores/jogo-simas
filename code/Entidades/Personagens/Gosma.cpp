@@ -1,4 +1,5 @@
 #include "Gosma.hpp"
+#include <math.h>
 #include <iostream>
 #include <stdlib.h>
 
@@ -17,7 +18,7 @@ namespace Entidades
             pJogador(pJ),
             raio_deteccao(250.0f)
         {
-            if (!textura.loadFromFile("gosma.png"))
+            if (!textura.loadFromFile("tileSets/gosma.png"))
             {
                 std::cerr << "ERRO FATAL: Nao foi possivel carregar 'Gosma.png'" << std::endl;
                 exit(1);

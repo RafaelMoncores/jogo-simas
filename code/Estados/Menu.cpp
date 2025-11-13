@@ -15,11 +15,11 @@ namespace Estados
         pos = 0;
         pressed = theselect = false;
 
-        if (!font.openFromFile("PressStart2P-Regular.ttf")) {
+        if (!font.openFromFile("font/PressStart2P-Regular.ttf")) {
             std::cerr << "Erro: nao foi possivel carregar fonte PressStart2P-Regular.ttf\n";
         }
 
-        if (!texture.loadFromFile("menu.png")) {
+        if (!texture.loadFromFile("tileSets/menu.png")) {
             std::cerr << "Erro: nao foi possivel carregar imagem menu.png\n";
         } else {
             bg.emplace(texture);

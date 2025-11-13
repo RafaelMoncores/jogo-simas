@@ -23,7 +23,7 @@ namespace Entidades
             COOLDOWN_ATAQUE(0.3f),
             completouFase(false)
         {
-            if (!textura.loadFromFile("player.png"))
+            if (!textura.loadFromFile("tileSets/player.png"))
             {
                 std::cerr << "ERRO FATAL: Nao foi possivel carregar 'player.png'" << std::endl;
                 exit(1);

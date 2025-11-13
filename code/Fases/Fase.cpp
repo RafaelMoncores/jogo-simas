@@ -11,7 +11,7 @@ namespace Fases
         jogador1(nullptr),
         faseConcluida(false)
     {
-        if (!texFase.loadFromFile("fase_background.png"))
+        if (!texFase.loadFromFile("tileSets/fase2/fase_background.png"))
         {
             std::cerr << "Erro: nao foi possivel carregar imagem fase_background.png\n";
         }
@@ -44,7 +44,7 @@ namespace Fases
 
     void Fase::inicializarUI()
     {
-        if (!uiFont.openFromFile("PressStart2P-Regular.ttf"))
+        if (!uiFont.openFromFile("font/PressStart2P-Regular.ttf"))
         {
             std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
         }
@@ -73,8 +73,8 @@ namespace Fases
 
         Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
 
-        jogador1 = new Entidades::Personagens::Jogador({0.f, 550.0f});
-        jogador1->setPosition({0.f, 550.0f});
+        jogador1 = new Entidades::Personagens::Jogador({0.f, 1000.0f});//550
+        jogador1->setPosition({0.f, 1000.0f});//550
         
         listaEntidades.incluir(jogador1); 
 
