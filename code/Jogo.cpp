@@ -50,7 +50,7 @@ void Jogo::executar()
                     estadoAtual = EstadoJogo::Jogando;
                     if (!pFaseAtual)
                     {
-                        pFaseAtual = new Fases::FaseUm();
+                        pFaseAtual = new Fases::FaseDois();
                     }
                     pFaseAtual->inicializar(); 
                     estadoAtual = EstadoJogo::Jogando;
