@@ -42,27 +42,29 @@ namespace Fases
 
     void FaseUm::criarObstaculos()
     {
+        criarPlataformas();
+        criarObstMedios();
+        criarObstDificil();
+    }
+
+    void FaseUm::criarInimigos()
+    {
+        criarInimigosFaceis();
+        criarInimMedios();
+    }
+
+    void FaseUm::criarPlataformas()
+    {
         pChao2_Gosma = nullptr;
         pPlat1_Gosma = nullptr;
         pPlat4_Gosma = nullptr;
     
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::PlataformaFinal;
-        using Entidades::Obstaculos::Trampolim;
-        using Entidades::Obstaculos::Parede;
-
-        float larguraMundo = 1900.f; 
-        float alturaMundo = 1100.f;  
-        float espessuraMuro = 50.f;
         int randP = 0;
-        int randR = 0;
-        int randW = 0;
         srand(time(nullptr));
         
         std::string texPlat = "tileSets/fase1/plataforma.png";
-        std::string texTrampolim = "tileSets/trampolim.png";
-        std::string texParede = "tileSets/fase1/terra.png";
-
 
         Plataforma* pChao1 = new Plataforma({0.f, 600.f}, {300.f, 50.f}, texPlat);
         listaObstaculos.incluir(pChao1);
@@ -151,6 +153,15 @@ namespace Fases
             listaObstaculos.incluir(pPlat7);
             listaEntidades.incluir(pPlat7);
         }
+    }
+
+    void FaseUm::criarObstMedios()
+    {
+        using Entidades::Obstaculos::Trampolim;
+        int randR = 0;
+        srand(time(nullptr));
+        
+        std::string texTrampolim = "tileSets/trampolim.png";
 
         randR = rand() % 5 + 1;
         std::cout << randR << std::endl;
@@ -206,8 +217,14 @@ namespace Fases
             listaObstaculos.incluir(pTramp5);
             listaEntidades.incluir(pTramp5);
         }
+    }
 
-        randW = rand() % 2 + 1;
+    void FaseUm::criarObstDificil()
+    {
+        using Entidades::Obstaculos::Parede;
+        std::string texParede = "tileSets/fase1/terra.png";
+        srand(time(nullptr));
+        int randW = rand() % 2 + 1;
         std::cout << randW << std::endl;
 
         if(randW == 1){
@@ -224,11 +241,11 @@ namespace Fases
             listaEntidades.incluir(pParede2);
         }
     }
-
-    void FaseUm::criarInimigos()
+    
+    void FaseUm::criarInimigosFaceis()
     {
+        
         using Entidades::Personagens::Gosma;
-        using Entidades::Personagens::Vampiro;
 
         if (pChao2_Gosma && (rand() % 2 == 0))
         {
@@ -256,7 +273,12 @@ namespace Fases
             listaInimigos.incluir(pGosma);
             listaEntidades.incluir(pGosma);
         }
+    }
 
+    void FaseUm::criarInimMedios()
+    {
+        using Entidades::Personagens::Vampiro;
+        
         Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f);
         listaInimigos.incluir(pVamp1);
         listaEntidades.incluir(pVamp1);
@@ -265,34 +287,14 @@ namespace Fases
         listaInimigos.incluir(pVamp2);
         listaEntidades.incluir(pVamp2);
     }
-
-    void FaseUm::criarPlataformas()
-    {
-        // Método "casca" para cumprir o UML.
-        // A lógica principal já está em criarObstaculos().
-    }
-
+    
     void FaseUm::PosarInimigos()
     {
-        // Método "casca" para cumprir o UML.
-        // A lógica principal já está em criarInimigos().
+        // Para load
     }
 
     void FaseUm::PosarObstaculos()
     {
-        // Método "casca" para cumprir o UML.
-        // A lógica principal já está em criarObstaculos().
-    }
-
-    void FaseUm::criarInimMedios()
-    {
-        // Método "casca" para cumprir o UML. [cite: 191]
-        // (Você pode mover a criação dos Vampiros para cá se quiser)
-    }
-
-    void FaseUm::criarObstMedios()
-    {
-        // Método "casca" para cumprir o UML. [cite: 192]
-        // (Você pode mover a criação das Trampolims para cá se quiser)
+        // para load
     }
 }
