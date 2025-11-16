@@ -1,5 +1,7 @@
 #pragma once
 #include "Inimigo.hpp"
+#include "Jogador.hpp"
+#include "../../Listas/ListaEntidades.hpp"
 
 namespace Entidades
 {
@@ -11,10 +13,23 @@ namespace Entidades
             sf::Texture textura;
             short int forca; 
 
+            Jogador* pJogador;
+            Listas::ListaEntidades* pListaEntidades;
+
+            bool estaAtacando;
+            float temporizadorMovimento;
+            float temporizadorAtaque;
+            float cooldownTiro;
+            int tirosDisparados;
+            float tempoMovimentoRestante;
+            bool ignorandoObstaculos;
+
+            void atirar();
+
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Dragao(sf::Vector2f pos);
+            Dragao(sf::Vector2f pos, Jogador* pJog, Listas::ListaEntidades* pLista);
             ~Dragao();
 
             virtual void executar(float delta) override;

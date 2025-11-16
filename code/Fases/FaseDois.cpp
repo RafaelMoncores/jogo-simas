@@ -306,7 +306,7 @@ namespace Fases
         using Entidades::Personagens::Dragao;
 
         sf::Vector2f posDragao = {1000.f, 100.f};
-        Dragao* pDragao = new Dragao(posDragao);
+        Dragao* pDragao = new Dragao(posDragao, jogador1, &listaEntidades);
         listaInimigos.incluir(pDragao);
         listaEntidades.incluir(pDragao);
     }

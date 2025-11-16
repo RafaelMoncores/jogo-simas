@@ -1,11 +1,10 @@
 #include "ListaInimigos.hpp"
-// Inclui a definição completa para a implementação
 #include "../Entidades/Personagens/Inimigo.hpp" 
 
 namespace Listas
 {
     ListaInimigos::ListaInimigos() : LIs() {}
-    ListaInimigos::~ListaInimigos() {} // ~Lista() já chama o limpar()
+    ListaInimigos::~ListaInimigos() {}
 
     void ListaInimigos::incluir(Entidades::Personagens::Inimigo* pI) {
         LIs.incluir(pI);
@@ -13,6 +12,12 @@ namespace Listas
     void ListaInimigos::limpar() {
         LIs.limpar();
     }
+
+    void ListaInimigos::remover(Entidades::Personagens::Inimigo* pI)
+    {
+        LIs.remover(pI);
+    }
+
     void ListaInimigos::irParaPrimeiro() {
         LIs.irParaPrimeiro();
     }

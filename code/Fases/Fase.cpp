@@ -1,5 +1,7 @@
 #include "Fase.hpp"
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
+#include "../Entidades/BolaDeFogo.hpp"
+#include "../Entidades/Personagens/Inimigo.hpp"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -73,7 +75,7 @@ namespace Fases
     
     void Fase::executar(float delta)
     {
-        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos);
+        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos, &listaEntidades);
 
         for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
@@ -98,11 +100,47 @@ namespace Fases
             {
                 std::cout << "Sem vidas! Reiniciando a fase..." << std::endl;
                 inicializar();
+                return;
             }
         }
         else if (vidasText)
         {
             vidasText->setString("Vidas: 0");
+        }
+
+        bool removeu = true;
+        while (removeu)
+        {
+            removeu = false;
+            for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
+            {
+                Entidades::Entidade* pE = listaEntidades.getAtual();
+                if (pE == NULL) break;
+
+                bool deletar = false;
+
+                // Com o include lá em cima, isso agora funciona
+                if (Entidades::BolaDeFogo* pFogo = dynamic_cast<Entidades::BolaDeFogo*>(pE))
+                {
+                    if (!pFogo->getAtivo()) deletar = true;
+                }
+                else if (Entidades::Personagens::Inimigo* pInim = dynamic_cast<Entidades::Personagens::Inimigo*>(pE))
+                {
+                    if (pInim->getVidas() <= 0)
+                    {
+                        deletar = true;
+                        listaInimigos.remover(pInim);
+                    }
+                }
+                
+                if (deletar)
+                {
+                    listaEntidades.remover(pE); 
+                    delete pE;                  
+                    removeu = true;             
+                    break; 
+                }
+            }
         }
     }
 

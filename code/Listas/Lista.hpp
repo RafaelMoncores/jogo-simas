@@ -19,6 +19,8 @@ namespace Listas{
         Lista();
         ~Lista();
 
+        void remover(TL* pInfo);
+
         // --- Métodos do Snippet ---
         void incluir(TL* p);
         void limpar();
@@ -77,6 +79,42 @@ namespace Listas{
         pPrimeiro = NULL;
         pUltimo = NULL;
         pAtual = NULL;
+    }
+
+    template <class TL>
+    void Lista<TL>::remover(TL* pInfo)
+    {
+        Elemento<TL>* pAnt = NULL;
+        Elemento<TL>* pAux = pPrimeiro;
+
+        while (pAux != NULL && pAux->getInfo() != pInfo)
+        {
+            pAnt = pAux;
+            pAux = pAux->getPRoximo();
+        }
+
+        if (pAux == NULL) return;
+
+        if (pAux == pPrimeiro)
+        {
+            pPrimeiro = pAux->getPRoximo();
+        }
+        else
+        {
+            pAnt->setProx(pAux->getPRoximo());
+        }
+        
+        if (pAux == pUltimo)
+        {
+            pUltimo = pAnt;
+        }
+
+        if (pAux == pAtual)
+        {
+            pAtual = pAux->getPRoximo();
+        }
+
+        delete pAux;
     }
 
     // --- Implementação dos Iteradores ---
