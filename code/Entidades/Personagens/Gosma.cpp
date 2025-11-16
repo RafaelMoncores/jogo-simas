@@ -113,7 +113,26 @@ namespace Entidades
         void Gosma::danificar(Personagem* pOutro)
         {
             if (num_vidas <= 0) return;
-            pOutro->perderVida();
+
+            // Se "pOutro" for o Jogador (colisão lateral)
+            if (pOutro)
+            {
+                pOutro->perderVida(1); 
+            }
+            // Se "pOutro" for NULO (pulo no topo)
+            else 
+            {
+                perderVida(1); // Gosma morre
+
+                // DÁ PONTOS SE FOR ELIMINADA
+                if (num_vidas <= 0)
+                {
+                    if (pJogador) 
+                    {
+                        pJogador->addPontos(100); 
+                    }
+                }
+            }
         }
 
         void Gosma::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)

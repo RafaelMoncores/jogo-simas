@@ -33,6 +33,14 @@ namespace Fases
 
             sf::Font uiFont;
             std::optional<sf::Text> vidasText;
+            std::optional<sf::Text> pontosText;
+            std::optional<sf::Text> tentativasText; 
+            int numTentativas;
+
+            // --- ADICIONAR UI DE FIM DE FASE ---
+            std::optional<sf::Text> pontuacaoFinalText;
+            int pontuacaoFinalCache; // Para salvar os pontos
+            bool enterPressionado; // Para debounce do ENTER
 
             bool faseConcluida;
 

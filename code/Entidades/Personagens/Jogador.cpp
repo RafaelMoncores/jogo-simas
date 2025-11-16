@@ -21,7 +21,8 @@ namespace Entidades
             estaAtacando(false),
             tempoAtaque(0.0f),
             COOLDOWN_ATAQUE(0.3f),
-            completouFase(false)
+            completouFase(false),
+            pontos(1000.0f)
         {
             if (!textura.loadFromFile("tileSets/player.png"))
             {
@@ -112,16 +113,18 @@ namespace Entidades
 
         void Jogador::executar(float delta)
         {
-            if (estaAtacando)
+            if (completouFase) return; // Não faz nada se a fase terminou
+
+            if (num_vidas > 0)
             {
-                tempoAtaque -= delta;
-                if (tempoAtaque <= 0.0f)
-                {
-                    estaAtacando = false;
-                    // (TODO: Mudar animação de volta para "idle" ou "walk")
-                }
+                processarInputs(delta);
+
+                // --- LÓGICA DE PONTOS POR SEGUNDO ---
+                pontos -= 20.0f * delta; // Perde 20 pontos por segundo
+                if (pontos < 0.f) pontos = 0.f; // Não deixa ficar negativo
+                // -------------------------------------
             }
-            processarInputs(delta);
+            
             aplicarFisica(delta);
         }
 
@@ -225,5 +228,22 @@ namespace Entidades
                 }
             }
         }
+    
+        int Jogador::getPontos() const 
+        {
+            return static_cast<int>(pontos);
+        }
+
+        void Jogador::addPontos(int p) 
+        {
+            pontos += p;
+        }
+
+        void Jogador::setPontos(float p) 
+        {
+            pontos = p;
+            if (pontos < 0.f) pontos = 0.f;
+        }
+
     }
 }

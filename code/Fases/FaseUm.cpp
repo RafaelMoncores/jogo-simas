@@ -257,11 +257,11 @@ namespace Fases
             listaEntidades.incluir(pGosma);
         }
 
-        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f);
+        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f, jogador1);
         listaInimigos.incluir(pVamp1);
         listaEntidades.incluir(pVamp1);
 
-        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f);
+        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f, jogador1);
         listaInimigos.incluir(pVamp2);
         listaEntidades.incluir(pVamp2);
     }
