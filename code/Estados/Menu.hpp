@@ -6,6 +6,8 @@
 #include <string>
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 
+struct RankingEntry;
+
 namespace Estados
     {
     class Menu {
@@ -13,14 +15,15 @@ namespace Estados
             Menu();
             ~Menu() = default;
 
-            int executar();
+            int executar(const std::vector<RankingEntry>& ranking);
 
         private:
-            enum class EstadoMenu { MenuPrincipal, MenuNiveis };
+            enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking };
             EstadoMenu estadoAtualMenu;
             
             void set_values_principal();
             void set_values_niveis();
+            void set_values_ranking(const std::vector<RankingEntry>& ranking);
             
             Gerenciadores::GerenciadorGrafico* pGG;
 

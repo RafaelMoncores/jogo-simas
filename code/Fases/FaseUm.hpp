@@ -19,7 +19,7 @@ namespace Fases
             virtual void criarObstMedios();
 
         public:
-            FaseUm();
+            FaseUm(Jogo* pJogo);
             ~FaseUm();
 
             const int maxInimMedios;

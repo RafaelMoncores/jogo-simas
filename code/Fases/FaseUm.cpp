@@ -14,8 +14,8 @@
 
 namespace Fases
 {
-    FaseUm::FaseUm() :
-        Fase(),
+    FaseUm::FaseUm(Jogo* pJogo) :
+        Fase(pJogo),
         pChao2_Gosma(nullptr),
         pPlat1_Gosma(nullptr),
         pPlat4_Gosma(nullptr),

@@ -13,11 +13,14 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
+class Jogo;
+
 namespace Fases
 {
     class Fase : public Entidades::Ente
     {
         protected: 
+            Jogo* pJogo;
             Entidades::Personagens::Jogador* jogador1;
 
             sf::Vector2f posJogadorInicial;
@@ -42,6 +45,16 @@ namespace Fases
             int pontuacaoFinalCache; // Para salvar os pontos
             bool enterPressionado; // Para debounce do ENTER
 
+            enum class EstadoFim { MostrandoOpcoes, PedindoIniciais };
+            EstadoFim estadoFim;
+
+            int posBotaoFim; // 0 = Salvar, 1 = Menu
+            std::string iniciais;
+
+            std::optional<sf::Text> botaoSalvarText;
+            std::optional<sf::Text> botaoMenuText;
+            std::optional<sf::Text> inputIniciaisText;
+
             bool faseConcluida;
 
             void inicializarUI();
@@ -53,7 +66,7 @@ namespace Fases
             virtual void PosarObstaculos() = 0;
 
         public:
-            Fase();
+            Fase(Jogo* pJogo);
             virtual ~Fase();
 
             void inicializar();

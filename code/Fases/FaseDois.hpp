@@ -21,7 +21,7 @@ namespace Fases
             virtual void criarObstDificil();
 
         public:
-            FaseDois();
+            FaseDois(Jogo* pJogo);
             ~FaseDois();
 
             const int maxChefoes;
