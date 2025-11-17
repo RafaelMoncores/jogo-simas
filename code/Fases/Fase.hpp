@@ -21,6 +21,8 @@ namespace Fases
     {
         protected: 
             Jogo* pJogo;
+            int faseNum;
+
             Entidades::Personagens::Jogador* jogador1;
 
             sf::Vector2f posJogadorInicial;
@@ -44,6 +46,7 @@ namespace Fases
             std::optional<sf::Text> pontuacaoFinalText;
             int pontuacaoFinalCache; // Para salvar os pontos
             bool enterPressionado; // Para debounce do ENTER
+            bool navPressionado;
 
             enum class EstadoFim { MostrandoOpcoes, PedindoIniciais };
             EstadoFim estadoFim;
@@ -66,7 +69,7 @@ namespace Fases
             virtual void PosarObstaculos() = 0;
 
         public:
-            Fase(Jogo* pJogo);
+            Fase(Jogo* pJogo, int num);
             virtual ~Fase();
 
             void inicializar();

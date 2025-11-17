@@ -45,7 +45,7 @@ void Jogo::executar()
         {
             case EstadoJogo::NoMenu:
             {
-                int acaoMenu = menu.executar(ranking);
+                int acaoMenu = menu.executar(rankingFase1, rankingFase2);
                 if (acaoMenu == 0)
                 {
                     pGG->fecharWindow();
@@ -79,6 +79,7 @@ void Jogo::executar()
                 if (pFaseAtual && pFaseAtual->getFaseConcluida())
                 {
                     estadoAtual = EstadoJogo::NoMenu;
+                    menu.resetInput();
                     
                     delete pFaseAtual;
                     pFaseAtual = nullptr;
@@ -116,21 +117,36 @@ void Jogo::renderizar()
     }
 }
 
-void Jogo::adicionarAoRanking(std::string nome, int pontuacao)
+void Jogo::adicionarAoRanking(int faseNum, std::string nome, int pontuacao)
 {
-    ranking.push_back({nome, pontuacao});
+    // Escolhe o vetor correto
+    std::vector<RankingEntry>* pRanking = nullptr;
+    if (faseNum == 1) {
+        pRanking = &rankingFase1;
+    } else if (faseNum == 2) {
+        pRanking = &rankingFase2;
+    }
 
-    // Ordena o vector do maior para o menor
-    std::sort(ranking.begin(), ranking.end(), std::greater<RankingEntry>());
+    if (!pRanking) return; // Número de fase inválido
+
+    pRanking->push_back({nome, pontuacao});
+
+    // Ordena o vetor (do maior para o menor)
+    std::sort(pRanking->begin(), pRanking->end(), std::greater<RankingEntry>());
 
     // Mantém apenas os Top 10
-    if (ranking.size() > 10)
+    if (pRanking->size() > 10)
     {
-        ranking.resize(10);
+        pRanking->resize(10);
     }
 }
 
-const std::vector<RankingEntry>& Jogo::getRanking() const
+const std::vector<RankingEntry>& Jogo::getRankingFase1() const
 {
-    return ranking;
+    return rankingFase1;
+}
+
+const std::vector<RankingEntry>& Jogo::getRankingFase2() const
+{
+    return rankingFase2;
 }

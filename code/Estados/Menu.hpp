@@ -15,7 +15,8 @@ namespace Estados
             Menu();
             ~Menu() = default;
 
-            int executar(const std::vector<RankingEntry>& ranking);
+            int executar(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
+            void resetInput();
 
         private:
             enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking };
@@ -23,7 +24,7 @@ namespace Estados
             
             void set_values_principal();
             void set_values_niveis();
-            void set_values_ranking(const std::vector<RankingEntry>& ranking);
+            void set_values_ranking(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
             
             Gerenciadores::GerenciadorGrafico* pGG;
 

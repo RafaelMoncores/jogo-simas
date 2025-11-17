@@ -31,7 +31,8 @@ class Jogo
         Fases::Fase* pFaseAtual;
         sf::Clock relogio;
 
-        std::vector<RankingEntry> ranking;
+        std::vector<RankingEntry> rankingFase1; 
+        std::vector<RankingEntry> rankingFase2;
 
         void processarEventosJogando(); 
         void renderizar();
@@ -43,6 +44,7 @@ class Jogo
 
         void executar();
 
-        void adicionarAoRanking(std::string nome, int pontuacao);
-        const std::vector<RankingEntry>& getRanking() const;
+        void adicionarAoRanking(int faseNum, std::string nome, int pontuacao);
+        const std::vector<RankingEntry>& getRankingFase1() const;
+        const std::vector<RankingEntry>& getRankingFase2() const;
 };

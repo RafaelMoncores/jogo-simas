@@ -7,7 +7,7 @@
 
 namespace Fases
 {
-    Fase::Fase(Jogo* pJ) :
+    Fase::Fase(Jogo* pJ, int num) :
         Ente(),
         pJogo(pJ),
         jogador1(nullptr),
@@ -16,7 +16,9 @@ namespace Fases
         posJogadorInicial(0.f, 0.f),
         pontuacaoFinalCache(-1),
         posBotaoFim(0),
+        navPressionado(true),
         iniciais(""),
+        faseNum(num),
         numTentativas(1),
         enterPressionado(true)
     {
@@ -156,16 +158,16 @@ namespace Fases
                     // --- Processar Inputs de Navegação (Cima/Baixo) ---
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
                     {
-                        if (!enterPressionado) {
+                        if (!navPressionado) {
                             posBotaoFim = 0; // Vai para "Salvar"
-                            enterPressionado = true;
+                            navPressionado = true;
                         }
                     }
                     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
                     {
-                        if (!enterPressionado) {
+                        if (!navPressionado) { // Use 'navPressionado'
                             posBotaoFim = 1; // Vai para "Menu"
-                            enterPressionado = true;
+                            navPressionado = true; // Use 'navPressionado'
                         }
                     }
                     
@@ -188,30 +190,19 @@ namespace Fases
                     }
                     else
                     {
-                        enterPressionado = false; // Debounce
+                        enterPressionado = false;
+                        navPressionado = false; // Debounce
                     }
 
-                    // --- Atualização Visual dos Botões (feedback) ---
-                    if (botaoSalvarText)
-                        botaoSalvarText->setFillColor(posBotaoFim == 0 ? sf::Color::White : sf::Color::White);
-                    if (botaoMenuText)
-                        botaoMenuText->setFillColor(posBotaoFim == 1 ? sf::Color::White : sf::Color::White);
                 }
                 break;
 
                 case EstadoFim::PedindoIniciais:
                 {
-                    // --- Processar Input de Texto ---
-                    // Esta é uma lógica de input de texto simplificada.
-                    // Para uma versão completa, precisaríamos de um loop de eventos.
-                    // Por agora, vamos apenas simular a captura e salvar.
 
                     // (Simulação simplificada: captura 3 letras e salva)
                     if (iniciais.length() < 3)
                     {
-                        // LÓGICA SIMPLIFICADA: apenas aceita "AAA" e salva
-                        // (Input de texto real em C++ é complexo,
-                        // recomendo focar nisto *depois* do resto funcionar)
                         
                         // Vamos apenas usar "AAA" como placeholder
                         iniciais = "AAA"; 
@@ -225,7 +216,7 @@ namespace Fases
                         {
                             // --- SALVA NO RANKING ---
                             if (pJogo)
-                                pJogo->adicionarAoRanking(iniciais, pontuacaoFinalCache);
+                                pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
                             
                             faseConcluida = true; // Volta ao menu
                             enterPressionado = true;
@@ -337,9 +328,34 @@ namespace Fases
             switch (estadoFim)
             {
                 case EstadoFim::MostrandoOpcoes:
-                    if (botaoSalvarText) pGG->desenhar(*botaoSalvarText);
-                    if (botaoMenuText) pGG->desenhar(*botaoMenuText);
+                {
+                    // Lógica de Destaque para "Salvar"
+                    if (botaoSalvarText) 
+                    {
+                        if (posBotaoFim == 0) { // Se "Salvar" está selecionado
+                            botaoSalvarText->setOutlineThickness(4.f);
+                            botaoSalvarText->setFillColor(sf::Color::White); // Garante a cor
+                        } else {
+                            botaoSalvarText->setOutlineThickness(0.f);
+                            botaoSalvarText->setFillColor(sf::Color::White);
+                        }
+                        pGG->desenhar(*botaoSalvarText);
+                    }
+                    
+                    // Lógica de Destaque para "Menu"
+                    if (botaoMenuText) 
+                    {
+                        if (posBotaoFim == 1) { // Se "Menu" está selecionado
+                            botaoMenuText->setOutlineThickness(4.f);
+                            botaoMenuText->setFillColor(sf::Color::White);
+                        } else {
+                            botaoMenuText->setOutlineThickness(0.f);
+                            botaoMenuText->setFillColor(sf::Color::White);
+                        }
+                        pGG->desenhar(*botaoMenuText);
+                    }
                     break;
+                }
                 
                 case EstadoFim::PedindoIniciais:
                     if (inputIniciaisText) pGG->desenhar(*inputIniciaisText);
