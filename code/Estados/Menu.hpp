@@ -35,6 +35,7 @@ namespace Estados
             std::size_t pos{0};
             bool pressed{false};
             bool theselect{false};
+            bool enterDebounce{false};
 
             sf::Vector2i pos_mouse;
             sf::Vector2f mouse_coord;

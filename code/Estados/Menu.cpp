@@ -7,6 +7,7 @@ namespace Estados
 {
     Menu::Menu() :
         pGG(Gerenciadores::GerenciadorGrafico::getInstance()),
+        enterDebounce(false),
         estadoAtualMenu(EstadoMenu::MenuPrincipal) // Começa no Principal
     {
         set_values_principal();
@@ -268,10 +269,19 @@ namespace Estados
 
                     // 'Enter' deve funcionar em todos os estados
                     case sf::Keyboard::Key::Enter:
-                        theselect = true;
+                        if (!enterDebounce) { // Só seleciona se não estiver em debounce
+                            theselect = true;
+                        }
                         break;
                     default:
                         break;
+                }
+            }
+            if (event.is<sf::Event::KeyReleased>()) {
+                const auto *kr = event.getIf<sf::Event::KeyReleased>();
+                // Se o usuário SOLTOU o Enter, paramos o debounce
+                if (kr && kr->code == sf::Keyboard::Key::Enter) {
+                    enterDebounce = false; 
                 }
             }
         } 
@@ -340,5 +350,6 @@ namespace Estados
     {
         theselect = false;
         pressed = false;
+        enterDebounce = true;
     }
 }
