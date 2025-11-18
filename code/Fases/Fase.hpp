@@ -24,6 +24,9 @@ namespace Fases
             int faseNum;
 
             Entidades::Personagens::Jogador* jogador1;
+            Entidades::Personagens::Jogador* jogador2;
+            bool modoDoisJogadores;
+            sf::Vector2f posJogador2Inicial;
 
             sf::Vector2f posJogadorInicial;
 
@@ -37,9 +40,11 @@ namespace Fases
             std::optional<sf::Sprite> bgFase;
 
             sf::Font uiFont;
-            std::optional<sf::Text> vidasText;
-            std::optional<sf::Text> pontosText;
-            std::optional<sf::Text> tentativasText; 
+            std::optional<sf::Text> vidasTextP1;
+            std::optional<sf::Text> pontosTextP1;
+            std::optional<sf::Text> vidasTextP2;
+            std::optional<sf::Text> pontosTextP2;
+            std::optional<sf::Text> tentativasText;
             int numTentativas;
 
             std::optional<sf::Text> pontuacaoFinalText;
@@ -69,7 +74,7 @@ namespace Fases
             virtual void PosarObstaculos() = 0;
 
         public:
-            Fase(Jogo* pJogo, int num);
+            Fase(Jogo* pJogo, int num, bool doisJogadores);
             virtual ~Fase();
 
             void inicializar();

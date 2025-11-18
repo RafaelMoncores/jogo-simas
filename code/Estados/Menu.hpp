@@ -9,7 +9,7 @@
 struct RankingEntry;
 
 namespace Estados
-    {
+{
     class Menu {
         public:
             Menu();
@@ -19,12 +19,14 @@ namespace Estados
             void resetInput();
 
         private:
-            enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking };
+            enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking, MenuModoJogo };
             EstadoMenu estadoAtualMenu;
             
             void set_values_principal();
             void set_values_niveis();
             void set_values_ranking(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
+            void set_values_modo_jogo();
+            int nivelSelecionado;
             
             Gerenciadores::GerenciadorGrafico* pGG;
 

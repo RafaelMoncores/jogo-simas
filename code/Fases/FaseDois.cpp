@@ -14,8 +14,8 @@
 
 namespace Fases
 {
-    FaseDois::FaseDois(Jogo* pJogo) :
-        Fase(pJogo, 2),
+    FaseDois::FaseDois(Jogo* pJogo, bool doisJogadores) :
+        Fase(pJogo, 2, doisJogadores),
         pChao_I(nullptr),
         pChao_F(nullptr),
         maxChefoes(1)
@@ -240,62 +240,62 @@ namespace Fases
 
         if(randG <= 3){
             sf::Vector2f pos1 = {1750.f, 900.f};
-            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1);   
+            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1, jogador2);   
             listaInimigos.incluir(pGosma1);
             listaEntidades.incluir(pGosma1);
 
             sf::Vector2f pos2 = {1750.f, 700.f};
-            Gosma* pGosma2 = new Gosma(pos2, pChao_2, jogador1);   
+            Gosma* pGosma2 = new Gosma(pos2, pChao_2, jogador1, jogador2);   
             listaInimigos.incluir(pGosma2);
             listaEntidades.incluir(pGosma2);
 
             sf::Vector2f pos3 = {150.f, 450.f};
-            Gosma* pGosma3 = new Gosma(pos3, pChao_3, jogador1);   
+            Gosma* pGosma3 = new Gosma(pos3, pChao_3, jogador1, jogador2);   
             listaInimigos.incluir(pGosma3);
             listaEntidades.incluir(pGosma3);
 
             sf::Vector2f pos4 = {650.f, 950.f};
-            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1);   
+            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma4);
             listaEntidades.incluir(pGosma4);
 
             sf::Vector2f pos5 = {1050.f, 950.f};
-            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1);   
+            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma5);
             listaEntidades.incluir(pGosma5);
         }else if(randG == 4){
             sf::Vector2f pos1 = {1750.f, 900.f};
-            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1);   
+            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1, jogador2);   
             listaInimigos.incluir(pGosma1);
             listaEntidades.incluir(pGosma1);
 
             sf::Vector2f pos2 = {1750.f, 700.f};
-            Gosma* pGosma2 = new Gosma(pos2, pChao_2, jogador1);   
+            Gosma* pGosma2 = new Gosma(pos2, pChao_2, jogador1, jogador2);   
             listaInimigos.incluir(pGosma2);
             listaEntidades.incluir(pGosma2);
 
             sf::Vector2f pos4 = {650.f, 950.f};
-            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1);   
+            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma4);
             listaEntidades.incluir(pGosma4);
 
             sf::Vector2f pos5 = {1050.f, 950.f};
-            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1);   
+            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma5);
             listaEntidades.incluir(pGosma5);
         }else{
             sf::Vector2f pos1 = {1750.f, 900.f};
-            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1);   
+            Gosma* pGosma1 = new Gosma(pos1, pChao_1, jogador1, jogador2);   
             listaInimigos.incluir(pGosma1);
             listaEntidades.incluir(pGosma1);
 
             sf::Vector2f pos4 = {650.f, 950.f};
-            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1);   
+            Gosma* pGosma4 = new Gosma(pos4, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma4);
             listaEntidades.incluir(pGosma4);
 
             sf::Vector2f pos5 = {1050.f, 950.f};
-            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1);   
+            Gosma* pGosma5 = new Gosma(pos5, pChao_I, jogador1, jogador2);   
             listaInimigos.incluir(pGosma5);
             listaEntidades.incluir(pGosma5);
         }
@@ -306,7 +306,7 @@ namespace Fases
         using Entidades::Personagens::Dragao;
 
         sf::Vector2f posDragao = {1000.f, 100.f};
-        Dragao* pDragao = new Dragao(posDragao, jogador1, &listaEntidades);
+        Dragao* pDragao = new Dragao(posDragao, jogador1, jogador2, &listaEntidades);
         listaInimigos.incluir(pDragao);
         listaEntidades.incluir(pDragao);
     }

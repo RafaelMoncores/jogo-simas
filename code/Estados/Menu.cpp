@@ -8,7 +8,8 @@ namespace Estados
     Menu::Menu() :
         pGG(Gerenciadores::GerenciadorGrafico::getInstance()),
         enterDebounce(false),
-        estadoAtualMenu(EstadoMenu::MenuPrincipal) // Começa no Principal
+        estadoAtualMenu(EstadoMenu::MenuPrincipal),
+        nivelSelecionado(1)
     {
         set_values_principal();
     }
@@ -190,6 +191,39 @@ namespace Estados
         // ---------------------------------------------
     }
 
+    void Menu::set_values_modo_jogo()
+    {
+        pos = 0;
+        pressed = theselect = false;
+
+        pos_mouse = {0, 0};
+        mouse_coord = {0.f, 0.f};
+
+        options = {"1 Jogador", "2 Jogadores", "Voltar"};
+        coords = {
+            {880.f, 370.f},
+            {880.f, 508.f},
+            {910.f, 648.f}
+        };
+        sizes = {18, 18, 18};
+
+        texts.clear();
+        texts.reserve(options.size());
+        for (std::size_t i = 0; i < options.size(); ++i) {
+            texts.emplace_back(font);
+            texts[i].setString(options[i]);
+            texts[i].setCharacterSize(sizes[i]);
+            texts[i].setOutlineColor(sf::Color::Black);
+            texts[i].setOutlineThickness(0.f);
+            texts[i].setPosition(coords[i]);
+        }
+
+        if (!texts.empty()) {
+            texts[0].setOutlineThickness(4.f);
+            pos = 0;
+        }
+    }
+
     int Menu::executar(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2)
     {
         pos_mouse = sf::Mouse::getPosition(pGG->getWindow());
@@ -294,7 +328,10 @@ namespace Estados
                 case EstadoMenu::MenuPrincipal:
                     switch (pos) {
                         case 1:
-                            return 1;
+                            nivelSelecionado = 1;
+                            estadoAtualMenu = EstadoMenu::MenuModoJogo;
+                            set_values_modo_jogo();
+                            return -1;
                         case 3:
                             estadoAtualMenu = EstadoMenu::MenuNiveis;
                             set_values_niveis();
@@ -310,13 +347,35 @@ namespace Estados
                 
                 case EstadoMenu::MenuNiveis:
                     switch (pos) {
-                        case 0:
-                            return 1;
-                        case 1:
-                            return 2;
-                        case 2:
+                        case 0: // "Level 1"
+                            nivelSelecionado = 1;
+                            estadoAtualMenu = EstadoMenu::MenuModoJogo;
+                            set_values_modo_jogo();
+                            return -1; // Em vez de 'return 1'
+                        case 1: // "Level 2"
+                            nivelSelecionado = 2;
+                            estadoAtualMenu = EstadoMenu::MenuModoJogo;
+                            set_values_modo_jogo();
+                            return -1; // Em vez de 'return 2'
+                        case 2: // "Back"
                             estadoAtualMenu = EstadoMenu::MenuPrincipal;
                             set_values_principal();
+                            return -1;
+                    }
+                    break;
+                case EstadoMenu::MenuModoJogo:
+                    switch (pos) {
+                        case 0:
+                            if (nivelSelecionado == 1) return 10;
+                            if (nivelSelecionado == 2) return 20;
+                            break;
+                        case 1:
+                            if (nivelSelecionado == 1) return 11;
+                            if (nivelSelecionado == 2) return 21;
+                            break;
+                        case 2:
+                            estadoAtualMenu = EstadoMenu::MenuNiveis;
+                            set_values_niveis();
                             return -1;
                     }
                     break;

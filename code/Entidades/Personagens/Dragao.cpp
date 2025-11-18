@@ -8,10 +8,9 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Dragao::Dragao(sf::Vector2f pos, Jogador* pJog, Listas::ListaEntidades* pLista) :
-            Inimigo(9, pos),
+        Dragao::Dragao(sf::Vector2f pos, Jogador* pJog1, Jogador* pJog2, Listas::ListaEntidades* pLista) :
+            Inimigo(9, pos, pJog1, pJog2),
             forca(2),
-            pJogador(pJog),
             pListaEntidades(pLista),
             estaAtacando(false),
             temporizadorMovimento(0.f),
@@ -40,14 +39,15 @@ namespace Entidades
 
         void Dragao::atirar()
         {
-            if (!pJogador || !pListaEntidades || !sprite) return;
+            Jogador* pAlvo = getJogadorMaisProximo();
+            if (!pAlvo || !pListaEntidades || !sprite) return;
 
             sf::Vector2f posDragao = sprite->getPosition();
             
             posDragao.x += sprite->getGlobalBounds().size.x / 2.f;
             posDragao.y += sprite->getGlobalBounds().size.y / 2.f;
 
-            sf::FloatRect boundsJog = pJogador->getBoundingBox();
+            sf::FloatRect boundsJog = pAlvo->getBoundingBox();
             sf::Vector2f posJogador(
                 boundsJog.position.x + boundsJog.size.x / 2.f,
                 boundsJog.position.y + boundsJog.size.y / 2.f
@@ -73,6 +73,8 @@ namespace Entidades
 
             temporizadorMovimento += delta;
             temporizadorAtaque += delta;
+            
+            Jogador* pAlvo = getJogadorMaisProximo();
 
             if (estaAtacando)
             {
@@ -110,9 +112,9 @@ namespace Entidades
 
                 if (tempoMovimentoRestante <= 0.f && temporizadorMovimento >= 5.0f)
                 {
-                    if (pJogador && sprite)
+                    if (pAlvo && sprite)
                     {
-                        sf::Vector2f posJogador = pJogador->getBoundingBox().position;
+                        sf::Vector2f posJogador = pAlvo->getBoundingBox().position;
                         sf::Vector2f posDragao = sprite->getPosition();
 
                         if (posJogador.x < posDragao.x)

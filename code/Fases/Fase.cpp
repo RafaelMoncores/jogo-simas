@@ -10,13 +10,16 @@
 
 namespace Fases
 {
-    Fase::Fase(Jogo* pJ, int num) :
+    Fase::Fase(Jogo* pJ, int num, bool doisJogadores) :
         Ente(),
         pJogo(pJ),
         jogador1(nullptr),
+        jogador2(nullptr),
+        modoDoisJogadores(doisJogadores),
         faseConcluida(false),
         estadoFim(EstadoFim::MostrandoOpcoes),
         posJogadorInicial(0.f, 0.f),
+        posJogador2Inicial(80.f, 0.f),
         pontuacaoFinalCache(-1),
         posBotaoFim(0),
         navPressionado(true),
@@ -42,6 +45,7 @@ namespace Fases
         listaEntidades.limpar();
         
         jogador1 = nullptr;
+        jogador2 = nullptr;
     }
 
     void Fase::inicializarUI()
@@ -51,19 +55,33 @@ namespace Fases
             std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
         }
 
-        vidasText.emplace(uiFont); 
-        vidasText->setCharacterSize(30);
-        vidasText->setFillColor(sf::Color::White);
-        vidasText->setPosition({60.f, 10.f}); 
-        vidasText->setString("Vidas: ");
+        vidasTextP1.emplace(uiFont);
+        vidasTextP1->setCharacterSize(30);
+        vidasTextP1->setFillColor(sf::Color::White);
+        vidasTextP1->setPosition({60.f, 10.f}); 
+        vidasTextP1->setString("P1 Vidas: ");
 
-        pontosText.emplace(uiFont); 
-        pontosText->setCharacterSize(30);
-        pontosText->setFillColor(sf::Color::White);
-        sf::FloatRect boundsPontos = pontosText->getLocalBounds();
-        pontosText->setOrigin({boundsPontos.size.x / 2.f, 0.f}); // Sintaxe SFML 3.x
-        pontosText->setPosition({760, 10.f});
-        pontosText->setString("Pontos: ");
+        pontosTextP1.emplace(uiFont);
+        pontosTextP1->setCharacterSize(30);
+        pontosTextP1->setFillColor(sf::Color::White);
+        sf::FloatRect boundsPontos = pontosTextP1->getLocalBounds();
+        pontosTextP1->setOrigin({boundsPontos.size.x / 2.f, 0.f});
+        pontosTextP1->setPosition({760, 10.f});
+        pontosTextP1->setString("P1 Pontos: ");
+
+        vidasTextP2.emplace(uiFont);
+        vidasTextP2->setCharacterSize(30);
+        vidasTextP2->setFillColor(sf::Color::White);
+        vidasTextP2->setPosition({60.f, 50.f});
+        vidasTextP2->setString("P2 Vidas: ");
+
+        pontosTextP2.emplace(uiFont);
+        pontosTextP2->setCharacterSize(30);
+        pontosTextP2->setFillColor(sf::Color::White);
+        sf::FloatRect boundsPontosP2 = pontosTextP2->getLocalBounds();
+        pontosTextP2->setOrigin({boundsPontosP2.size.x / 2.f, 0.f});
+        pontosTextP2->setPosition({760, 50.f});
+        pontosTextP2->setString("P2 Pontos: ");
 
         tentativasText.emplace(uiFont); 
         tentativasText->setCharacterSize(30);
@@ -119,13 +137,22 @@ namespace Fases
         listaEntidades.limpar();
         
         jogador1 = nullptr;
+        jogador2 = nullptr;
 
         Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
 
-        jogador1 = new Entidades::Personagens::Jogador(posJogadorInicial);
+        posJogador2Inicial = posJogadorInicial + sf::Vector2f(80.f, 0.f);
+
+        jogador1 = new Entidades::Personagens::Jogador(posJogadorInicial, 1);
         jogador1->setPosition(posJogadorInicial);
-        
         listaEntidades.incluir(jogador1); 
+
+        if (modoDoisJogadores)
+        {
+            jogador2 = new Entidades::Personagens::Jogador(posJogador2Inicial, 2);
+            jogador2->setPosition(posJogador2Inicial);
+            listaEntidades.incluir(jogador2);
+        }
 
         criarObstaculos();
         criarInimigos();
@@ -133,7 +160,10 @@ namespace Fases
 
     void Fase::processarEvento(const sf::Event& evento)
     {
-        if (jogador1 && jogador1->getCompletouFase() && estadoFim == EstadoFim::PedindoIniciais)
+        bool p1Completo = (jogador1 && jogador1->getCompletouFase());
+        bool p2Completo = (modoDoisJogadores && jogador2 && jogador2->getCompletouFase());
+
+        if ((p1Completo || p2Completo) && estadoFim == EstadoFim::PedindoIniciais)
         {
             processarInputIniciais(evento);
         }
@@ -185,14 +215,18 @@ namespace Fases
     
     void Fase::executar(float delta)
     {
-        // --- 1. LÓGICA DE FASE CONGELADA (NO TOPO) ---
-        // Se o jogador pisou na plataforma final...
-        if (jogador1 && jogador1->getCompletouFase())
+        // --- 1. LÓGICA DE FASE CONGELADA (FIM DE JOGO) ---
+        bool p1Completo = (jogador1 && jogador1->getCompletouFase());
+        bool p2Completo = (modoDoisJogadores && jogador2 && jogador2->getCompletouFase());
+
+        if (p1Completo || p2Completo)
         {
-            // 1a. Salva a pontuação (só na primeira vez)
             if (pontuacaoFinalCache == -1) 
             {
-                pontuacaoFinalCache = jogador1->getPontos(); 
+                if (p1Completo)
+                    pontuacaoFinalCache = jogador1->getPontos();
+                else
+                    pontuacaoFinalCache = jogador2->getPontos();
             
                 if (pontuacaoFinalText)
                 {
@@ -226,14 +260,14 @@ namespace Fases
                     {
                         if (!enterPressionado)
                         {
-                            if (posBotaoFim == 0) // Selecionou "Salvar"
+                            if (posBotaoFim == 0) 
                             {
                                 estadoFim = EstadoFim::PedindoIniciais;
-                                iniciais = ""; // Reseta as iniciais
+                                iniciais = ""; 
                             }
-                            else // Selecionou "Menu"
+                            else 
                             {
-                                faseConcluida = true; // Sinaliza para o Jogo voltar ao Menu
+                                faseConcluida = true; 
                             }
                             enterPressionado = true;
                         }
@@ -241,7 +275,7 @@ namespace Fases
                     else
                     {
                         enterPressionado = false;
-                        navPressionado = false; // Debounce
+                        navPressionado = false; 
                     }
 
                 }
@@ -254,11 +288,10 @@ namespace Fases
                     {
                         if (iniciais.length() == 3)
                         {
-                            // --- SALVA NO RANKING ---
                             if (pJogo)
                                 pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
                             
-                            faseConcluida = true; // Volta ao menu
+                            faseConcluida = true; 
                             enterPressionado = true;
                         }
                     }
@@ -271,13 +304,17 @@ namespace Fases
                 break;
             }
             
-            // 3. NÃO EXECUTA MAIS NADA (congela o jogo)
             return; 
         }
 
-        // --- 2. LÓGICA DE JOGO NORMAL ---
+        // --- 2. LÓGICA DE JOGO NORMAL (COLISÕES E UPDATES) ---
         
         gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos, &listaEntidades);
+        
+        if (modoDoisJogadores && jogador2)
+        {
+            gerenciadorColisoes.verificarColisoes(jogador2, &listaObstaculos, &listaInimigos, &listaEntidades);
+        }
 
         for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
@@ -286,54 +323,79 @@ namespace Fases
             pE->executar(delta); 
         }
 
-        // --- 3. ATUALIZAÇÃO DA UI (Vidas e Pontos Normais) ---
+        // --- 3. ATUALIZAÇÃO DA UI (VIDAS, PONTOS, TENTATIVAS) ---
+        
         if (jogador1)
         {
-            if (vidasText)
+            if (vidasTextP1) 
             {
-                vidasText->setString("Vidas: " + std::to_string(jogador1->getVidas()));
+                vidasTextP1->setString("P1 Vidas: " + std::to_string(jogador1->getVidas()));
             }
-
-            if (pontosText)
+            if (pontosTextP1) 
             {
-                pontosText->setString("Pontos: " + std::to_string(jogador1->getPontos()));
+                pontosTextP1->setString("P1 Pontos: " + std::to_string(jogador1->getPontos()));
             }
+        }
+        else if (vidasTextP1)
+        {
+            vidasTextP1->setString("P1 Vidas: 0");
+        }
 
-            if (tentativasText)
+        if (modoDoisJogadores)
+        {
+            if (jogador2)
             {
-                tentativasText->setString("Tentativas: " + std::to_string(numTentativas));
-                sf::FloatRect bounds = tentativasText->getLocalBounds();
-                // Alinha a origem ao canto superior DIREITO do texto
-                tentativasText->setOrigin({bounds.size.x, 0.f});
-                tentativasText->setPosition({1850.f, 10.f}); 
-            }
-
-            if (jogador1->getVidas() <= 0)
-            {
-                std::cout << "Sem vidas! Reiniciando a fase..." << std::endl;
-                
-                numTentativas++; // Incrementa as tentativas
-
-                int pontosIniciais = 1000 - ((numTentativas - 1) * 100);
-                
-                // Garante que a pontuação não é negativa
-                if (pontosIniciais < 0) pontosIniciais = 0; 
-                
-                // Reinicia a fase (isso vai recriar o jogador)
-                inicializar(); 
-                
-                // Define os pontos do *novo* jogador
-                if (jogador1) 
+                if (vidasTextP2)
                 {
-                    jogador1->setPontos( (float)pontosIniciais );
+                    vidasTextP2->setString("P2 Vidas: " + std::to_string(jogador2->getVidas()));
+                }
+                if (pontosTextP2)
+                {
+                    pontosTextP2->setString("P2 Pontos: " + std::to_string(jogador2->getPontos()));
                 }
             }
-        }
-        else if (vidasText)
-        {
-            vidasText->setString("Vidas: 0");
+            else if (vidasTextP2)
+            {
+                vidasTextP2->setString("P2 Vidas: 0");
+            }
         }
 
+        if (tentativasText)
+        {
+            tentativasText->setString("Tentativas: " + std::to_string(numTentativas));
+            sf::FloatRect bounds = tentativasText->getLocalBounds();
+            tentativasText->setOrigin({bounds.size.x, 0.f});
+            tentativasText->setPosition({1850.f, 10.f}); 
+        }
+
+        // --- 4. LÓGICA DE MORTE E REINÍCIO DE FASE ---
+        bool p1Morto = (jogador1 && jogador1->getVidas() <= 0);
+        bool p2Morto = (modoDoisJogadores && jogador2 && jogador2->getVidas() <= 0);
+        bool p2NaoJoga = !modoDoisJogadores;
+
+        if ( (p1Morto && p2NaoJoga) || (p1Morto && p2Morto) )
+        {
+            std::cout << "Sem vidas! Reiniciando a fase..." << std::endl;
+                
+            numTentativas++; 
+            
+            int pontosIniciais = 1000 - ((numTentativas - 1) * 100);
+            
+            if (pontosIniciais < 0) pontosIniciais = 0; 
+            
+            inicializar(); 
+            
+            if (jogador1) 
+            {
+                jogador1->setPontos( (float)pontosIniciais );
+            }
+            if (jogador2) 
+            {
+                jogador2->setPontos( (float)pontosIniciais );
+            }
+        }
+
+        // --- 5. LÓGICA DE LIMPEZA DE ENTIDADES (INIMIGOS MORTOS, PROJÉTEIS) ---
         bool removeu = true;
         while (removeu)
         {
@@ -345,7 +407,6 @@ namespace Fases
 
                 bool deletar = false;
 
-                // Com o include lá em cima, isso agora funciona
                 if (Entidades::BolaDeFogo* pFogo = dynamic_cast<Entidades::BolaDeFogo*>(pE))
                 {
                     if (!pFogo->getAtivo()) deletar = true;
@@ -434,9 +495,15 @@ namespace Fases
         }
         else
         {
-            // JOGO NORMAL: Desenha a UI normal
-            if (vidasText) pGG->desenhar(*vidasText);
-            if (pontosText) pGG->desenhar(*pontosText); 
+            if (vidasTextP1) pGG->desenhar(*vidasTextP1);
+            if (pontosTextP1) pGG->desenhar(*pontosTextP1);
+            
+            if (modoDoisJogadores)
+            {
+                if (vidasTextP2) pGG->desenhar(*vidasTextP2);
+                if (pontosTextP2) pGG->desenhar(*pontosTextP2);
+            }
+
             if (tentativasText) pGG->desenhar(*tentativasText);
         }
     }

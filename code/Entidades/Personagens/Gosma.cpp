@@ -7,15 +7,14 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Gosma::Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ) :
-            Inimigo(1, pos),
+       Gosma::Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Jogador* pJ1, Jogador* pJ2) :
+            Inimigo(1, pos, pJ1, pJ2),
             pPlataforma(pPlat),
             tempoEspera(2.0f),
             tempoTotal(0.0f),
             direcaoPulo(1),
             FORCA_PULO_INIMIGO(350.0f),
             VELOCIDADE_LATERAL_INIMIGO(100.0f),
-            pJogador(pJ),
             raio_deteccao(250.0f)
         {
             if (!textura.loadFromFile("tileSets/gosma.png"))
@@ -37,29 +36,36 @@ namespace Entidades
         void Gosma::processarAI(float delta)
         {
             if (num_vidas <= 0) return;
-            if (!pPlataforma || !sprite || !pJogador) return;
+            
+            if (!pPlataforma || !sprite) return;
+
+            Jogador* pAlvo = getJogadorMaisProximo();
 
             if (podePular)
             {
                 tempoTotal += delta;
-                velocidade.x = 0.f; 
 
                 if (tempoTotal >= tempoEspera)
                 {
+                    tempoTotal = 0.0f;
                     sf::Vector2f posGosma = sprite->getPosition();
-                    sf::Vector2f posPlayer = pJogador->getBoundingBox().position;
-                    
-                    float dist = std::sqrt(
-                        std::pow(posGosma.x - posPlayer.x, 2) + 
-                        std::pow(posGosma.y - posPlayer.y, 2)
-                    );
 
-                    if (dist < raio_deteccao)
+                    if (pAlvo != nullptr)
                     {
-                        if (posPlayer.x < posGosma.x)
-                            direcaoPulo = -1;
-                        else
-                            direcaoPulo = 1; 
+                        sf::Vector2f posPlayer = pAlvo->getBoundingBox().position;
+                        
+                        float dist = std::sqrt(
+                            std::pow(posGosma.x - posPlayer.x, 2) + 
+                            std::pow(posGosma.y - posPlayer.y, 2)
+                        );
+
+                        if (dist < raio_deteccao)
+                        {
+                            if (posPlayer.x < posGosma.x)
+                                direcaoPulo = -1;
+                            else
+                                direcaoPulo = 1; 
+                        }
                     }
                     else
                     {
@@ -73,8 +79,11 @@ namespace Entidades
 
                     velocidade.y = -FORCA_PULO_INIMIGO;
                     velocidade.x = VELOCIDADE_LATERAL_INIMIGO * direcaoPulo;
-                    tempoTotal = 0.0f;
                     podePular = false;
+                }
+                else
+                {
+                    velocidade.x = 0.f;
                 }
             }
         }
@@ -114,22 +123,20 @@ namespace Entidades
         {
             if (num_vidas <= 0) return;
 
-            // Se "pOutro" for o Jogador (colisão lateral)
             if (pOutro)
             {
                 pOutro->perderVida(1); 
             }
-            // Se "pOutro" for NULO (pulo no topo)
             else 
             {
-                perderVida(1); // Gosma morre
+                perderVida(1); 
 
-                // DÁ PONTOS SE FOR ELIMINADA
                 if (num_vidas <= 0)
                 {
-                    if (pJogador) 
+                    Jogador* pAlvo = getJogadorMaisProximo();
+                    if (pAlvo) 
                     {
-                        pJogador->addPontos(100); 
+                        pAlvo->addPontos(100); 
                     }
                 }
             }
