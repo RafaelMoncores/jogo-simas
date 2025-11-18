@@ -1,6 +1,5 @@
 #pragma once
 #include "Personagem.hpp"
-// Obstaculo.hpp agora é incluído no .cpp
 
 namespace Entidades
 {
@@ -33,6 +32,7 @@ namespace Entidades
                 int getDirecao() const;
 
                 int getPontos() const;
+                sf::FloatRect getHitboxAtaque() const;
                 void addPontos(int p);
                 void setPontos(float p);
 

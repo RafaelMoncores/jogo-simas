@@ -13,9 +13,10 @@ namespace Entidades
             float velocidadeProjetil;
             int dano;
             bool ativo;
+            bool pertenceAoJogador;
 
         public:
-            BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel = 600.f);
+            BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel = 600.f, bool doJogador = false);
             ~BolaDeFogo();
 
             virtual void executar(float delta) override;
@@ -25,5 +26,9 @@ namespace Entidades
             void colidirComJogador(Personagens::Jogador* pJogador);
 
             bool getAtivo() const;
+            void setAtivo(bool af);
+            void rebater();
+            bool getPertenceAoJogador() const;
+            int getDano() const;
     };
 }

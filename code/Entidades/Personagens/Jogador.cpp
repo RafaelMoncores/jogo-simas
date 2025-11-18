@@ -119,10 +119,17 @@ namespace Entidades
             {
                 processarInputs(delta);
 
-                // --- LÓGICA DE PONTOS POR SEGUNDO ---
-                pontos -= 20.0f * delta; // Perde 20 pontos por segundo
-                if (pontos < 0.f) pontos = 0.f; // Não deixa ficar negativo
-                // -------------------------------------
+                if (estaAtacando && tempoAtaque > 0.f)
+                {
+                    tempoAtaque -= delta;
+                    if (tempoAtaque <= 0.f)
+                    {
+                        estaAtacando = false;
+                    }
+                }
+
+                pontos -= 20.0f * delta;
+                if (pontos < 0.f) pontos = 0.f;
             }
             
             aplicarFisica(delta);
@@ -232,6 +239,30 @@ namespace Entidades
         int Jogador::getPontos() const 
         {
             return static_cast<int>(pontos);
+        }
+
+        sf::FloatRect Jogador::getHitboxAtaque() const
+        {
+            if (!estaAtacando || !sprite) 
+                return {};
+
+            sf::FloatRect boundsJogador = sprite->getGlobalBounds();
+            
+            sf::Vector2f attackSize = { 50.f, boundsJogador.size.y * 0.8f }; 
+            sf::Vector2f attackPos;
+
+            if (direcao == 1)
+            {
+                attackPos.x = boundsJogador.position.x + boundsJogador.size.x;
+            }
+            else
+            {
+                attackPos.x = boundsJogador.position.x - attackSize.x;
+            }
+            
+            attackPos.y = boundsJogador.position.y + (boundsJogador.size.y - attackSize.y) / 2.f;
+
+            return { attackPos, attackSize };
         }
 
         void Jogador::addPontos(int p) 

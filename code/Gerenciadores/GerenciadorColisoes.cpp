@@ -4,6 +4,7 @@
 #include "../Listas/ListaInimigos.hpp"
 #include "../Listas/ListaEntidades.hpp"
 #include "../Entidades/BolaDeFogo.hpp"
+#include "../Entidades/Personagens/Dragao.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
 namespace Gerenciadores
@@ -59,7 +60,42 @@ namespace Gerenciadores
             
             if (pFogo)
             {
-                tratarColisao(pJogador, pFogo);
+                sf::FloatRect boundsFogo = pFogo->getBoundingBox();
+
+                if (pFogo->getPertenceAoJogador())
+                {
+                    for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
+                    {
+                        Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
+                        if (pInim == NULL) break;
+
+                        if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
+                        {
+                            sf::FloatRect boundsInimigo = pInim->getBoundingBox();
+                            if (boundsFogo.findIntersection(boundsInimigo))
+                            {
+                                pInim->perderVida(pFogo->getDano());
+                                pFogo->setAtivo(false);
+                                pJogador->addPontos(100);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (pJogador->getEstaAtacando())
+                    {
+                        sf::FloatRect boundsAtaque = pJogador->getHitboxAtaque();
+                        if (boundsFogo.findIntersection(boundsAtaque))
+                        {
+                            pFogo->rebater();
+                            continue; 
+                        }
+                    }
+
+                    tratarColisao(pJogador, pFogo);
+                }
             }
         }
     }
@@ -107,7 +143,7 @@ namespace Gerenciadores
             
             if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
             {
-                pInim->danificar(nullptr);
+                pInim->perderVida(1);
                 pJogador->fazerBounce(250.0f);
                 pJogador->colidir(pInim, boundsInim);
             }

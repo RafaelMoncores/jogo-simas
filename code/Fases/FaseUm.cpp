@@ -255,7 +255,7 @@ namespace Fases
     {
         using Entidades::Personagens::Vampiro;
         
-        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f);
+        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f, jogador1);
         listaInimigos.incluir(pVamp1);
         listaEntidades.incluir(pVamp1);
 

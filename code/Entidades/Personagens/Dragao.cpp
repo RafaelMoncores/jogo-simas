@@ -9,7 +9,7 @@ namespace Entidades
     namespace Personagens
     {
         Dragao::Dragao(sf::Vector2f pos, Jogador* pJog, Listas::ListaEntidades* pLista) :
-            Inimigo(20, pos),
+            Inimigo(9, pos),
             forca(2),
             pJogador(pJog),
             pListaEntidades(pLista),
@@ -55,7 +55,7 @@ namespace Entidades
 
             sf::Vector2f direcao = posJogador - posDragao;
 
-            BolaDeFogo* pFogo = new BolaDeFogo(posDragao, direcao);
+            BolaDeFogo* pFogo = new BolaDeFogo(posDragao, direcao, 400.f, false);
 
             pListaEntidades->incluir(static_cast<Entidade*>(pFogo));
         }

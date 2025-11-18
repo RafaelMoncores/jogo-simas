@@ -4,12 +4,13 @@
 
 namespace Entidades
 {
-    BolaDeFogo::BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel) :
+    BolaDeFogo::BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel, bool doJogador) :
         Entidade(),
         direcao(dir),
         velocidadeProjetil(vel),
         dano(1),
-        ativo(true)
+        ativo(true),
+        pertenceAoJogador(doJogador)
     {
         if (!textura.loadFromFile("tileSets/bola_de_fogo.png"))
         {
@@ -66,7 +67,7 @@ namespace Entidades
 
     void BolaDeFogo::colidirComJogador(Personagens::Jogador* pJogador)
     {
-        if (pJogador)
+        if (pJogador && !pertenceAoJogador)
         {
             pJogador->perderVida(dano);
             ativo = false;
@@ -76,6 +77,32 @@ namespace Entidades
     bool BolaDeFogo::getAtivo() const
     {
         return ativo;
+    }
+
+    void BolaDeFogo::rebater()
+    {
+        direcao *= -1.f; 
+        pertenceAoJogador = true;
+        
+        if (shape)
+        {
+            shape->setColor(sf::Color::Cyan); 
+        }
+    }
+
+    void BolaDeFogo::setAtivo(bool af)
+    {
+        ativo = af;
+    }
+
+    bool BolaDeFogo::getPertenceAoJogador() const
+    {
+        return pertenceAoJogador;
+    }
+
+    int BolaDeFogo::getDano() const
+    {
+        return dano;
     }
 
 }
