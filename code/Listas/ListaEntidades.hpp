@@ -16,6 +16,7 @@ namespace Listas{
         // Métodos do snippet 
         void incluir(Entidades::Entidade* pE);
         void limpar();
+        void remover(Entidades::Entidade* pE);
 
         // Métodos de iteração 
         void percorrer();

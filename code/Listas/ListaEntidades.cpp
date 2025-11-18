@@ -19,6 +19,11 @@ namespace Listas
     void ListaEntidades::limpar() {
         LEs.limpar();
     }
+    
+    void ListaEntidades::remover(Entidades::Entidade* pE)
+    {
+        LEs.remover(pE);
+    }
 
     void ListaEntidades::percorrer()
     {
