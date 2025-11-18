@@ -23,7 +23,7 @@ namespace Fases
             virtual void criarObstMedios();
 
         public:
-            FaseDois();
+            FaseDois(Jogo* pJogo);
             ~FaseDois();
 
             const int maxChefoes;

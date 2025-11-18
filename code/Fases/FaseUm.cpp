@@ -14,8 +14,8 @@
 
 namespace Fases
 {
-    FaseUm::FaseUm() :
-        Fase(),
+    FaseUm::FaseUm(Jogo* pJogo) :
+        Fase(pJogo, 1),
         pChao2_Gosma(nullptr),
         pPlat1_Gosma(nullptr),
         pPlat4_Gosma(nullptr),
@@ -259,7 +259,7 @@ namespace Fases
         listaInimigos.incluir(pVamp1);
         listaEntidades.incluir(pVamp1);
 
-        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f);
+        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f, jogador1);
         listaInimigos.incluir(pVamp2);
         listaEntidades.incluir(pVamp2);
     }

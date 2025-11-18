@@ -20,7 +20,7 @@ namespace Fases
             virtual void criarInimigosFaceis();
 
         public:
-            FaseUm();
+            FaseUm(Jogo* pJogo);
             ~FaseUm();
 
             const int maxInimMedios;

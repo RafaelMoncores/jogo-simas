@@ -19,6 +19,8 @@ namespace Entidades
                 float tempoAtaque;
                 const float COOLDOWN_ATAQUE;
 
+                float pontos;
+
                 void processarInputs(float delta);
                 virtual void aplicarFisica(float delta) override;
 
@@ -29,6 +31,10 @@ namespace Entidades
                 bool getEstaAtacando() const;
                 bool getCompletouFase() const;
                 int getDirecao() const;
+
+                int getPontos() const;
+                void addPontos(int p);
+                void setPontos(float p);
 
                 virtual void executar(float delta) override;
                 virtual sf::FloatRect getBoundingBox() const override;

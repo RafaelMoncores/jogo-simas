@@ -5,9 +5,10 @@ namespace Entidades
 {
     namespace Personagens
     {
-        Vampiro::Vampiro(sf::Vector2f pos, float tam) :
+        Vampiro::Vampiro(sf::Vector2f pos, float tam, Entidades::Personagens::Jogador* pJ) :
             Inimigo( (int)(tam * 2.0f) , pos), 
             tamanho(tam),
+            pJogador(pJ),
             tempoTotal(0.0f),
             direcao(1),
             VELOCIDADE_PATRULHA(150.0f),
@@ -85,7 +86,23 @@ namespace Entidades
         void Vampiro::danificar(Personagem* pOutro)
         {
             if (num_vidas <= 0) return;
-            pOutro->perderVida(1); 
+
+            // Se "pOutro" for o Jogador (colisão lateral)
+            if (pOutro)
+            {
+                pOutro->perderVida(1); 
+            }
+            // Se "pOutro" for NULO (pulo no topo)
+            else 
+            {
+                perderVida(1); // Vampiro perde 1 vida
+                
+                // DÁ PONTOS IMEDIATAMENTE (A CADA GOLPE)
+                if (pJogador)
+                {
+                    pJogador->addPontos(300); 
+                }
+            }
         }
 
         void Vampiro::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)

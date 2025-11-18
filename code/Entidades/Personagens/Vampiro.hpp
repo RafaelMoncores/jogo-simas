@@ -1,5 +1,6 @@
 #pragma once
 #include "Inimigo.hpp"
+#include "Jogador.hpp"
 
 namespace Entidades
 {
@@ -9,6 +10,7 @@ namespace Entidades
         {
         private:
             sf::Texture textura;
+            Entidades::Personagens::Jogador* pJogador;
             
             float tamanho;
             float tempoTotal;
@@ -24,7 +26,7 @@ namespace Entidades
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Vampiro(sf::Vector2f pos, float tamanho);
+            Vampiro(sf::Vector2f pos, float tamanho, Entidades::Personagens::Jogador* pJ);
             ~Vampiro();
 
             virtual void executar(float delta) override;

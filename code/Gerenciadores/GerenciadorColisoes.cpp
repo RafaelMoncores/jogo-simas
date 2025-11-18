@@ -107,7 +107,7 @@ namespace Gerenciadores
             
             if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
             {
-                pInim->perderVida(1);
+                pInim->danificar(nullptr);
                 pJogador->fazerBounce(250.0f);
                 pJogador->colidir(pInim, boundsInim);
             }

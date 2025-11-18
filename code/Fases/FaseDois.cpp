@@ -14,8 +14,8 @@
 
 namespace Fases
 {
-    FaseDois::FaseDois() :
-        Fase(),
+    FaseDois::FaseDois(Jogo* pJogo) :
+        Fase(pJogo, 2),
         pChao_I(nullptr),
         pChao_F(nullptr),
         maxChefoes(1)

@@ -6,6 +6,8 @@
 #include <string>
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 
+struct RankingEntry;
+
 namespace Estados
     {
     class Menu {
@@ -13,14 +15,16 @@ namespace Estados
             Menu();
             ~Menu() = default;
 
-            int executar();
+            int executar(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
+            void resetInput();
 
         private:
-            enum class EstadoMenu { MenuPrincipal, MenuNiveis };
+            enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking };
             EstadoMenu estadoAtualMenu;
             
             void set_values_principal();
             void set_values_niveis();
+            void set_values_ranking(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
             
             Gerenciadores::GerenciadorGrafico* pGG;
 
@@ -31,6 +35,7 @@ namespace Estados
             std::size_t pos{0};
             bool pressed{false};
             bool theselect{false};
+            bool enterDebounce{false};
 
             sf::Vector2i pos_mouse;
             sf::Vector2f mouse_coord;
