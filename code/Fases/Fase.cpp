@@ -61,66 +61,48 @@ namespace Fases
             std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
         }
 
-        // --- POSIÇÕES PROPORCIONAIS X (HUD) ---
+        const float X_LEFT = 5.f;
         
-        // Ancoragem à esquerda (3% da largura)
-        const float X_LEFT = W_BASE * 0.03f; // 57.6f
+        const float X_CENTER_LEFT = W_BASE * 0.350f;
         
-        // Ancoragem centralizada (39.5% da largura)
-        const float X_CENTER_LEFT = W_BASE * 0.395f; // 758.4f
-        
-        // Ancoragem à direita (96.3% da largura - 1850.f)
-        const float X_RIGHT = W_BASE * 0.963f; // 1848.96f
+        const float X_RIGHT = W_BASE * 0.963f;
 
-        // --- HUD (Vidas, Pontos) ---
-        
-        // P1 Vidas (Top Left)
         vidasTextP1.emplace(uiFont);
         vidasTextP1->setCharacterSize(FONT_SIZE_UI);
         vidasTextP1->setFillColor(sf::Color::White);
-        // X ajustado
         vidasTextP1->setPosition({X_LEFT, 10.f}); 
         vidasTextP1->setString("P1 Vidas: ");
 
-        // P1 Pontos (Top Center-Left)
         pontosTextP1.emplace(uiFont);
         pontosTextP1->setCharacterSize(FONT_SIZE_UI);
         pontosTextP1->setFillColor(sf::Color::White);
         pontosTextP1->setString("P1 Pontos: "); 
         sf::FloatRect boundsPontos = pontosTextP1->getLocalBounds();
         pontosTextP1->setOrigin({boundsPontos.size.x / 2.f, 0.f});
-        // X ajustado
         pontosTextP1->setPosition({X_CENTER_LEFT, 10.f});
 
-        // P2 Vidas (Second Row Left)
         vidasTextP2.emplace(uiFont);
         vidasTextP2->setCharacterSize(FONT_SIZE_UI);
         vidasTextP2->setFillColor(sf::Color::White);
-        // X ajustado
         vidasTextP2->setPosition({X_LEFT, 50.f});
         vidasTextP2->setString("P2 Vidas: ");
 
-        // P2 Pontos (Second Row Center-Left)
         pontosTextP2.emplace(uiFont);
         pontosTextP2->setCharacterSize(FONT_SIZE_UI);
         pontosTextP2->setFillColor(sf::Color::White);
         pontosTextP2->setString("P2 Pontos: "); 
         sf::FloatRect boundsPontosP2 = pontosTextP2->getLocalBounds();
         pontosTextP2->setOrigin({boundsPontosP2.size.x / 2.f, 0.f});
-        // X ajustado
         pontosTextP2->setPosition({X_CENTER_LEFT, 50.f});
 
-        // Tentativas (Top Right)
         tentativasText.emplace(uiFont); 
         tentativasText->setCharacterSize(FONT_SIZE_UI);
         tentativasText->setFillColor(sf::Color::White);
         tentativasText->setString("tentativas: "); 
         sf::FloatRect bounds = tentativasText->getLocalBounds();
         tentativasText->setOrigin({bounds.size.x, 0.f});
-        // X ajustado
         tentativasText->setPosition({X_RIGHT, 10.f});
 
-        // Pontuação Final (Centralizada)
         pontuacaoFinalText.emplace(uiFont); 
         pontuacaoFinalText->setCharacterSize(FONT_SIZE_FINAL);
         pontuacaoFinalText->setFillColor(sf::Color::White);
@@ -395,7 +377,10 @@ namespace Fases
             tentativasText->setString("Tentativas: " + std::to_string(numTentativas));
             sf::FloatRect bounds = tentativasText->getLocalBounds();
             tentativasText->setOrigin({bounds.size.x, 0.f});
-            tentativasText->setPosition({1850.f, 10.f}); 
+
+            sf::Vector2u winSize = Gerenciadores::GerenciadorGrafico::getInstance()->getWindow().getSize();
+            float xPos = static_cast<float>(winSize.x) - 20.f;
+            tentativasText->setPosition({xPos, 10.f});
         }
 
         // --- 4. LÓGICA DE MORTE E REINÍCIO DE FASE ---
