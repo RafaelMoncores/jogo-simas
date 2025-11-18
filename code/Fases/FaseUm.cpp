@@ -44,7 +44,6 @@ namespace Fases
     {
         criarPlataformas();
         criarObstMedios();
-        criarObstDificil();
     }
 
     void FaseUm::criarInimigos()
@@ -216,29 +215,6 @@ namespace Fases
             Trampolim* pTramp5 = new Trampolim({1650.f, 550.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
             listaObstaculos.incluir(pTramp5);
             listaEntidades.incluir(pTramp5);
-        }
-    }
-
-    void FaseUm::criarObstDificil()
-    {
-        using Entidades::Obstaculos::Parede;
-        std::string texParede = "tileSets/fase1/terra.png";
-        srand(time(nullptr));
-        int randW = rand() % 2 + 1;
-        std::cout << randW << std::endl;
-
-        if(randW == 1){
-            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 350.f}, texParede);
-            listaObstaculos.incluir(pParede1);
-            listaEntidades.incluir(pParede1);
-        }else{
-            Parede* pParede1 = new Parede({1400.f, 0.f}, {50.f, 350.f}, texParede);
-            listaObstaculos.incluir(pParede1);
-            listaEntidades.incluir(pParede1);
-
-            Parede* pParede2 = new Parede({1300.f, 700.f}, {50.f, 400.f}, texParede);
-            listaObstaculos.incluir(pParede2);
-            listaEntidades.incluir(pParede2);
         }
     }
     
