@@ -46,22 +46,33 @@ void Jogo::executar()
             case EstadoJogo::NoMenu:
             {
                 int acaoMenu = menu.executar(rankingFase1, rankingFase2);
-                if (acaoMenu == 0)
+                Fases::Fase* proximaFase = nullptr;
+
+                switch (acaoMenu)
                 {
-                    pGG->fecharWindow();
+                    case 0:
+                        pGG->fecharWindow();
+                        break;
+                    case 10:
+                        proximaFase = new Fases::FaseUm(this, false);
+                        break;
+                    case 11:
+                        proximaFase = new Fases::FaseUm(this, true);
+                        break;
+                    case 20:
+                        proximaFase = new Fases::FaseDois(this, false);
+                        break;
+                    case 21:
+                        proximaFase = new Fases::FaseDois(this, true);
+                        break;
                 }
-                else if (acaoMenu == 1)
+
+                // Se uma fase foi escolhida, transiciona o estado
+                if (proximaFase != nullptr)
                 {
-                    if(pFaseAtual) { delete pFaseAtual; pFaseAtual = nullptr; }
-                    pFaseAtual = new Fases::FaseUm(this);
-                    pFaseAtual->inicializar(); 
-                    estadoAtual = EstadoJogo::Jogando;
-                }
-                else if (acaoMenu == 2)
-                {
-                    if(pFaseAtual) { delete pFaseAtual; pFaseAtual = nullptr; }
-                    pFaseAtual = new Fases::FaseDois(this);
-                    pFaseAtual->inicializar(); 
+                    if (pFaseAtual) { delete pFaseAtual; } // Limpa a fase antiga
+                    pFaseAtual = proximaFase;
+                    pFaseAtual->inicializar(); // Inicializa a nova
                     estadoAtual = EstadoJogo::Jogando;
                 }
             }

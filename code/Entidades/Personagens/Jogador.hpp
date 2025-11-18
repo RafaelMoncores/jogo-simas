@@ -20,11 +20,17 @@ namespace Entidades
 
                 float pontos;
 
+                int idJogador;
+                sf::Keyboard::Key teclaCima;
+                sf::Keyboard::Key teclaEsq;
+                sf::Keyboard::Key teclaDir;
+                sf::Keyboard::Key teclaAtaque;
+
                 void processarInputs(float delta);
                 virtual void aplicarFisica(float delta) override;
 
             public:
-                Jogador(sf::Vector2f pos);
+                Jogador(sf::Vector2f pos, int id);
                 ~Jogador();
 
                 bool getEstaAtacando() const;

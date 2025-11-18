@@ -10,7 +10,6 @@ namespace Entidades
         {
         private:
             sf::Texture textura;
-            Entidades::Personagens::Jogador* pJogador;
             
             float tamanho;
             float tempoTotal;
@@ -26,7 +25,7 @@ namespace Entidades
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Vampiro(sf::Vector2f pos, float tamanho, Entidades::Personagens::Jogador* pJ);
+            Vampiro(sf::Vector2f pos, float tamanho, Jogador* pJ1, Jogador* pJ2);
             ~Vampiro();
 
             virtual void executar(float delta) override;

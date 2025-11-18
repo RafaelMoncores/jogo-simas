@@ -13,7 +13,7 @@ namespace Entidades
     namespace Personagens
     {
 
-        Jogador::Jogador(sf::Vector2f pos) :
+        Jogador::Jogador(sf::Vector2f pos, int id) : // Recebe 'id'
             Personagem(3, pos),
             FORCA_PULO(420.0f),
             MULTIPLICADOR_PULO_CURTO(3.0f),
@@ -22,11 +22,30 @@ namespace Entidades
             tempoAtaque(0.0f),
             COOLDOWN_ATAQUE(0.3f),
             completouFase(false),
-            pontos(1000.0f)
+            pontos(1000.0f),
+            idJogador(id)
         {
-            if (!textura.loadFromFile("tileSets/player.png"))
+            std::string texturaPath;
+            if (idJogador == 1)
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'player.png'" << std::endl;
+                texturaPath = "tileSets/player.png";
+                teclaCima = sf::Keyboard::Key::W;
+                teclaEsq = sf::Keyboard::Key::A;
+                teclaDir = sf::Keyboard::Key::D;
+                teclaAtaque = sf::Keyboard::Key::F;
+            }
+            else
+            {
+                texturaPath = "tileSets/player2.png";
+                teclaCima = sf::Keyboard::Key::Up;
+                teclaEsq = sf::Keyboard::Key::Left;
+                teclaDir = sf::Keyboard::Key::Right;
+                teclaAtaque = sf::Keyboard::Key::Space;
+            }
+
+            if (!textura.loadFromFile(texturaPath))
+            {
+                std::cerr << "ERRO FATAL: Nao foi possivel carregar '" << texturaPath << "'" << std::endl;
                 exit(1);
             }
             
@@ -40,16 +59,15 @@ namespace Entidades
 
         void Jogador::processarInputs(float delta)
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && podePular)
+            if (sf::Keyboard::isKeyPressed(teclaCima) && podePular)
             {
                 velocidade.y = -FORCA_PULO;
                 podePular = false;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && !estaAtacando)
+            if (sf::Keyboard::isKeyPressed(teclaAtaque) && !estaAtacando)
             {
                 estaAtacando = true;
                 tempoAtaque = COOLDOWN_ATAQUE;
-                // (TODO: mudar para a animação do sprite para "atacando")
             }
         }
 
@@ -58,8 +76,8 @@ namespace Entidades
             const float FATOR_LENTIDAO_RAMPA = 0.30f;
             float modificadorAceleracao = 0.7f; 
 
-            bool inputEsquerda = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A);
-            bool inputDireita = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D);
+            bool inputEsquerda = sf::Keyboard::isKeyPressed(teclaEsq);
+            bool inputDireita = sf::Keyboard::isKeyPressed(teclaDir);
             bool noInputHorizontal = !inputEsquerda && !inputDireita;
 
             if (inputEsquerda)
@@ -73,7 +91,7 @@ namespace Entidades
                 direcao = 1;
             }
 
-            if (velocidade.y < 0.0f && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+            if (velocidade.y < 0.0f && !sf::Keyboard::isKeyPressed(teclaCima))
             {
                 velocidade.y += G_ACCEL.y * MULTIPLICADOR_PULO_CURTO * delta;
             }
@@ -82,7 +100,6 @@ namespace Entidades
 
             if (podePular && noInputHorizontal)
             {
-                // ESTAMOS EM CHÃO PLANO (lógica de fricção original)
                 if (std::abs(velocidade.x) > 0.1f)
                 {
                     if (velocidade.x > 0.0f)
@@ -96,7 +113,6 @@ namespace Entidades
                 }
             }
 
-            // 5. LIMITAR VELOCIDADE E MOVER (Sem alteração)
             velocidade.x = std::clamp(velocidade.x, -VELOCIDADE_MAXIMA_LATERAL, VELOCIDADE_MAXIMA_LATERAL);
             
             if (sprite)
@@ -113,7 +129,7 @@ namespace Entidades
 
         void Jogador::executar(float delta)
         {
-            if (completouFase) return; // Não faz nada se a fase terminou
+            if (completouFase) return;
 
             if (num_vidas > 0)
             {
@@ -184,33 +200,27 @@ namespace Entidades
 
             if (overlapY < overlapX)
             {
-                // Colisão Vertical
-                if (distCentros.y > 0) // Teto
+                if (distCentros.y > 0)
                 {
                     sprite->move({ 0.f, overlapY });
                     velocidade.y = 0.f;
                 }
-                else // Chão
+                else
                 {
                     if (velocidade.y >= 0)
                     {
-                        // --- LÓGICA DE CONCLUSÃO DE FASE ---
-                        // Tenta converter o obstáculo para PlataformaFinal
                         if (auto* pFinal = dynamic_cast<Obstaculos::PlataformaFinal*>(pOutra))
                         {
-                            // Pega o centro X do jogador
                             float xJogador = centroProprio.x;
                             
-                            // Calcula o "meio" da plataforma (os 50% centrais)
                             float meioInicio = boundsOutra.position.x + (boundsOutra.size.x * 0.25f);
                             float meioFim = boundsOutra.position.x + (boundsOutra.size.x * 0.75f);
 
-                            // Se o jogador está no meio...
                             if (xJogador > meioInicio && xJogador < meioFim)
                             {
-                                completouFase = true; // Sinaliza que a fase terminou!
-                                velocidade = {0.f, 0.f}; // Para o jogador
-                                return; // Interrompe a física normal
+                                completouFase = true;
+                                velocidade = {0.f, 0.f};
+                                return;
                             }
                         }
                         sprite->move({ 0.f, -overlapY });

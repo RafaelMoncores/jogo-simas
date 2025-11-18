@@ -13,7 +13,6 @@ namespace Entidades
             sf::Texture textura;
             short int forca; 
 
-            Jogador* pJogador;
             Listas::ListaEntidades* pListaEntidades;
 
             bool estaAtacando;
@@ -29,7 +28,7 @@ namespace Entidades
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Dragao(sf::Vector2f pos, Jogador* pJog, Listas::ListaEntidades* pLista);
+            Dragao(sf::Vector2f pos, Jogador* pJog1, Jogador* pJog2, Listas::ListaEntidades* pLista);
             ~Dragao();
 
             virtual void executar(float delta) override;

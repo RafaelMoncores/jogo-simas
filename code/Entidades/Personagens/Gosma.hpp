@@ -20,14 +20,13 @@ namespace Entidades
             const float FORCA_PULO_INIMIGO;
             const float VELOCIDADE_LATERAL_INIMIGO;
 
-            Entidades::Personagens::Jogador* pJogador;
             const float raio_deteccao;
 
             void processarAI(float delta);
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Entidades::Personagens::Jogador* pJ);
+            Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Jogador* pJ1, Jogador* pJ2);
             ~Gosma();
 
             virtual void executar(float delta) override;

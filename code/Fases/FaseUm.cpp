@@ -14,8 +14,8 @@
 
 namespace Fases
 {
-    FaseUm::FaseUm(Jogo* pJogo) :
-        Fase(pJogo, 1),
+    FaseUm::FaseUm(Jogo* pJogo, bool doisJogadores) : 
+        Fase(pJogo, 1, doisJogadores),
         pChao2_Gosma(nullptr),
         pPlat1_Gosma(nullptr),
         pPlat4_Gosma(nullptr),
@@ -226,7 +226,7 @@ namespace Fases
         if (pChao2_Gosma && (rand() % 2 == 0))
         {
             sf::Vector2f pos = {1720.f, 300.f};
-            Gosma* pGosma = new Gosma(pos, pChao2_Gosma, jogador1);
+            Gosma* pGosma = new Gosma(pos, pChao2_Gosma, jogador1, jogador2);
             
             listaInimigos.incluir(pGosma);
             listaEntidades.incluir(pGosma);
@@ -235,7 +235,7 @@ namespace Fases
         if (pPlat1_Gosma) 
         {
             sf::Vector2f pos = {520.f, 450.f};
-            Gosma* pGosma = new Gosma(pos, pPlat1_Gosma, jogador1);
+            Gosma* pGosma = new Gosma(pos, pPlat1_Gosma, jogador1, jogador2);
             
             listaInimigos.incluir(pGosma);
             listaEntidades.incluir(pGosma);
@@ -244,7 +244,7 @@ namespace Fases
         if (pPlat4_Gosma)
         {
             sf::Vector2f pos = {770.f, 650.f};
-            Gosma* pGosma = new Gosma(pos, pPlat4_Gosma, jogador1);
+            Gosma* pGosma = new Gosma(pos, pPlat4_Gosma, jogador1, jogador2);
             
             listaInimigos.incluir(pGosma);
             listaEntidades.incluir(pGosma);
@@ -255,11 +255,11 @@ namespace Fases
     {
         using Entidades::Personagens::Vampiro;
         
-        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f, jogador1);
+        Vampiro* pVamp1 = new Vampiro({100.f, 300.f}, 2.0f, jogador1, jogador2);
         listaInimigos.incluir(pVamp1);
         listaEntidades.incluir(pVamp1);
 
-        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f, jogador1);
+        Vampiro* pVamp2 = new Vampiro({1000.f, 250.f}, 2.8f, jogador1, jogador2);
         listaInimigos.incluir(pVamp2);
         listaEntidades.incluir(pVamp2);
     }
