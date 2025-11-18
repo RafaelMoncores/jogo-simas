@@ -50,77 +50,107 @@ namespace Fases
 
     void Fase::inicializarUI()
     {
+        const float W_BASE = 1920.0f;
+        const float H_BASE = 1080.0f;
+        const unsigned int FONT_SIZE_UI = static_cast<unsigned int>(H_BASE * 0.022f);
+        const unsigned int FONT_SIZE_FINAL = static_cast<unsigned int>(H_BASE * 0.045f);
+        const unsigned int FONT_SIZE_BUTTON = static_cast<unsigned int>(H_BASE * 0.032f);
+
         if (!uiFont.openFromFile("font/PressStart2P-Regular.ttf"))
         {
             std::cerr << "ERRO: Nao foi possivel carregar a fonte 'PressStart2P-Regular.ttf'" << std::endl;
         }
 
+        // --- POSIÇÕES PROPORCIONAIS X (HUD) ---
+        
+        // Ancoragem à esquerda (3% da largura)
+        const float X_LEFT = W_BASE * 0.03f; // 57.6f
+        
+        // Ancoragem centralizada (39.5% da largura)
+        const float X_CENTER_LEFT = W_BASE * 0.395f; // 758.4f
+        
+        // Ancoragem à direita (96.3% da largura - 1850.f)
+        const float X_RIGHT = W_BASE * 0.963f; // 1848.96f
+
+        // --- HUD (Vidas, Pontos) ---
+        
+        // P1 Vidas (Top Left)
         vidasTextP1.emplace(uiFont);
-        vidasTextP1->setCharacterSize(30);
+        vidasTextP1->setCharacterSize(FONT_SIZE_UI);
         vidasTextP1->setFillColor(sf::Color::White);
-        vidasTextP1->setPosition({60.f, 10.f}); 
+        // X ajustado
+        vidasTextP1->setPosition({X_LEFT, 10.f}); 
         vidasTextP1->setString("P1 Vidas: ");
 
+        // P1 Pontos (Top Center-Left)
         pontosTextP1.emplace(uiFont);
-        pontosTextP1->setCharacterSize(30);
+        pontosTextP1->setCharacterSize(FONT_SIZE_UI);
         pontosTextP1->setFillColor(sf::Color::White);
+        pontosTextP1->setString("P1 Pontos: "); 
         sf::FloatRect boundsPontos = pontosTextP1->getLocalBounds();
         pontosTextP1->setOrigin({boundsPontos.size.x / 2.f, 0.f});
-        pontosTextP1->setPosition({760, 10.f});
-        pontosTextP1->setString("P1 Pontos: ");
+        // X ajustado
+        pontosTextP1->setPosition({X_CENTER_LEFT, 10.f});
 
+        // P2 Vidas (Second Row Left)
         vidasTextP2.emplace(uiFont);
-        vidasTextP2->setCharacterSize(30);
+        vidasTextP2->setCharacterSize(FONT_SIZE_UI);
         vidasTextP2->setFillColor(sf::Color::White);
-        vidasTextP2->setPosition({60.f, 50.f});
+        // X ajustado
+        vidasTextP2->setPosition({X_LEFT, 50.f});
         vidasTextP2->setString("P2 Vidas: ");
 
+        // P2 Pontos (Second Row Center-Left)
         pontosTextP2.emplace(uiFont);
-        pontosTextP2->setCharacterSize(30);
+        pontosTextP2->setCharacterSize(FONT_SIZE_UI);
         pontosTextP2->setFillColor(sf::Color::White);
+        pontosTextP2->setString("P2 Pontos: "); 
         sf::FloatRect boundsPontosP2 = pontosTextP2->getLocalBounds();
         pontosTextP2->setOrigin({boundsPontosP2.size.x / 2.f, 0.f});
-        pontosTextP2->setPosition({760, 50.f});
-        pontosTextP2->setString("P2 Pontos: ");
+        // X ajustado
+        pontosTextP2->setPosition({X_CENTER_LEFT, 50.f});
 
+        // Tentativas (Top Right)
         tentativasText.emplace(uiFont); 
-        tentativasText->setCharacterSize(30);
+        tentativasText->setCharacterSize(FONT_SIZE_UI);
         tentativasText->setFillColor(sf::Color::White);
+        tentativasText->setString("tentativas: "); 
         sf::FloatRect bounds = tentativasText->getLocalBounds();
         tentativasText->setOrigin({bounds.size.x, 0.f});
-        tentativasText->setPosition({1850.f, 10.f}); 
-        tentativasText->setString("tentativas: ");
+        // X ajustado
+        tentativasText->setPosition({X_RIGHT, 10.f});
 
+        // Pontuação Final (Centralizada)
         pontuacaoFinalText.emplace(uiFont); 
-        pontuacaoFinalText->setCharacterSize(60);
+        pontuacaoFinalText->setCharacterSize(FONT_SIZE_FINAL);
         pontuacaoFinalText->setFillColor(sf::Color::White);
         pontuacaoFinalText->setOrigin({pontuacaoFinalText->getLocalBounds().size.x / 2.f,pontuacaoFinalText->getLocalBounds().size.y / 2.f});
-        pontuacaoFinalText->setPosition({960.f, 540.f}); 
+        pontuacaoFinalText->setPosition({W_BASE / 2.f, H_BASE / 2.f - 50.f}); 
         pontuacaoFinalText->setString("Pontuacao: ");
 
         // Botão Salvar
         botaoSalvarText.emplace(uiFont);
-        botaoSalvarText->setCharacterSize(40);
+        botaoSalvarText->setCharacterSize(FONT_SIZE_BUTTON);
         botaoSalvarText->setString("Salvar no Ranking");
         sf::FloatRect boundsSalvar = botaoSalvarText->getLocalBounds();
         botaoSalvarText->setOrigin({boundsSalvar.size.x / 2.f, boundsSalvar.size.y / 2.f});
-        botaoSalvarText->setPosition({1920.f / 2.f, (1080.f / 2.f) + 100.f}); // Abaixo da pontuação
+        botaoSalvarText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 10.f}); 
 
         // Botão Menu
         botaoMenuText.emplace(uiFont);
-        botaoMenuText->setCharacterSize(40);
+        botaoMenuText->setCharacterSize(FONT_SIZE_BUTTON);
         botaoMenuText->setString("Menu");
         sf::FloatRect boundsMenu = botaoMenuText->getLocalBounds();
         botaoMenuText->setOrigin({boundsMenu.size.x / 2.f, boundsMenu.size.y / 2.f});
-        botaoMenuText->setPosition({1920.f / 2.f, (1080.f / 2.f) + 160.f}); // Abaixo do Salvar
+        botaoMenuText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 70.f}); 
 
         // Texto de Input
         inputIniciaisText.emplace(uiFont);
-        inputIniciaisText->setCharacterSize(40);
+        inputIniciaisText->setCharacterSize(FONT_SIZE_BUTTON);
         inputIniciaisText->setString("Iniciais (3): ___");
         sf::FloatRect boundsInput = inputIniciaisText->getLocalBounds();
         inputIniciaisText->setOrigin({boundsInput.size.x / 2.f, boundsInput.size.y / 2.f});
-        inputIniciaisText->setPosition({1920.f / 2.f, (1080.f / 2.f) + 100.f});
+        inputIniciaisText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 10.f});
     }
     
     void Fase::inicializar()

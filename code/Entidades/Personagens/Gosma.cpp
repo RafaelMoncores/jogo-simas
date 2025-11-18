@@ -37,7 +37,9 @@ namespace Entidades
         {
             if (num_vidas <= 0) return;
             
-            if (!pPlataforma || !sprite) return;
+            // REMOVA a checagem do pPlataforma daqui.
+            // Mantenha apenas a checagem do sprite.
+            if (!sprite) return;
 
             Jogador* pAlvo = getJogadorMaisProximo();
 
@@ -50,6 +52,8 @@ namespace Entidades
                     tempoTotal = 0.0f;
                     sf::Vector2f posGosma = sprite->getPosition();
 
+                    bool devePatrulhar = true; // Assume que vai patrulhar
+
                     if (pAlvo != nullptr)
                     {
                         sf::Vector2f posPlayer = pAlvo->getBoundingBox().position;
@@ -59,30 +63,46 @@ namespace Entidades
                             std::pow(posGosma.y - posPlayer.y, 2)
                         );
 
+                        // Se o jogador está perto, PERSEGUE
                         if (dist < raio_deteccao)
                         {
                             if (posPlayer.x < posGosma.x)
                                 direcaoPulo = -1;
                             else
                                 direcaoPulo = 1; 
+                            
+                            devePatrulhar = false; // Encontrou um alvo, então não patrulha
                         }
                     }
-                    else
+
+                    // Se não encontrou alvo para perseguir, PATRULHA
+                    // MAS SÓ SE A PLATAFORMA FOR VÁLIDA (pPlataforma != nullptr)
+                    if (devePatrulhar && pPlataforma != nullptr)
                     {
                         sf::FloatRect boundsPlat = pPlataforma->getBoundingBox();
                         float xAtual = posGosma.x;
                         float xCentroPlataforma = boundsPlat.position.x + (boundsPlat.size.x / 2.f); 
                         
-                        if (xAtual < xCentroPlataforma) direcaoPulo = 1;
-                        else direcaoPulo = -1;
+                        if (xAtual < xCentroPlataforma) 
+                            direcaoPulo = 1;
+                        else 
+                            direcaoPulo = -1;
+                    }
+                    else if (devePatrulhar && pPlataforma == nullptr)
+                    {
+                        // Sem plataforma, não pode patrulhar.
+                        // Apenas pula na direção que já estava.
+                        // Não fazemos nada, 'direcaoPulo' mantém seu valor.
                     }
 
+                    // Aplica o pulo com a 'direcaoPulo' correta
                     velocidade.y = -FORCA_PULO_INIMIGO;
                     velocidade.x = VELOCIDADE_LATERAL_INIMIGO * direcaoPulo;
                     podePular = false;
                 }
                 else
                 {
+                    // Esperando para pular, fica parado
                     velocidade.x = 0.f;
                 }
             }

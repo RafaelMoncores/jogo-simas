@@ -22,6 +22,7 @@ namespace Estados
             enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking, MenuModoJogo };
             EstadoMenu estadoAtualMenu;
             
+            void centralizarTexto(sf::Text& texto, float x, float y);
             void set_values_principal();
             void set_values_niveis();
             void set_values_ranking(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
