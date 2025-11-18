@@ -5,11 +5,16 @@
 #include "../Entidades/Personagens/Inimigo.hpp"
 //#include <list>
 
-//FORWARD DECLARATIONS PARA AS NOVAS LISTAS
 namespace Listas 
 {
     class ListaObstaculos;
     class ListaInimigos;
+    class ListaEntidades;
+}
+
+namespace Entidades
+{
+    class BolaDeFogo;
 }
 
 namespace Gerenciadores
@@ -20,17 +25,17 @@ namespace Gerenciadores
         void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Obstaculos::Obstaculo* pObst);
         void tratarColisao(Entidades::Personagens::Inimigo* pInim, Entidades::Obstaculos::Obstaculo* pObst);
         void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Personagens::Inimigo* pInim);
+        void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::BolaDeFogo* pFogo);
 
     public:
         GerenciadorColisoes();
         ~GerenciadorColisoes();
 
         void verificarColisoes(
-            Entidades::Personagens::Jogador* pJogador, 
-            //std::list<Entidades::Obstaculos::Obstaculo*>* pObstaculos,
-            //std::list<Entidades::Personagens::Inimigo*>* pInimigos
+            Entidades::Personagens::Jogador* pJogador,
             Listas::ListaObstaculos* pObstaculos,
-            Listas::ListaInimigos* pInimigos
+            Listas::ListaInimigos* pInimigos,
+            Listas::ListaEntidades* pEntidades
         );
     };
 }

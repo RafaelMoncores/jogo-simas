@@ -2,6 +2,8 @@
 #include "../Entidades/Personagens/Inimigo.hpp"
 #include "../Listas/ListaObstaculos.hpp"
 #include "../Listas/ListaInimigos.hpp"
+#include "../Listas/ListaEntidades.hpp"
+#include "../Entidades/BolaDeFogo.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
 namespace Gerenciadores
@@ -12,7 +14,8 @@ namespace Gerenciadores
     void GerenciadorColisoes::verificarColisoes(
         Entidades::Personagens::Jogador* pJogador,
         Listas::ListaObstaculos* pObstaculos,
-        Listas::ListaInimigos* pInimigos)
+        Listas::ListaInimigos* pInimigos,
+        Listas::ListaEntidades* pEntidades)
     {
         if (!pJogador) return;
 
@@ -45,6 +48,19 @@ namespace Gerenciadores
             Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
             if (pInim == NULL) break;
             tratarColisao(pJogador, pInim);
+        }
+
+        for (pEntidades->irParaPrimeiro(); ; pEntidades->irParaProximo())
+        {
+            Entidades::Entidade* pE = pEntidades->getAtual();
+            if (pE == NULL) break;
+
+            Entidades::BolaDeFogo* pFogo = dynamic_cast<Entidades::BolaDeFogo*>(pE);
+            
+            if (pFogo)
+            {
+                tratarColisao(pJogador, pFogo);
+            }
         }
     }
 
@@ -99,6 +115,19 @@ namespace Gerenciadores
             {
                 pInim->danificar(pJogador);
             }
+        }
+    }
+
+    void GerenciadorColisoes::tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::BolaDeFogo* pFogo)
+    {
+        if (!pFogo->getAtivo()) return;
+
+        sf::FloatRect boundsJogador = pJogador->getBoundingBox();
+        sf::FloatRect boundsFogo = pFogo->getBoundingBox();
+
+        if (boundsJogador.findIntersection(boundsFogo))
+        {
+            pFogo->colidirComJogador(pJogador);
         }
     }
 }

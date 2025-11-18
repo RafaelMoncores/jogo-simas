@@ -19,6 +19,8 @@ namespace Fases
             virtual void PosarObstaculos() override;
             virtual void criarChefao();
             virtual void criarObstDificil();
+            virtual void criarInimigosFaceis();
+            virtual void criarObstMedios();
 
         public:
             FaseDois();
