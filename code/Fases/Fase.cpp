@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <cstdint>
 
 namespace Fases
 {
@@ -129,6 +130,58 @@ namespace Fases
         criarObstaculos();
         criarInimigos();
     }
+
+    void Fase::processarEvento(const sf::Event& evento)
+    {
+        if (jogador1 && jogador1->getCompletouFase() && estadoFim == EstadoFim::PedindoIniciais)
+        {
+            processarInputIniciais(evento);
+        }
+    }
+
+    void Fase::processarInputIniciais(const sf::Event& evento)
+    {
+        if (evento.is<sf::Event::TextEntered>())
+        {
+            const auto* te = evento.getIf<sf::Event::TextEntered>();
+            if (!te) return;
+
+            std::uint32_t valorUnicode = te->unicode;
+
+            if (valorUnicode == 8)
+            {
+                if (!iniciais.empty())
+                {
+                    iniciais.pop_back();
+                }
+            }
+            else if (valorUnicode >= 32 && valorUnicode <= 126 && iniciais.length() < 3)
+            {
+                char c = static_cast<char>(valorUnicode);
+                iniciais += std::toupper(c);
+            }
+            
+            if (inputIniciaisText)
+            {
+                std::string placeholder = "___";
+                std::string textoAtual = iniciais;
+                if (textoAtual.length() < 3)
+                {
+                    textoAtual += placeholder.substr(textoAtual.length());
+                }
+                inputIniciaisText->setString("Iniciais (3): " + textoAtual);
+            }
+        }
+        
+        if (evento.is<sf::Event::KeyReleased>())
+        {
+             const auto* kr = evento.getIf<sf::Event::KeyReleased>();
+             if (kr && kr->code == sf::Keyboard::Key::Enter)
+             {
+                 enterPressionado = false; 
+             }
+        }
+    }
     
     void Fase::executar(float delta)
     {
@@ -145,35 +198,30 @@ namespace Fases
                 {
                     pontuacaoFinalText->setString("PONTUACAO: " + std::to_string(pontuacaoFinalCache));
                     
-                    // Re-centraliza (com a sua sintaxe SFML 3.x)
                     sf::FloatRect bounds = pontuacaoFinalText->getLocalBounds();
                     pontuacaoFinalText->setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
-                    // (Não precisa de setPosition, pois já foi feito no inicializarUI)
                 }
             }
 
-            // 1b. Sub-máquina de estados do fim da fase
             switch (estadoFim)
             {
                 case EstadoFim::MostrandoOpcoes:
                 {
-                    // --- Processar Inputs de Navegação (Cima/Baixo) ---
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
                     {
                         if (!navPressionado) {
-                            posBotaoFim = 0; // Vai para "Salvar"
+                            posBotaoFim = 0;
                             navPressionado = true;
                         }
                     }
                     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
                     {
-                        if (!navPressionado) { // Use 'navPressionado'
-                            posBotaoFim = 1; // Vai para "Menu"
-                            navPressionado = true; // Use 'navPressionado'
+                        if (!navPressionado) {
+                            posBotaoFim = 1;
+                            navPressionado = true;
                         }
                     }
                     
-                    // --- Processar Seleção (ENTER) ---
                     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
                     {
                         if (!enterPressionado)
@@ -201,16 +249,6 @@ namespace Fases
 
                 case EstadoFim::PedindoIniciais:
                 {
-
-                    // (Simulação simplificada: captura 3 letras e salva)
-                    if (iniciais.length() < 3)
-                    {
-                        
-                        // Vamos apenas usar "AAA" como placeholder
-                        iniciais = "AAA"; 
-                        if (inputIniciaisText)
-                            inputIniciaisText->setString("Iniciais (3): " + iniciais);
-                    }
                     
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) && !enterPressionado)
                     {
@@ -228,11 +266,6 @@ namespace Fases
                     {
                         enterPressionado = false;
                     }
-
-                    // Atualiza o texto de input (na implementação real,
-                    // você atualizaria o string 'iniciais' com base nas teclas)
-                    if (inputIniciaisText)
-                        inputIniciaisText->setString("Iniciais (3): " + iniciais + "_");
 
                 }
                 break;

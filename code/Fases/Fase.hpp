@@ -42,7 +42,6 @@ namespace Fases
             std::optional<sf::Text> tentativasText; 
             int numTentativas;
 
-            // --- ADICIONAR UI DE FIM DE FASE ---
             std::optional<sf::Text> pontuacaoFinalText;
             int pontuacaoFinalCache; // Para salvar os pontos
             bool enterPressionado; // Para debounce do ENTER
@@ -61,6 +60,7 @@ namespace Fases
             bool faseConcluida;
 
             void inicializarUI();
+            void processarInputIniciais(const sf::Event& evento);
 
             virtual void criarObstaculos() = 0;
             virtual void criarInimigos() = 0;
@@ -77,6 +77,7 @@ namespace Fases
             bool getFaseConcluida() const;
             virtual void desenhar() override;
             virtual sf::FloatRect getBoundingBox() const override;
+            void processarEvento(const sf::Event& evento);
             virtual void salvar();
     };
 }

@@ -100,11 +100,18 @@ void Jogo::executar()
 
 void Jogo::processarEventosJogando()
 {
-    while (auto event = pGG->pollEvent())
+   while (auto optEvent = pGG->pollEvent())
     {
-        if (event->is<sf::Event::Closed>())
+        const auto& event = *optEvent;
+
+        if (event.is<sf::Event::Closed>())
         {
             pGG->fecharWindow();
+        }
+
+        if (pFaseAtual)
+        {
+            pFaseAtual->processarEvento(event);
         }
     }
 }
