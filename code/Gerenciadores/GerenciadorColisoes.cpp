@@ -16,11 +16,27 @@ namespace Gerenciadores
         Entidades::Personagens::Jogador* pJogador,
         Listas::ListaObstaculos* pObstaculos,
         Listas::ListaInimigos* pInimigos,
-        Listas::ListaEntidades* pEntidades)
+        Listas::ListaEntidades* pEntidades,
+        bool resetInimigos)
     {
         if (!pJogador) return;
 
         pJogador->setPodePular(false);
+
+        // Se solicitado, resetamos a flag de pulo de todos inimigos uma vez
+        // por frame. Isso evita que a segunda chamada (para o 2º jogador)
+        // zere o estado depois que colisões com o primeiro jogador já o
+        // tinham habilitado.
+        if (resetInimigos)
+        {
+            for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
+            {
+                Entidades::Personagens::Inimigo* pInimInit = pInimigos->getAtual();
+                if (pInimInit == NULL) break;
+                pInimInit->setPodePular(false);
+            }
+        }
+
         for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
         {
             Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();
@@ -33,9 +49,6 @@ namespace Gerenciadores
             Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
             if (pInim == NULL) break;
 
-            pInim->setPodePular(false);
-            
-            // Loop C++03 aninhado
             for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
             {
                 Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();

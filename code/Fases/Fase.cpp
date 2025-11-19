@@ -321,11 +321,11 @@ namespace Fases
 
         // --- 2. LÓGICA DE JOGO NORMAL (COLISÕES E UPDATES) ---
         
-        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos, &listaEntidades);
+        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos, &listaEntidades, true);
         
         if (modoDoisJogadores && jogador2)
         {
-            gerenciadorColisoes.verificarColisoes(jogador2, &listaObstaculos, &listaInimigos, &listaEntidades);
+            gerenciadorColisoes.verificarColisoes(jogador2, &listaObstaculos, &listaInimigos, &listaEntidades, false);
         }
 
         for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())

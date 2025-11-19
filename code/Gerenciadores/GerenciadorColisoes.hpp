@@ -35,7 +35,8 @@ namespace Gerenciadores
             Entidades::Personagens::Jogador* pJogador,
             Listas::ListaObstaculos* pObstaculos,
             Listas::ListaInimigos* pInimigos,
-            Listas::ListaEntidades* pEntidades
+            Listas::ListaEntidades* pEntidades,
+            bool resetInimigos = true
         );
     };
 }
