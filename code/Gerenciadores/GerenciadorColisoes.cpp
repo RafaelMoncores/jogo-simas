@@ -5,6 +5,8 @@
 #include "../Listas/ListaEntidades.hpp"
 #include "../Entidades/BolaDeFogo.hpp"
 #include "../Entidades/Personagens/Dragao.hpp"
+#include "../Entidades/Personagens/Gosma.hpp"
+#include "../Entidades/Personagens/Vampiro.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
 namespace Gerenciadores
@@ -157,6 +159,24 @@ namespace Gerenciadores
             if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
             {
                 pInim->perderVida(1);
+
+                // Se o inimigo morreu por este dano, credita pontos ao jogador
+                if (pInim->getVidas() <= 0)
+                {
+                    if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim))
+                    {
+                        pJogador->addPontos(100);
+                    }
+                    else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim))
+                    {
+                        pJogador->addPontos(300);
+                    }
+                    else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
+                    {
+                        pJogador->addPontos(500);
+                    }
+                }
+
                 pJogador->fazerBounce(250.0f);
                 pJogador->colidir(pInim, boundsInim);
             }

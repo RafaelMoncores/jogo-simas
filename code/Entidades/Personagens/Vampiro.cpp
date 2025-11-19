@@ -6,7 +6,7 @@ namespace Entidades
     namespace Personagens
     {
         Vampiro::Vampiro(sf::Vector2f pos, float tam, Jogador* pJ1, Jogador* pJ2) :
-            Inimigo( (int)(tam * 2.0f) , pos, pJ1, pJ2),
+            Inimigo(2, pos, pJ1, pJ2),
             tamanho(tam),
             tempoTotal(0.0f),
             direcao(1),
