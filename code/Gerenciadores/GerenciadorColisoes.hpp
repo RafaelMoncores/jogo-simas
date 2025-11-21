@@ -1,42 +1,55 @@
 #pragma once
-#include "../Entidades/Personagens/Jogador.hpp"
-#include "../Entidades/Obstaculos/Plataforma.hpp"
-#include "../Entidades/Obstaculos/Obstaculo.hpp"
-#include "../Entidades/Personagens/Inimigo.hpp"
-//#include <list>
 
-namespace Listas 
-{
-    class ListaObstaculos;
-    class ListaInimigos;
-    class ListaEntidades;
-}
+#include <vector>
+#include <list>
+#include <set>
+#include <cmath> 
 
-namespace Entidades
-{
+// Forward Declarations
+namespace Entidades {
+    class Entidade;
     class BolaDeFogo;
+    namespace Personagens {
+        class Jogador;
+        class Inimigo;
+    }
+    namespace Obstaculos {
+        class Obstaculo;
+    }
 }
 
 namespace Gerenciadores
 {
     class GerenciadorColisoes
     {
-    private: 
-        void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Obstaculos::Obstaculo* pObst);
-        void tratarColisao(Entidades::Personagens::Inimigo* pInim, Entidades::Obstaculos::Obstaculo* pObst);
-        void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Personagens::Inimigo* pInim);
-        void tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::BolaDeFogo* pFogo);
+    private:
+        // Atributos seguindo o Modelo UML (STL)
+        std::vector<Entidades::Personagens::Inimigo*> LIs;
+        std::list<Entidades::Obstaculos::Obstaculo*> LOs;
+        std::set<Entidades::BolaDeFogo*> LPs; 
+
+        Entidades::Personagens::Jogador* pJog1;
+
+        // Método auxiliar
+        const bool verificarColisao(Entidades::Entidade* pe1, Entidades::Entidade* pe2) const;
+
+        // Métodos de tratamento divididos
+        void tratarColisoesJogsObstacs();
+        void tratarColisoesJogsInimgs();
+        void tratarColisoesJogsProjeteis(); 
 
     public:
         GerenciadorColisoes();
         ~GerenciadorColisoes();
 
-        void verificarColisoes(
-            Entidades::Personagens::Jogador* pJogador,
-            Listas::ListaObstaculos* pObstaculos,
-            Listas::ListaInimigos* pInimigos,
-            Listas::ListaEntidades* pEntidades,
-            bool resetInimigos = true
-        );
+        // Métodos para popular as listas STL
+        void incluirInimigo(Entidades::Personagens::Inimigo* pi);
+        void incluirObstaculo(Entidades::Obstaculos::Obstaculo* po);
+        void incluirProjetil(Entidades::BolaDeFogo* pj);
+        
+        void setJogador(Entidades::Personagens::Jogador* pJ);
+
+        void executar(bool resetInimigos = true);
+        void limpar(); 
     };
 }

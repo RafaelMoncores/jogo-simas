@@ -6,9 +6,6 @@
 #include "../Entidades/Obstaculos/Trampolim.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
 #include "../Entidades/Personagens/Inimigo.hpp"
-//#include <list>
-#include "../Listas/ListaObstaculos.hpp"
-#include "../Listas/ListaInimigos.hpp"
 #include "../Listas/ListaEntidades.hpp"
 #include <SFML/Graphics.hpp>
 #include <optional>
@@ -27,18 +24,16 @@ namespace Fases
             Entidades::Personagens::Jogador* jogador2;
             bool modoDoisJogadores;
             sf::Vector2f posJogador2Inicial;
-
             sf::Vector2f posJogadorInicial;
 
-            Listas::ListaObstaculos listaObstaculos;
-            Listas::ListaInimigos listaInimigos;
+            // --- Apenas uma lista genérica ---
             Listas::ListaEntidades listaEntidades;
 
+            // O Gerenciador agora armazena seus próprios vetores/listas STL
             Gerenciadores::GerenciadorColisoes gerenciadorColisoes;
             
             sf::Texture texFase;
             std::optional<sf::Sprite> bgFase;
-
             sf::Font uiFont;
             std::optional<sf::Text> vidasTextP1;
             std::optional<sf::Text> pontosTextP1;
@@ -46,22 +41,17 @@ namespace Fases
             std::optional<sf::Text> pontosTextP2;
             std::optional<sf::Text> tentativasText;
             int numTentativas;
-
             std::optional<sf::Text> pontuacaoFinalText;
-            int pontuacaoFinalCache; // Para salvar os pontos
-            bool enterPressionado; // Para debounce do ENTER
+            int pontuacaoFinalCache; 
+            bool enterPressionado; 
             bool navPressionado;
-
             enum class EstadoFim { MostrandoOpcoes, PedindoIniciais };
             EstadoFim estadoFim;
-
-            int posBotaoFim; // 0 = Salvar, 1 = Menu
+            int posBotaoFim; 
             std::string iniciais;
-
             std::optional<sf::Text> botaoSalvarText;
             std::optional<sf::Text> botaoMenuText;
             std::optional<sf::Text> inputIniciaisText;
-
             bool faseConcluida;
 
             void inicializarUI();

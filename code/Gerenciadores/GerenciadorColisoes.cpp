@@ -1,202 +1,185 @@
 #include "GerenciadorColisoes.hpp"
+
+// Inclusões necessárias para reconhecer os tipos completos
 #include "../Entidades/Personagens/Inimigo.hpp"
-#include "../Listas/ListaObstaculos.hpp"
-#include "../Listas/ListaInimigos.hpp"
-#include "../Listas/ListaEntidades.hpp"
-#include "../Entidades/BolaDeFogo.hpp"
+#include "../Entidades/Personagens/Jogador.hpp"
+#include "../Entidades/Obstaculos/Obstaculo.hpp"
+#include "../Entidades/BolaDeFogo.hpp" 
+// Includes de inimigos específicos para pontuação
 #include "../Entidades/Personagens/Dragao.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
+
 #include <SFML/Graphics/Rect.hpp>
+#include <algorithm> 
+#include <cmath>
 
 namespace Gerenciadores
 {
-    GerenciadorColisoes::GerenciadorColisoes() {}
-    GerenciadorColisoes::~GerenciadorColisoes() {}
-
-    void GerenciadorColisoes::verificarColisoes(
-        Entidades::Personagens::Jogador* pJogador,
-        Listas::ListaObstaculos* pObstaculos,
-        Listas::ListaInimigos* pInimigos,
-        Listas::ListaEntidades* pEntidades,
-        bool resetInimigos)
+    GerenciadorColisoes::GerenciadorColisoes() : 
+        LIs(), LOs(), LPs(), pJog1(nullptr) 
     {
-        if (!pJogador) return;
+    }
 
-        pJogador->setPodePular(false);
+    GerenciadorColisoes::~GerenciadorColisoes() 
+    {
+        limpar();
+    }
 
-        // Se solicitado, resetamos a flag de pulo de todos inimigos uma vez
-        // por frame. Isso evita que a segunda chamada (para o 2º jogador)
-        // zere o estado depois que colisões com o primeiro jogador já o
-        // tinham habilitado.
+    // --- Métodos de Inclusão STL ---
+    void GerenciadorColisoes::incluirInimigo(Entidades::Personagens::Inimigo* pi) {
+        if (pi) LIs.push_back(pi); 
+    }
+
+    void GerenciadorColisoes::incluirObstaculo(Entidades::Obstaculos::Obstaculo* po) {
+        if (po) LOs.push_back(po); 
+    }
+
+    void GerenciadorColisoes::incluirProjetil(Entidades::BolaDeFogo* pj) {
+        if (pj) LPs.insert(pj); 
+    }
+
+    void GerenciadorColisoes::setJogador(Entidades::Personagens::Jogador* pJ) {
+        pJog1 = pJ;
+    }
+
+    void GerenciadorColisoes::limpar() {
+        LIs.clear();
+        LOs.clear();
+        LPs.clear();
+        pJog1 = nullptr;
+    }
+
+    const bool GerenciadorColisoes::verificarColisao(Entidades::Entidade* pe1, Entidades::Entidade* pe2) const {
+        if (!pe1 || !pe2) return false;
+        sf::FloatRect bounds1 = pe1->getBoundingBox();
+        sf::FloatRect bounds2 = pe2->getBoundingBox();
+        
+        return bounds1.findIntersection(bounds2).has_value();
+    }
+
+    void GerenciadorColisoes::executar(bool resetInimigos)
+    {
+        if (!pJog1) return;
+
+        // Sempre resetamos o estado de pulo do jogador atual
+        pJog1->setPodePular(false);
+
+        // Reset apenas na primeira passagem por frame (quando solicitado).
         if (resetInimigos)
         {
-            for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
-            {
-                Entidades::Personagens::Inimigo* pInimInit = pInimigos->getAtual();
-                if (pInimInit == NULL) break;
-                pInimInit->setPodePular(false);
+            for (auto* inimigo : LIs) {
+                if (inimigo) inimigo->setPodePular(false);
             }
         }
 
-        for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
-        {
-            Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();
-            if (pObst == NULL) break;
-            tratarColisao(pJogador, pObst);
-        }
+        tratarColisoesJogsObstacs();
+        tratarColisoesJogsInimgs();
+        tratarColisoesJogsProjeteis();
+    }
 
-        for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
+    void GerenciadorColisoes::tratarColisoesJogsObstacs()
+    {
+        for (auto* obstaculo : LOs) 
         {
-            Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
-            if (pInim == NULL) break;
-
-            for (pObstaculos->irParaPrimeiro(); ; pObstaculos->irParaProximo())
-            {
-                Entidades::Obstaculos::Obstaculo* pObst = pObstaculos->getAtual();
-                if (pObst == NULL) break;
-                tratarColisao(pInim, pObst);
+            if (verificarColisao(pJog1, obstaculo)) {
+                obstaculo->obstaculizar(pJog1);
             }
         }
+    }
 
-        for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
+    void GerenciadorColisoes::tratarColisoesJogsInimgs()
+    {
+        for (auto* pInim : LIs)
         {
-            Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
-            if (pInim == NULL) break;
-            tratarColisao(pJogador, pInim);
-        }
+            if (!pInim) continue;
 
-        for (pEntidades->irParaPrimeiro(); ; pEntidades->irParaProximo())
-        {
-            Entidades::Entidade* pE = pEntidades->getAtual();
-            if (pE == NULL) break;
-
-            Entidades::BolaDeFogo* pFogo = dynamic_cast<Entidades::BolaDeFogo*>(pE);
-            
-            if (pFogo)
+            // 1. Inimigo vs Obstáculos
+            for (auto* obstaculo : LOs)
             {
-                sf::FloatRect boundsFogo = pFogo->getBoundingBox();
+                if (verificarColisao(pInim, obstaculo)) {
+                    sf::FloatRect boundsObst = obstaculo->getBoundingBox();
+                    pInim->colidir(obstaculo, boundsObst);
+                }
+            }
 
-                if (pFogo->getPertenceAoJogador())
+            // 2. Jogador vs Inimigo
+            if (verificarColisao(pJog1, pInim))
+            {
+                sf::FloatRect boundsJogador = pJog1->getBoundingBox();
+                sf::FloatRect boundsInim = pInim->getBoundingBox();
+
+                float velJogadorY = pJog1->getVelocidade().y;
+                
+                // Centro Jogador
+                sf::Vector2f centroJogador(
+                    boundsJogador.position.x + boundsJogador.size.x / 2.f, 
+                    boundsJogador.position.y + boundsJogador.size.y / 2.f
+                );
+                
+                // Centro Inimigo
+                sf::Vector2f centroInimigo(
+                    boundsInim.position.x + boundsInim.size.x / 2.f, 
+                    boundsInim.position.y + boundsInim.size.y / 2.f
+                );
+                
+                sf::Vector2f distCentros(centroJogador.x - centroInimigo.x, centroJogador.y - centroInimigo.y);
+                
+                // Meias Larguras/Alturas
+                float somaMeiasLarguras = boundsJogador.size.x / 2.f + boundsInim.size.x / 2.f;
+                float somaMeiasAlturas = boundsJogador.size.y / 2.f + boundsInim.size.y / 2.f;
+                
+                float overlapX = somaMeiasLarguras - std::abs(distCentros.x);
+                float overlapY = somaMeiasAlturas - std::abs(distCentros.y);
+
+                // Lógica de "Pular na cabeça"
+                if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
                 {
-                    for (pInimigos->irParaPrimeiro(); ; pInimigos->irParaProximo())
-                    {
-                        Entidades::Personagens::Inimigo* pInim = pInimigos->getAtual();
-                        if (pInim == NULL) break;
+                    pInim->perderVida(1);
 
-                        if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
-                        {
-                            sf::FloatRect boundsInimigo = pInim->getBoundingBox();
-                            if (boundsFogo.findIntersection(boundsInimigo))
-                            {
-                                pInim->perderVida(pFogo->getDano());
-                                pFogo->setAtivo(false);
-                                pJogador->addPontos(100);
-                                break;
-                            }
-                        }
+                    if (pInim->getVidas() <= 0)
+                    {
+                        if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
+                        else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
+                        else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
                     }
+
+                    pJog1->fazerBounce(250.0f);
+                    pJog1->colidir(pInim, boundsInim);
                 }
                 else
                 {
-                    if (pJogador->getEstaAtacando())
-                    {
-                        sf::FloatRect boundsAtaque = pJogador->getHitboxAtaque();
-                        if (boundsFogo.findIntersection(boundsAtaque))
-                        {
-                            pFogo->rebater();
-                            continue; 
-                        }
-                    }
-
-                    tratarColisao(pJogador, pFogo);
+                    pInim->danificar(pJog1);
                 }
             }
         }
     }
 
-    void GerenciadorColisoes::tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Obstaculos::Obstaculo* pObst)
+    void GerenciadorColisoes::tratarColisoesJogsProjeteis()
     {
-        sf::FloatRect boundsJogador = pJogador->getBoundingBox();
-        sf::FloatRect boundsObst = pObst->getBoundingBox();
-
-        if (boundsJogador.findIntersection(boundsObst))
+        for (auto* pFogo : LPs)
         {
-            pObst->obstaculizar(pJogador);
-        }
-    }
+            if (!pFogo || !pFogo->getAtivo()) continue;
 
-    void GerenciadorColisoes::tratarColisao(Entidades::Personagens::Inimigo* pInim, Entidades::Obstaculos::Obstaculo* pObst)
-    {
-        sf::FloatRect boundsInim = pInim->getBoundingBox();
-        sf::FloatRect boundsObst = pObst->getBoundingBox();
-
-        if (boundsInim.findIntersection(boundsObst))
-        {
-            pInim->colidir(pObst, boundsObst);
-        }
-    }
-
-    void GerenciadorColisoes::tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::Personagens::Inimigo* pInim)
-    {
-        sf::FloatRect boundsJogador = pJogador->getBoundingBox();
-        sf::FloatRect boundsInim = pInim->getBoundingBox();
-
-        if (boundsJogador.findIntersection(boundsInim))
-        {
-            float velJogadorY = pJogador->getVelocidade().y;
-
-            sf::Vector2f centroJogador(boundsJogador.position.x + boundsJogador.size.x / 2.f, boundsJogador.position.y + boundsJogador.size.y / 2.f);
-            sf::Vector2f centroInimigo(boundsInim.position.x + boundsInim.size.x / 2.f, boundsInim.position.y + boundsInim.size.y / 2.f);
-            sf::Vector2f distCentros(centroJogador.x - centroInimigo.x, centroJogador.y - centroInimigo.y);
-            
-            float somaMeiasLarguras = boundsJogador.size.x / 2.f + boundsInim.size.x / 2.f;
-            float somaMeiasAlturas = boundsJogador.size.y / 2.f + boundsInim.size.y / 2.f;
-            
-            float overlapX = somaMeiasLarguras - std::abs(distCentros.x);
-            float overlapY = somaMeiasAlturas - std::abs(distCentros.y);
-            
-            if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
+            if (!pFogo->getPertenceAoJogador() && pJog1->getEstaAtacando())
             {
-                pInim->perderVida(1);
-
-                // Se o inimigo morreu por este dano, credita pontos ao jogador
-                if (pInim->getVidas() <= 0)
+                sf::FloatRect boundsFogo = pFogo->getBoundingBox();
+                sf::FloatRect boundsAtaque = pJog1->getHitboxAtaque();
+                
+                if (boundsFogo.findIntersection(boundsAtaque).has_value())
                 {
-                    if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim))
-                    {
-                        pJogador->addPontos(100);
-                    }
-                    else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim))
-                    {
-                        pJogador->addPontos(300);
-                    }
-                    else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
-                    {
-                        pJogador->addPontos(500);
-                    }
+                    pFogo->rebater(); 
+                    continue; 
                 }
-
-                pJogador->fazerBounce(250.0f);
-                pJogador->colidir(pInim, boundsInim);
             }
-            else
+
+            if (!pFogo->getPertenceAoJogador())
             {
-                pInim->danificar(pJogador);
+                if (verificarColisao(pJog1, pFogo))
+                {
+                    pFogo->colidirComJogador(pJog1);
+                }
             }
-        }
-    }
-
-    void GerenciadorColisoes::tratarColisao(Entidades::Personagens::Jogador* pJogador, Entidades::BolaDeFogo* pFogo)
-    {
-        if (!pFogo->getAtivo()) return;
-
-        sf::FloatRect boundsJogador = pJogador->getBoundingBox();
-        sf::FloatRect boundsFogo = pFogo->getBoundingBox();
-
-        if (boundsJogador.findIntersection(boundsFogo))
-        {
-            pFogo->colidirComJogador(pJogador);
         }
     }
 }

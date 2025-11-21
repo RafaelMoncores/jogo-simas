@@ -56,7 +56,16 @@ namespace Entidades
         {
             if (sprite)
             {
-                return sprite->getGlobalBounds();
+                sf::FloatRect b = sprite->getGlobalBounds();
+
+                // Expande levemente para tornar a hitbox mais permissiva
+                const float EXPAND_X = b.size.x * 0.05f; // 5%
+                const float EXPAND_Y = b.size.y * 0.05f; // 5%
+                b.position.x -= EXPAND_X / 2.f;
+                b.position.y -= EXPAND_Y / 2.f;
+                b.size.x += EXPAND_X;
+                b.size.y += EXPAND_Y;
+                return b;
             }
             return {};
         }

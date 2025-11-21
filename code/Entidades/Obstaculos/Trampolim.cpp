@@ -41,7 +41,16 @@ namespace Entidades
 
         sf::FloatRect Trampolim::getBoundingBox() const
         {
-            return corpo.getGlobalBounds();
+            sf::FloatRect b = corpo.getGlobalBounds();
+
+            // Pequena expansão para tornar a hitbox mais alinhada ao visual
+            const float EXPAND_X = b.size.x * 0.05f;
+            const float EXPAND_Y = b.size.y * 0.05f;
+            b.position.x -= EXPAND_X / 2.f;
+            b.position.y -= EXPAND_Y / 2.f;
+            b.size.x += EXPAND_X;
+            b.size.y += EXPAND_Y;
+            return b;
         }
 
         // --- A LÓGICA PRINCIPAL ---

@@ -33,6 +33,8 @@ namespace Entidades
             virtual void danificar(Personagem* pOutro) override;
             virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
 
+            virtual sf::FloatRect getBoundingBox() const override;
+
             virtual void salvarDataBuffer() override;
             virtual void salvar() override;
         };

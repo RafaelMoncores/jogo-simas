@@ -220,5 +220,27 @@ namespace Entidades
         {
             Inimigo::salvar();
         }
+
+        sf::FloatRect Gosma::getBoundingBox() const
+        {
+            if (num_vidas <= 0) return {};
+            if (!sprite) return {};
+
+            sf::FloatRect b = sprite->getGlobalBounds();
+
+            // Expande levemente a hitbox para corresponder ao visual da gosma.
+            const float EXPAND_FACTOR_X = 0.20f; // 20% mais largo
+            const float EXPAND_FACTOR_Y = 0.10f; // 10% mais alto
+
+            float expandX = b.size.x * EXPAND_FACTOR_X;
+            float expandY = b.size.y * EXPAND_FACTOR_Y;
+
+            b.position.x -= expandX / 2.f;
+            b.position.y -= expandY / 2.f;
+            b.size.x += expandX;
+            b.size.y += expandY;
+
+            return b;
+        }
     }
 }

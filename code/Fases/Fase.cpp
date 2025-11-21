@@ -3,10 +3,9 @@
 #include "../Jogo.hpp"
 #include "../Entidades/BolaDeFogo.hpp"
 #include "../Entidades/Personagens/Inimigo.hpp"
+#include "../Entidades/Obstaculos/Obstaculo.hpp" 
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <cstdint>
 
 namespace Fases
 {
@@ -32,17 +31,9 @@ namespace Fases
     }
 
     Fase::~Fase()
-    {   
-        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
-        {
-            Entidades::Entidade* pE = listaEntidades.getAtual();
-            if (pE == NULL) break;
-            delete pE;
-        }
-        
-        listaObstaculos.limpar();
-        listaInimigos.limpar();
+    {
         listaEntidades.limpar();
+        gerenciadorColisoes.limpar();
         
         jogador1 = nullptr;
         jogador2 = nullptr;
@@ -135,18 +126,10 @@ namespace Fases
         inputIniciaisText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 10.f});
     }
     
-    void Fase::inicializar()
+   void Fase::inicializar()
     {
-        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
-        {
-            Entidades::Entidade* pE = listaEntidades.getAtual();
-            if (pE == NULL) break;
-            delete pE;
-        }
-        
-        listaObstaculos.limpar();
-        listaInimigos.limpar();
         listaEntidades.limpar();
+        gerenciadorColisoes.limpar();
         
         jogador1 = nullptr;
         jogador2 = nullptr;
@@ -230,6 +213,9 @@ namespace Fases
         // --- 1. LÓGICA DE FASE CONGELADA (FIM DE JOGO) ---
         bool p1Completo = (jogador1 && jogador1->getCompletouFase());
         bool p2Completo = (modoDoisJogadores && jogador2 && jogador2->getCompletouFase());
+
+        gerenciadorColisoes.limpar();
+        gerenciadorColisoes.setJogador(jogador1);
 
         if (p1Completo || p2Completo)
         {
@@ -321,19 +307,36 @@ namespace Fases
 
         // --- 2. LÓGICA DE JOGO NORMAL (COLISÕES E UPDATES) ---
         
-        gerenciadorColisoes.verificarColisoes(jogador1, &listaObstaculos, &listaInimigos, &listaEntidades, true);
-        
-        if (modoDoisJogadores && jogador2)
-        {
-            gerenciadorColisoes.verificarColisoes(jogador2, &listaObstaculos, &listaInimigos, &listaEntidades, false);
-        }
-
         for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
         {
             Entidades::Entidade* pE = listaEntidades.getAtual();
             if (pE == NULL) break;
-            pE->executar(delta); 
+
+            // Tenta converter e adicionar no gerenciador
+            if (auto* pInim = dynamic_cast<Entidades::Personagens::Inimigo*>(pE)) {
+                gerenciadorColisoes.incluirInimigo(pInim);
+            }
+            else if (auto* pObst = dynamic_cast<Entidades::Obstaculos::Obstaculo*>(pE)) {
+                gerenciadorColisoes.incluirObstaculo(pObst);
+            }
+            else if (auto* pFogo = dynamic_cast<Entidades::BolaDeFogo*>(pE)) {
+                gerenciadorColisoes.incluirProjetil(pFogo);
+            }
+            
+            // Executa o update individual da entidade
+            pE->executar(delta);
         }
+
+           // Executa colisões para o Jogador 1 (e reseta inimigos nesta primeira passada)
+           gerenciadorColisoes.executar(true);
+
+           // Se houver segundo jogador, executa novamente SEM resetar o estado dos inimigos,
+           // para não sobrescrever flags (como 'podePular') já determinadas.
+           if (modoDoisJogadores && jogador2) {
+               gerenciadorColisoes.setJogador(jogador2);
+               gerenciadorColisoes.executar(false);
+               gerenciadorColisoes.setJogador(jogador1);
+           }
 
         // --- 3. ATUALIZAÇÃO DA UI (VIDAS, PONTOS, TENTATIVAS) ---
         
@@ -428,17 +431,13 @@ namespace Fases
                 }
                 else if (Entidades::Personagens::Inimigo* pInim = dynamic_cast<Entidades::Personagens::Inimigo*>(pE))
                 {
-                    if (pInim->getVidas() <= 0)
-                    {
-                        deletar = true;
-                        listaInimigos.remover(pInim);
-                    }
+                    if (pInim->getVidas() <= 0) deletar = true;
                 }
                 
                 if (deletar)
                 {
                     listaEntidades.remover(pE); 
-                    delete pE;                  
+                    delete pE;
                     removeu = true;             
                     break; 
                 }
@@ -475,22 +474,43 @@ namespace Fases
             {
                 case EstadoFim::MostrandoOpcoes:
                 {
-                    // Lógica de Destaque para "Salvar"
-                    if (botaoSalvarText) 
-                    {
-                        if (posBotaoFim == 0) { // Se "Salvar" está selecionado
-                            botaoSalvarText->setOutlineThickness(4.f);
-                            botaoSalvarText->setFillColor(sf::Color::White); // Garante a cor
-                        } else {
-                            botaoSalvarText->setOutlineThickness(0.f);
-                            botaoSalvarText->setFillColor(sf::Color::White);
-                        }
-                        pGG->desenhar(*botaoSalvarText);
-                    }
+                            // Reposiciona os elementos do menu final com base no tamanho real da janela
+                            sf::Vector2u winSize = pGG->getWindow().getSize();
+                            float centerX = static_cast<float>(winSize.x) / 2.f;
+                            float centerY = static_cast<float>(winSize.y) / 2.f;
+
+                            // Recentra a pontuação final
+                            if (pontuacaoFinalText)
+                            {
+                                sf::FloatRect bPts = pontuacaoFinalText->getLocalBounds();
+                                pontuacaoFinalText->setOrigin({bPts.size.x / 2.f, bPts.size.y / 2.f});
+                                pontuacaoFinalText->setPosition({centerX, centerY - 50.f});
+                            }
+
+                            // Lógica de Destaque para "Salvar"
+                            if (botaoSalvarText)
+                            {
+                                sf::FloatRect boundsSalvar = botaoSalvarText->getLocalBounds();
+                                botaoSalvarText->setOrigin({boundsSalvar.size.x / 2.f, boundsSalvar.size.y / 2.f});
+                                botaoSalvarText->setPosition({centerX, centerY + 10.f});
+
+                                if (posBotaoFim == 0) { // Se "Salvar" está selecionado
+                                    botaoSalvarText->setOutlineThickness(4.f);
+                                    botaoSalvarText->setFillColor(sf::Color::White);
+                                } else {
+                                    botaoSalvarText->setOutlineThickness(0.f);
+                                    botaoSalvarText->setFillColor(sf::Color::White);
+                                }
+                                pGG->desenhar(*botaoSalvarText);
+                            }
                     
                     // Lógica de Destaque para "Menu"
-                    if (botaoMenuText) 
+                    if (botaoMenuText)
                     {
+                        sf::FloatRect boundsMenu = botaoMenuText->getLocalBounds();
+                        botaoMenuText->setOrigin({boundsMenu.size.x / 2.f, boundsMenu.size.y / 2.f});
+                        botaoMenuText->setPosition({centerX, centerY + 70.f});
+
                         if (posBotaoFim == 1) { // Se "Menu" está selecionado
                             botaoMenuText->setOutlineThickness(4.f);
                             botaoMenuText->setFillColor(sf::Color::White);
