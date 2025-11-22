@@ -180,6 +180,30 @@ namespace Gerenciadores
                     pFogo->colidirComJogador(pJog1);
                 }
             }
+            else
+            {
+                // Projetil pertence ao jogador: checar colisão com inimigos
+                sf::FloatRect boundsFogo = pFogo->getBoundingBox();
+                for (auto* pInim : LIs)
+                {
+                    if (!pInim) continue;
+                    sf::FloatRect boundsInim = pInim->getBoundingBox();
+                    if (!boundsInim.findIntersection(boundsFogo).has_value()) continue;
+
+                    // Acertou o inimigo
+                    pInim->perderVida(pFogo->getDano());
+                    pFogo->setAtivo(false);
+
+                    if (pInim->getVidas() <= 0)
+                    {
+                        if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
+                        else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
+                        else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
+                    }
+
+                    break; // projetil consumido
+                }
+            }
         }
     }
 }
