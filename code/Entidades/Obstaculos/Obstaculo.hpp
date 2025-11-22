@@ -20,6 +20,7 @@ namespace Entidades
                 virtual void desenhar() override = 0;
                 virtual sf::FloatRect getBoundingBox() const override = 0;
                 virtual void obstaculizar(Entidades::Personagens::Jogador* pJogador) = 0;
+                virtual void salvarDataBuffer() override { /* default empty - subclasses may override */ }
         };
     }
 }

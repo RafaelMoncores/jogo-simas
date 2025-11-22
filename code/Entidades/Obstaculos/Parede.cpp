@@ -67,5 +67,18 @@ namespace Entidades
                 pJogador->perderVida(1);
             }
         }
+
+        void Parede::salvarDataBuffer()
+        {
+            Obstaculo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Parede" << std::endl;
+            sf::FloatRect b = getBoundingBox();
+            (*buffer) << "posX " << b.position.x << std::endl;
+            (*buffer) << "posY " << b.position.y << std::endl;
+            (*buffer) << "sizeX " << b.size.x << std::endl;
+            (*buffer) << "sizeY " << b.size.y << std::endl;
+            (*buffer) << "danoso " << (danoso ? 1 : 0) << std::endl;
+        }
     }
 }

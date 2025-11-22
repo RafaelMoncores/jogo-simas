@@ -32,6 +32,14 @@ class Jogo
         Estados::Menu menu;
         Fases::Fase* pFaseAtual;
         sf::Clock relogio;
+        sf::Clock saveClock;
+        // Estado do menu de pause
+        bool pauseActive{false};
+        int pausePos{0};
+        bool pauseEnterDebounce{false};
+        sf::Font pauseFont;
+        // In-memory snapshot created at pause time (fast, avoids disk I/O during pause)
+        std::string pauseSnapshot;
 
         std::vector<RankingEntry> rankingFase1; 
         std::vector<RankingEntry> rankingFase2;
@@ -39,6 +47,7 @@ class Jogo
         void processarEventosJogando(); 
         void renderizar();
         void inicializar();
+        bool carregarSave();
 
     public:
         Jogo();

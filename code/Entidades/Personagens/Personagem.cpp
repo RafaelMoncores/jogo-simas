@@ -83,9 +83,29 @@ namespace Entidades
             podePular = pode;
         }
 
+        void Personagem::setVidas(int v)
+        {
+            num_vidas = v;
+            if (num_vidas < 0) num_vidas = 0;
+        }
+
         void Personagem::salvarDataBuffer()
         {
             Entidade::salvarDataBuffer();
+
+            if (!buffer) return;
+            (*buffer) << "Personagem" << std::endl;
+            (*buffer) << "vidas " << num_vidas << std::endl;
+            (*buffer) << "podePular " << (podePular ? 1 : 0) << std::endl;
+            (*buffer) << "posInicialX " << posInicial.x << std::endl;
+            (*buffer) << "posInicialY " << posInicial.y << std::endl;
+            // Se houver um sprite, grava a posição exata do sprite (evita offsets
+            // causados por getBoundingBox() quando o bounding box é ajustado).
+            if (sprite) {
+                sf::Vector2f sp = sprite->getPosition();
+                (*buffer) << "spritePosX " << sp.x << std::endl;
+                (*buffer) << "spritePosY " << sp.y << std::endl;
+            }
         }
 
         void Personagem::salvar()

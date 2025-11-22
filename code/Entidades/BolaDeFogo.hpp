@@ -30,5 +30,6 @@ namespace Entidades
             void rebater();
             bool getPertenceAoJogador() const;
             int getDano() const;
+            virtual void salvarDataBuffer() override;
     };
 }

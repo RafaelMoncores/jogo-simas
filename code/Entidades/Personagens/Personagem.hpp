@@ -39,6 +39,7 @@ namespace Entidades
                 virtual void desenhar() override;
                 virtual sf::FloatRect getBoundingBox() const override;
                 void setPodePular(bool pode);
+                void setVidas(int v);
                 sf::Vector2f getVelocidade() const;
 
                 virtual void fazerBounce(float forcaBounce);

@@ -109,5 +109,18 @@ namespace Entidades
             // 4. Aplica o rebote
             pJogador->aplicarRepel(forcaRepel);
         }
+
+        void Trampolim::salvarDataBuffer()
+        {
+            Obstaculo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Trampolim" << std::endl;
+            sf::FloatRect b = getBoundingBox();
+            (*buffer) << "posX " << b.position.x << std::endl;
+            (*buffer) << "posY " << b.position.y << std::endl;
+            (*buffer) << "sizeX " << b.size.x << std::endl;
+            (*buffer) << "sizeY " << b.size.y << std::endl;
+            (*buffer) << "forcaRebote " << FORCA_REBOTE << std::endl;
+        }
     }
 }

@@ -216,6 +216,14 @@ namespace Entidades
         void Dragao::salvarDataBuffer()
         {
             Inimigo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Dragao" << std::endl;
+            (*buffer) << "forca " << forca << std::endl;
+            (*buffer) << "estaAtacando " << (estaAtacando ? 1 : 0) << std::endl;
+            (*buffer) << "temporizadorMovimento " << temporizadorMovimento << std::endl;
+            (*buffer) << "temporizadorAtaque " << temporizadorAtaque << std::endl;
+            (*buffer) << "tirosDisparados " << tirosDisparados << std::endl;
+            (*buffer) << "tempoMovimentoRestante " << tempoMovimentoRestante << std::endl;
         }
 
         void Dragao::salvar()

@@ -1,0 +1,219 @@
+Fase 1
+modoDoisJogadores 0
+Entidade
+posX 24
+posY 544
+velX 0
+velY 0
+Personagem
+vidas 3
+podePular 1
+posInicialX 0
+posInicialY 550
+spritePosX 0
+spritePosY 544
+Jogador
+idJogador 1
+pontos 883.545
+completouFase 0
+direcao 1
+---
+Plataforma
+posX 0
+posY 600
+sizeX 300
+sizeY 124
+---
+Plataforma
+posX 0
+posY 724
+sizeX 300
+sizeY 376
+---
+Plataforma
+posX 1700
+posY 350
+sizeX 220
+sizeY 124
+---
+Plataforma
+posX 1700
+posY 474
+sizeX 220
+sizeY 626
+---
+Plataforma
+posX 500
+posY 500
+sizeX 200
+sizeY 50
+---
+Plataforma
+posX 1050
+posY 350
+sizeX 200
+sizeY 50
+---
+Plataforma
+posX 1450
+posY 450
+sizeX 200
+sizeY 50
+---
+Plataforma
+posX 750
+posY 700
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 1100
+posY 600
+sizeX 100
+sizeY 50
+---
+Plataforma
+posX 1450
+posY 650
+sizeX 200
+sizeY 50
+---
+Plataforma
+posX 1600
+posY 600
+sizeX 50
+sizeY 50
+---
+Trampolim
+posX 798.75
+posY 448.75
+sizeX 52.5
+sizeY 52.5
+forcaRebote 600
+---
+Trampolim
+posX 948.75
+posY 448.75
+sizeX 52.5
+sizeY 52.5
+forcaRebote 600
+---
+Trampolim
+posX 1348.75
+posY 498.75
+sizeX 52.5
+sizeY 52.5
+forcaRebote 600
+---
+Trampolim
+posX 1298.75
+posY 498.75
+sizeX 52.5
+sizeY 52.5
+forcaRebote 600
+---
+Trampolim
+posX 1648.75
+posY 548.75
+sizeX 52.5
+sizeY 52.5
+forcaRebote 600
+---
+Entidade
+posX 1718.1
+posY 328
+velX 0
+velY 0
+Personagem
+vidas 1
+podePular 1
+posInicialX 1720
+posInicialY 300
+spritePosX 1720
+spritePosY 329
+Inimigo
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 0.55397
+direcaoPulo 1
+raio_deteccao 250
+---
+Entidade
+posX 518.1
+posY 478
+velX 0
+velY 0
+Personagem
+vidas 1
+podePular 1
+posInicialX 520
+posInicialY 450
+spritePosX 520
+spritePosY 479
+Inimigo
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 0.55397
+direcaoPulo 1
+raio_deteccao 250
+---
+Entidade
+posX 768.1
+posY 678
+velX 0
+velY 0
+Personagem
+vidas 1
+podePular 1
+posInicialX 770
+posInicialY 650
+spritePosX 770
+spritePosY 679
+Inimigo
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 0.495491
+direcaoPulo 1
+raio_deteccao 250
+---
+Entidade
+posX 223.407
+posY 406.106
+velX 150
+velY -1.49012e-08
+Personagem
+vidas 2
+podePular 0
+posInicialX 100
+posInicialY 300
+spritePosX 223.407
+spritePosY 406.106
+Inimigo
+nivel_maldade 2
+Vampiro
+tamanho 2
+tempoTotal 0.822712
+direcao 1
+---
+Entidade
+posX 1123.41
+posY 356.106
+velX 150
+velY -1.49012e-08
+Personagem
+vidas 2
+podePular 0
+posInicialX 1000
+posInicialY 250
+spritePosX 1123.41
+spritePosY 356.106
+Inimigo
+nivel_maldade 2
+Vampiro
+tamanho 2.8
+tempoTotal 0.822712
+direcao 1
+---
