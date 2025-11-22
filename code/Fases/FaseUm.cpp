@@ -64,12 +64,17 @@ namespace Fases
         srand(time(nullptr));
         
         std::string texPlat = "tileSets/fase1/plataforma.png";
+        std::string texTerra = "tileSets/fase1/terra.png";
 
-        Plataforma* pChao1 = new Plataforma({0.f, 600.f}, {300.f, 50.f}, texPlat);
+        Plataforma* pChao1 = new Plataforma({0.f, 600.f}, {300.f, 124.f}, texPlat);
         listaEntidades.incluir(pChao1); 
+        Plataforma* pTerra_chao1 = new Plataforma({0.f, 724.f}, {300.f, 376.f}, texTerra);
+        listaEntidades.incluir(pTerra_chao1);
 
-        pChao2_Gosma = new PlataformaFinal({1700.f, 350.f}, {150.f, 50.f}, texPlat);
+        pChao2_Gosma = new PlataformaFinal({1700.f, 350.f}, {220.f, 124.f}, texPlat);
         listaEntidades.incluir(pChao2_Gosma); 
+        Plataforma* pTerra_chao2 = new Plataforma({1700.f, 474.f}, {220.f, 626.f}, texTerra);
+        listaEntidades.incluir(pTerra_chao2);
 
         randP = rand() % 6 + 1;
         std::cout << randP << std::endl;

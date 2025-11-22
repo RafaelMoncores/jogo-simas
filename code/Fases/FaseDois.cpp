@@ -58,31 +58,46 @@ namespace Fases
         
         using Entidades::Obstaculos::Plataforma;
         using Entidades::Obstaculos::PlataformaFinal;
+
         std::string texPlat = "tileSets/fase2/plataforma.png";
+        std::string texPedra = "tileSets/fase2/pedra.png";
+
         srand(time(nullptr));
         int randP = rand() % 5 + 1;
         std::cout << randP << std::endl;
 
-        pChao_I = new Plataforma({0.f, 1050.f}, {1550.f, 100.f}, texPlat);
+        pChao_I = new Plataforma({0.f, 1050.f}, {1550.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_I);
 
-        pChao_F = new PlataformaFinal({550.f, 200.f}, {1400.f, 100.f}, texPlat);
+        pChao_F = new PlataformaFinal({550.f, 200.f}, {1400.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_F); 
+        Plataforma* pPChao_F = new PlataformaFinal({550.f, 250.f}, {1400.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_F);
 
         pChao_1 = new Plataforma({1700.f, 950.f}, {250.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_1);
+        Plataforma* pPChao_1 = new PlataformaFinal({1700.f, 1000.f}, {250.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_1);
 
         pChao_2 = new Plataforma({1700.f, 750.f}, {250.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_2);
+        Plataforma* pPChao_2 = new PlataformaFinal({1700.f, 800.f}, {250.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_2);
 
-        pChao_3 = new Plataforma({0.f, 500.f}, {250.f, 100.f}, texPlat);
+        pChao_3 = new Plataforma({0.f, 500.f}, {250.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_3);
+        Plataforma* pPChao_3 = new PlataformaFinal({0.f, 550.f}, {250.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_3);
 
-        Plataforma* pChao_4 = new Plataforma({0.f, 400.f}, {100.f, 100.f}, texPlat);
+        Plataforma* pChao_4 = new Plataforma({0.f, 400.f}, {100.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_4);
+        Plataforma* pPChao_4 = new PlataformaFinal({0.f, 450.f}, {100.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_4);
 
-        Plataforma* pChao_5 = new Plataforma({0.f, 600.f}, {1150.f, 100.f}, texPlat);
+        Plataforma* pChao_5 = new Plataforma({0.f, 600.f}, {1150.f, 50.f}, texPlat);
         listaEntidades.incluir(pChao_5);
+        Plataforma* pPChao_5 = new PlataformaFinal({0.f, 650.f}, {1150.f, 50.f}, texPedra);
+        listaEntidades.incluir(pPChao_5);
 
         if(randP <= 3){
             Plataforma* pPlat1 = new Plataforma({1450.f, 850.f}, {150.f, 50.f}, texPlat);
