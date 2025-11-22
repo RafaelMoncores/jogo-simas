@@ -6,6 +6,8 @@
 #include "../Entidades/Obstaculos/Obstaculo.hpp" 
 #include <iostream>
 #include <string>
+#include <cstdint>
+#include <cctype>
 
 namespace Fases
 {
@@ -126,7 +128,7 @@ namespace Fases
         inputIniciaisText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 10.f});
     }
     
-   void Fase::inicializar()
+    void Fase::inicializar()
     {
         listaEntidades.limpar();
         gerenciadorColisoes.limpar();
@@ -239,65 +241,14 @@ namespace Fases
             {
                 case EstadoFim::MostrandoOpcoes:
                 {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-                    {
-                        if (!navPressionado) {
-                            posBotaoFim = 0;
-                            navPressionado = true;
-                        }
-                    }
-                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-                    {
-                        if (!navPressionado) {
-                            posBotaoFim = 1;
-                            navPressionado = true;
-                        }
-                    }
                     
-                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
-                    {
-                        if (!enterPressionado)
-                        {
-                            if (posBotaoFim == 0) 
-                            {
-                                estadoFim = EstadoFim::PedindoIniciais;
-                                iniciais = ""; 
-                            }
-                            else 
-                            {
-                                faseConcluida = true; 
-                            }
-                            enterPressionado = true;
-                        }
-                    }
-                    else
-                    {
-                        enterPressionado = false;
-                        navPressionado = false; 
-                    }
-
                 }
                 break;
 
                 case EstadoFim::PedindoIniciais:
                 {
                     
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) && !enterPressionado)
-                    {
-                        if (iniciais.length() == 3)
-                        {
-                            if (pJogo)
-                                pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
-                            
-                            faseConcluida = true; 
-                            enterPressionado = true;
-                        }
-                    }
-                    else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
-                    {
-                        enterPressionado = false;
-                    }
-
+                    
                 }
                 break;
             }
@@ -552,4 +503,110 @@ namespace Fases
     {
         // Método de persistência (ainda não implementado)
     }
+
+    void Fase::tratarEvento(const sf::Event& evento)
+    {
+        // -----------------------------------------------
+        // CASO 1: DIGITANDO AS INICIAIS (RANKING)
+        // -----------------------------------------------
+        if (estadoFim == EstadoFim::PedindoIniciais)
+        {
+            // Usamos "TextEntered" para capturar caracteres digitados (letras, números, símbolos)
+            if (const auto* te = evento.getIf<sf::Event::TextEntered>())
+            {
+                // O SFML retorna o código Unicode
+                std::uint32_t unicode = te->unicode;
+
+                // --- 1. Lógica de Apagar (Backspace - ASCII 8) ---
+                if (unicode == 8) 
+                {
+                    if (!iniciais.empty()) {
+                        iniciais.pop_back(); // Remove a última letra
+                    }
+                }
+                // --- 2. Lógica de Confirmar (Enter - ASCII 13) ---
+                else if (unicode == 13) 
+                {
+                    if (iniciais.length() == 3) // Só aceita se tiver 3 letras
+                    {
+                        if (pJogo) {
+                            pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
+                        }
+                        faseConcluida = true;
+                    }
+                }
+                // --- 3. Lógica de Digitar (Caracteres Normais) ---
+                else 
+                {
+                    // Aceita apenas se tiver menos de 3 letras
+                    if (iniciais.length() < 3)
+                    {
+                        // Filtra: Apenas letras (A-Z, a-z) e Números (0-9)
+                        // (ASCII: 48-57 são números, 65-90 maiúsculas, 97-122 minúsculas)
+                        if ((unicode >= 48 && unicode <= 57) || 
+                            (unicode >= 65 && unicode <= 90) || 
+                            (unicode >= 97 && unicode <= 122))
+                        {
+                            char letra = static_cast<char>(unicode);
+                        
+                            // Converte para MAIÚSCULA antes de adicionar
+                            iniciais += std::toupper(letra);
+                        }
+                    }
+                }
+
+                // Atualiza o texto visual imediatamente
+                if (inputIniciaisText) {
+                    inputIniciaisText->setString("Iniciais (3): " + iniciais);
+                }
+            }
+        }
+
+        // -----------------------------------------------
+        // CASO 2: MENU DE FIM DE FASE (SALVAR/VOLTAR)
+        // -----------------------------------------------
+        else if (estadoFim == EstadoFim::MostrandoOpcoes)
+        {
+            if (const auto* kp = evento.getIf<sf::Event::KeyPressed>())
+            {
+                if (kp->code == sf::Keyboard::Key::Up || kp->code == sf::Keyboard::Key::W)
+                {
+                    posBotaoFim = 0; // Vai para "Salvar"
+                }
+                else if (kp->code == sf::Keyboard::Key::Down || kp->code == sf::Keyboard::Key::S)
+                {
+                    posBotaoFim = 1; // Vai para "Menu"
+                }
+                else if (kp->code == sf::Keyboard::Key::Enter)
+                {
+                    if (posBotaoFim == 0) // Salvar
+                    {
+                        estadoFim = EstadoFim::PedindoIniciais;
+                        iniciais = "";
+                        // Atualiza o texto visual para limpar
+                        if (inputIniciaisText) inputIniciaisText->setString("Iniciais (3): ");
+                    }
+                    else // Menu
+                    {
+                        faseConcluida = true;
+                    }
+                }
+            }
+        }
+
+        // -----------------------------------------------
+        // CASO 3: JOGO RODANDO (PULO DO JOGADOR)
+        // -----------------------------------------------
+        else if (jogador1)
+        {
+            if (const auto* kp = evento.getIf<sf::Event::KeyPressed>())
+            {
+                if (kp->code == sf::Keyboard::Key::Space)
+                {
+                    jogador1->pular(); 
+                }
+            }
+        }
+    }
+
 }

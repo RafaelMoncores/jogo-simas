@@ -13,6 +13,7 @@ using Fases::Fase;
 
 Jogo::Jogo() :
     pGG(nullptr),
+    pGE(nullptr),
     menu(),
     pFaseAtual(nullptr),
     estadoAtual(EstadoJogo::NoMenu) 
@@ -29,8 +30,12 @@ Jogo::~Jogo()
 void Jogo::inicializar()
 {
     pGG = GerenciadorGrafico::getInstance();
+    pGE = Gerenciadores::GerenciadorEventos::getInstance();
     
     Ente::setGerenciadorGrafico(pGG);
+
+    // Define o Menu como o primeiro ouvinte
+    pGE->setOuvinte(&menu);
 }
 
 void Jogo::executar()
@@ -38,6 +43,7 @@ void Jogo::executar()
     while (pGG->isWindowOpen())
     {
         pGG->limpar(sf::Color::Black);
+        pGE->processarEventos();
 
         float delta = relogio.restart().asSeconds();
 
@@ -45,6 +51,7 @@ void Jogo::executar()
         {
             case EstadoJogo::NoMenu:
             {
+                pGE->setOuvinte(&menu);
                 int acaoMenu = menu.executar(rankingFase1, rankingFase2);
                 Fases::Fase* proximaFase = nullptr;
 
@@ -74,6 +81,7 @@ void Jogo::executar()
                     pFaseAtual = proximaFase;
                     pFaseAtual->inicializar(); // Inicializa a nova
                     estadoAtual = EstadoJogo::Jogando;
+                    pGE->setOuvinte(pFaseAtual); // <--- TROCA O OUVINTE PARA A FASE
                 }
             }
             break;
@@ -90,6 +98,7 @@ void Jogo::executar()
                 if (pFaseAtual && pFaseAtual->getFaseConcluida())
                 {
                     estadoAtual = EstadoJogo::NoMenu;
+                    pGE->setOuvinte(&menu); // <--- TROCA O OUVINTE DE VOLTA PRO MENU
                     menu.resetInput();
                     
                     delete pFaseAtual;

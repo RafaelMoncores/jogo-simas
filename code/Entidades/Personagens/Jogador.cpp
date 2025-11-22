@@ -286,5 +286,15 @@ namespace Entidades
             if (pontos < 0.f) pontos = 0.f;
         }
 
+        void Jogador::pular()
+        {
+            // Usa a mesma lógica que estava no processarInputs
+            if (podePular)
+            {
+                velocidade.y = -std::sqrt(2.0f * 981.0f * 200.0f);
+                podePular = false;
+            }
+        }
+    
     }
 }

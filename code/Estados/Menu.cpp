@@ -6,7 +6,6 @@
 
 namespace Estados
 {
-    // ... (Menu::Menu, Menu::centralizarTexto, Menu::set_values_principal permanecem iguais) ...
     Menu::Menu() :
         pGG(Gerenciadores::GerenciadorGrafico::getInstance()),
         enterDebounce(false),
@@ -270,89 +269,6 @@ namespace Estados
         pos_mouse = sf::Mouse::getPosition(pGG->getWindow());
         mouse_coord = pGG->mapPixelToCoords(pos_mouse);
 
-        while (const auto optEvent = pGG->pollEvent()) {
-            const auto &event = *optEvent;
-
-            if (event.is<sf::Event::Closed>()) {
-                return 0;
-            }
-
-            if (estadoAtualMenu != EstadoMenu::MenuRanking)
-            {
-                if (event.is<sf::Event::MouseMoved>()) {
-                    for (std::size_t i = 0; i < texts.size(); ++i) {
-                        // O título (índice 0) é fixo, ignoramos no mouseover
-                        if (i == 0) continue; 
-                        
-                        if (texts[i].getGlobalBounds().contains(mouse_coord)) {
-                            if (pos != i) {
-                                texts[pos].setOutlineThickness(0.f);
-                                pos = i;
-                                texts[pos].setOutlineThickness(4.f);
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (event.is<sf::Event::MouseButtonPressed>()) {
-                if (event.getIf<sf::Event::MouseButtonPressed>()->button == sf::Mouse::Button::Left) {
-                    if (texts[pos].getGlobalBounds().contains(mouse_coord)) {
-                        theselect = true;
-                    }
-                }
-            }
-
-            if (event.is<sf::Event::KeyPressed>()) {
-                const auto *kp = event.getIf<sf::Event::KeyPressed>();
-                if (!kp) continue;
-
-                // O mínimo selecionável é o índice 1 (o título é o 0)
-                std::size_t min_pos = 1;
-
-                switch (kp->code) {
-                    case sf::Keyboard::Key::S:
-                    case sf::Keyboard::Key::Down:
-                        if (estadoAtualMenu != EstadoMenu::MenuRanking)
-                        {
-                            if (pos < texts.size() - 1) {
-                                texts[pos].setOutlineThickness(0.f);
-                                ++pos;
-                                texts[pos].setOutlineThickness(4.f);
-                            }
-                        }
-                        break;
-                    
-                    case sf::Keyboard::Key::W:
-                    case sf::Keyboard::Key::Up:
-                        if (estadoAtualMenu != EstadoMenu::MenuRanking)
-                        {
-                            if (pos > min_pos) {
-                                texts[pos].setOutlineThickness(0.f);
-                                --pos;
-                                texts[pos].setOutlineThickness(4.f);
-                            }
-                        }
-                        break;
-
-                    case sf::Keyboard::Key::Enter:
-                        if (!enterDebounce) {
-                            theselect = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            if (event.is<sf::Event::KeyReleased>()) {
-                const auto *kr = event.getIf<sf::Event::KeyReleased>();
-                if (kr && kr->code == sf::Keyboard::Key::Enter) {
-                    enterDebounce = false; 
-                }
-            }
-        } 
-
         if (theselect) {
             theselect = false;
 
@@ -456,5 +372,103 @@ namespace Estados
         theselect = false;
         pressed = false;
         enterDebounce = true;
+    }
+
+    void Menu::tratarEvento(const sf::Event& event)
+    {
+        // =====================
+        // 1. MOVIMENTO DO MOUSE
+        // =====================
+        if (const auto* mm = event.getIf<sf::Event::MouseMoved>())
+        {
+            // Apenas permite selecionar com o mouse se NÃO estiver no Ranking
+            if (estadoAtualMenu != EstadoMenu::MenuRanking)
+            {
+                sf::Vector2i pixelPos = mm->position;
+                sf::Vector2f worldPos = pGG->mapPixelToCoords(pixelPos);
+
+                for (std::size_t i = 0; i < texts.size(); ++i)
+                {
+                    // No Menu Principal, ignora o título (índice 0)
+                    if (estadoAtualMenu == EstadoMenu::MenuPrincipal && i == 0) continue;
+
+                    // Se o mouse estiver em cima do texto
+                    if (texts[i].getGlobalBounds().contains(worldPos))
+                    {
+                        pos = i; // Atualiza a seleção
+                    }
+                }
+            }
+        }
+
+        // ==================
+        // 2. CLIQUE DO MOUSE
+        // ==================
+        if (const auto* mb = event.getIf<sf::Event::MouseButtonPressed>())
+        {
+            if (mb->button == sf::Mouse::Button::Left)
+            {
+                sf::Vector2i pixelPos = mb->position;
+                sf::Vector2f worldPos = pGG->mapPixelToCoords(pixelPos);
+
+                // Verifica se clicou na opção que está atualmente selecionada (pos)
+                if (texts[pos].getGlobalBounds().contains(worldPos))
+                {
+                    // No Ranking, só funciona se for o botão "Voltar" (último item)
+                    if (estadoAtualMenu == EstadoMenu::MenuRanking)
+                    {
+                        if (pos == texts.size() - 1) {
+                            theselect = true;
+                        }
+                    }
+                    else
+                    {
+                        // Nos outros menus, aceita o clique
+                        theselect = true;
+                    }
+                }
+            }
+        }
+
+        // ============
+        // 3. TECLADO
+        // ============
+        if (const auto* kp = event.getIf<sf::Event::KeyPressed>())
+        {
+            
+
+            if (kp->code == sf::Keyboard::Key::S || kp->code == sf::Keyboard::Key::Down)
+            {
+                if (estadoAtualMenu != EstadoMenu::MenuRanking)
+                {
+                    if (pos < texts.size() - 1) pos++;
+                    else pos = (estadoAtualMenu == EstadoMenu::MenuPrincipal) ? 1 : 0;
+                }
+            }
+            else if (kp->code == sf::Keyboard::Key::W || kp->code == sf::Keyboard::Key::Up)
+            {
+                if (estadoAtualMenu != EstadoMenu::MenuRanking)
+                {
+                    size_t limiteInferior = (estadoAtualMenu == EstadoMenu::MenuPrincipal) ? 1 : 0;
+                    if (pos > limiteInferior) pos--;
+                    else pos = texts.size() - 1;
+                }
+            }
+            else if (kp->code == sf::Keyboard::Key::Enter)
+            {
+                if (!enterDebounce) theselect = true;
+            }
+        }
+
+        // ====================================
+        // 4. SOLTAR TECLA (Debounce do Enter)
+        // ====================================
+        if (const auto* kr = event.getIf<sf::Event::KeyReleased>())
+        {
+            if (kr->code == sf::Keyboard::Key::Enter)
+            {
+                enterDebounce = false;
+            }
+        }
     }
 }

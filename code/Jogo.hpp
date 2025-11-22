@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gerenciadores/GerenciadorGrafico.hpp"
+#include "Gerenciadores/GerenciadorEventos.hpp"
 #include "Entidades/Personagens/Jogador.hpp"
 #include "Estados/Menu.hpp"
 #include "Fases/Fase.hpp"
@@ -27,6 +28,7 @@ class Jogo
         
         EstadoJogo estadoAtual;
         Gerenciadores::GerenciadorGrafico* pGG;
+        Gerenciadores::GerenciadorEventos* pGE; 
         Estados::Menu menu;
         Fases::Fase* pFaseAtual;
         sf::Clock relogio;
