@@ -20,7 +20,6 @@ namespace Fases
             virtual void criarChefao();
             virtual void criarObstDificil();
             virtual void criarInimigosFaceis();
-            virtual void criarObstMedios();
 
         public:
             FaseDois(Jogo* pJogo, bool doisJogadores);

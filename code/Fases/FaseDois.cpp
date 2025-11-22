@@ -42,7 +42,6 @@ namespace Fases
     void FaseDois::criarObstaculos()
     {
         criarPlataformas();
-        criarObstMedios();
         criarObstDificil();
     }
 
@@ -81,6 +80,9 @@ namespace Fases
 
         Plataforma* pChao_4 = new Plataforma({0.f, 400.f}, {100.f, 100.f}, texPlat);
         listaEntidades.incluir(pChao_4);
+
+        Plataforma* pChao_5 = new Plataforma({0.f, 600.f}, {1150.f, 100.f}, texPlat);
+        listaEntidades.incluir(pChao_5);
 
         if(randP <= 3){
             Plataforma* pPlat1 = new Plataforma({1450.f, 850.f}, {150.f, 50.f}, texPlat);
@@ -123,39 +125,6 @@ namespace Fases
         }
     }
 
-    void FaseDois::criarObstMedios()
-    {
-        using Entidades::Obstaculos::Trampolim;
-        std::string texTrampolim = "tileSets/trampolim.png";
-        srand(time(nullptr));
-        int randR = rand() % 4 + 1;
-        std::cout << randR << std::endl;
-        float forcaRebote = 600.f;
-
-        if(randR <= 3){
-            Trampolim* pTramp1 = new Trampolim({1100.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp1);
-
-            Trampolim* pTramp2 = new Trampolim({850.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp2);
-
-            Trampolim* pTramp3 = new Trampolim({550.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp3);
-        }else{
-            Trampolim* pTramp1 = new Trampolim({1100.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp1);
-
-            Trampolim* pTramp2 = new Trampolim({850.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp2);
-
-            Trampolim* pTramp3 = new Trampolim({550.f, 700.f}, {100.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp3);
-
-            Trampolim* pTramp4 = new Trampolim({400.f, 500.f}, {50.f, 50.f}, texTrampolim, forcaRebote);
-            listaEntidades.incluir(pTramp4);
-        }
-    }
-
     void FaseDois::criarObstDificil()
     {
         using Entidades::Obstaculos::Parede;
@@ -165,31 +134,40 @@ namespace Fases
         std::cout << randW << std::endl;
 
         if(randW <= 3){
-            Parede* pParede1 = new Parede({1000.f, 300.f}, {50.f, 150.f}, texParede);
+            Parede* pParede1 = new Parede({950.f, 300.f}, {50.f, 200.f}, texParede);
             listaEntidades.incluir(pParede1);
 
-            Parede* pParede2 = new Parede({1000.f, 550.f}, {50.f, 300.f}, texParede);
+            Parede* pParede2 = new Parede({1050.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede2);
 
             Parede* pParede3 = new Parede({750.f, 300.f}, {50.f, 200.f}, texParede);
             listaEntidades.incluir(pParede3);
 
-            Parede* pParede4 = new Parede({750.f, 600.f}, {50.f, 250.f}, texParede);
+            Parede* pParede4 = new Parede({850.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede4);
+
+            Parede* pParede5 = new Parede({650.f, 550.f}, {50.f, 50.f}, texParede);
+            listaEntidades.incluir(pParede5);
         }else if(randW <= 2){
-            Parede* pParede2 = new Parede({1000.f, 550.f}, {50.f, 300.f}, texParede);
+            Parede* pParede1 = new Parede({950.f, 300.f}, {50.f, 200.f}, texParede);
+            listaEntidades.incluir(pParede1);
+
+            Parede* pParede2 = new Parede({1050.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede2);
 
             Parede* pParede3 = new Parede({750.f, 300.f}, {50.f, 200.f}, texParede);
             listaEntidades.incluir(pParede3);
 
-            Parede* pParede4 = new Parede({750.f, 600.f}, {50.f, 250.f}, texParede);
+            Parede* pParede4 = new Parede({850.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede4);
         }else{
-            Parede* pParede2 = new Parede({1000.f, 550.f}, {50.f, 300.f}, texParede);
+            Parede* pParede1 = new Parede({950.f, 300.f}, {50.f, 200.f}, texParede);
+            listaEntidades.incluir(pParede1);
+
+            Parede* pParede2 = new Parede({1050.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede2);
 
-            Parede* pParede4 = new Parede({750.f, 600.f}, {50.f, 250.f}, texParede);
+            Parede* pParede4 = new Parede({850.f, 550.f}, {50.f, 50.f}, texParede);
             listaEntidades.incluir(pParede4);
         }
     }
