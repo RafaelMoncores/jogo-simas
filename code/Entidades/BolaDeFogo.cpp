@@ -105,4 +105,17 @@ namespace Entidades
         return dano;
     }
 
+    void BolaDeFogo::salvarDataBuffer()
+    {
+        Entidade::salvarDataBuffer();
+        if (!buffer) return;
+        (*buffer) << "BolaDeFogo" << std::endl;
+        (*buffer) << "dirX " << direcao.x << std::endl;
+        (*buffer) << "dirY " << direcao.y << std::endl;
+        (*buffer) << "velProjetil " << velocidadeProjetil << std::endl;
+        (*buffer) << "dano " << dano << std::endl;
+        (*buffer) << "ativo " << (ativo ? 1 : 0) << std::endl;
+        (*buffer) << "pertenceAoJogador " << (pertenceAoJogador ? 1 : 0) << std::endl;
+    }
+
 }

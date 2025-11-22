@@ -214,6 +214,12 @@ namespace Entidades
         void Gosma::salvarDataBuffer()
         {
             Inimigo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Gosma" << std::endl;
+            (*buffer) << "tempoEspera " << tempoEspera << std::endl;
+            (*buffer) << "tempoTotal " << tempoTotal << std::endl;
+            (*buffer) << "direcaoPulo " << direcaoPulo << std::endl;
+            (*buffer) << "raio_deteccao " << raio_deteccao << std::endl;
         }
 
         void Gosma::salvar()

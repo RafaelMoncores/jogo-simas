@@ -6,6 +6,8 @@
 #include "../Entidades/Obstaculos/Obstaculo.hpp" 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 namespace Fases
 {
@@ -550,6 +552,65 @@ namespace Fases
 
     void Fase::salvar()
     {
-        // Método de persistência (ainda não implementado)
+        std::ofstream ofs("save_state.txt", std::ios::trunc);
+        if (!ofs.is_open()) {
+            std::cerr << "Erro ao abrir arquivo de salvamento" << std::endl;
+            return;
+        }
+
+        ofs << "Fase " << faseNum << std::endl;
+            ofs << "modoDoisJogadores " << (modoDoisJogadores ? 1 : 0) << std::endl;
+
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
+        {
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+
+            // Fornece o stream e chama salvar() que por sua vez chama salvarDataBuffer()
+            pE->setOutputStreamPublic(&ofs);
+            pE->salvar();
+            // Evita deixar o ponteiro para o stream local após o fechamento
+            pE->setOutputStreamPublic(nullptr);
+
+            ofs << "---" << std::endl;
+        }
+
+        ofs.close();
+    }
+
+    void Fase::salvarComNome(const std::string& caminho)
+    {
+        // Delegar para o buffer-string e então escrever no arquivo (reusa lógica)
+        std::string data = salvarParaString();
+        std::ofstream ofs(caminho, std::ios::trunc);
+        if (!ofs.is_open()) {
+            std::cerr << "Erro ao abrir arquivo de salvamento: " << caminho << std::endl;
+            return;
+        }
+        ofs << data;
+        ofs.close();
+    }
+
+    std::string Fase::salvarParaString()
+    {
+        std::ostringstream oss;
+        // Opcional: grava um cabeçalho com identificação da fase e informações úteis
+        oss << "Fase " << faseNum << std::endl;
+        oss << "modoDoisJogadores " << (modoDoisJogadores ? 1 : 0) << std::endl;
+
+        for (listaEntidades.irParaPrimeiro(); ; listaEntidades.irParaProximo())
+        {
+            Entidades::Entidade* pE = listaEntidades.getAtual();
+            if (pE == NULL) break;
+
+            pE->setOutputStreamPublic(&oss);
+            pE->salvar();
+            // Evita deixar o ponteiro para o stream local após o fechamento
+            pE->setOutputStreamPublic(nullptr);
+
+            oss << "---" << std::endl;
+        }
+
+        return oss.str();
     }
 }

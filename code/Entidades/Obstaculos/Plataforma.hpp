@@ -24,6 +24,7 @@ namespace Entidades
             virtual void desenhar() override;
             virtual sf::FloatRect getBoundingBox() const override;
             virtual void obstaculizar(Entidades::Personagens::Jogador* pJogador) override;
+            virtual void salvarDataBuffer() override;
         };
     }
 }

@@ -50,6 +50,10 @@ namespace Entidades
         void Inimigo::salvarDataBuffer()
         {
             Personagem::salvarDataBuffer();
+
+            if (!buffer) return;
+            (*buffer) << "Inimigo" << std::endl;
+            (*buffer) << "nivel_maldade " << nivel_maldade << std::endl;
         }
 
         void Inimigo::salvar()

@@ -1,6 +1,7 @@
 #pragma once
 #include "Ente.hpp"
 #include <SFML/Graphics.hpp>
+#include <ostream>
 
 namespace Entidades
 {
@@ -14,6 +15,7 @@ namespace Entidades
             std::ostream* buffer;
 
             virtual void salvarDataBuffer();
+            void setOutputStream(std::ostream* os);
 
         public:
             Entidade();
@@ -23,5 +25,6 @@ namespace Entidades
             virtual void desenhar() override = 0;
             virtual sf::FloatRect getBoundingBox() const override = 0;
             virtual void salvar();
+            void setOutputStreamPublic(std::ostream* os) { setOutputStream(os); }
     };
 }

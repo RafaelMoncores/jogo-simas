@@ -122,6 +122,11 @@ namespace Entidades
         void Vampiro::salvarDataBuffer()
         {
             Inimigo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Vampiro" << std::endl;
+            (*buffer) << "tamanho " << tamanho << std::endl;
+            (*buffer) << "tempoTotal " << tempoTotal << std::endl;
+            (*buffer) << "direcao " << direcao << std::endl;
         }
 
         void Vampiro::salvar()

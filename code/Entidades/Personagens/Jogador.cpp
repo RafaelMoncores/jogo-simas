@@ -251,6 +251,17 @@ namespace Entidades
             return static_cast<int>(pontos);
         }
 
+        void Jogador::salvarDataBuffer()
+        {
+            Personagem::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Jogador" << std::endl;
+            (*buffer) << "idJogador " << idJogador << std::endl;
+            (*buffer) << "pontos " << pontos << std::endl;
+            (*buffer) << "completouFase " << (completouFase ? 1 : 0) << std::endl;
+            (*buffer) << "direcao " << direcao << std::endl;
+        }
+
         sf::FloatRect Jogador::getHitboxAtaque() const
         {
             if (!estaAtacando || !sprite) 

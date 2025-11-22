@@ -74,5 +74,12 @@ namespace Fases
             virtual sf::FloatRect getBoundingBox() const override;
             void processarEvento(const sf::Event& evento);
             virtual void salvar();
+            // Salva para um arquivo específico (usado por pause/save-as)
+            virtual void salvarComNome(const std::string& caminho);
+            // Produz um snapshot textual da fase em memória (rápido, evita I/O bloqueante)
+            virtual std::string salvarParaString();
+                // Acesso público aos jogadores para operações de carga/restauração
+                Entidades::Personagens::Jogador* getJogador1() { return jogador1; }
+                Entidades::Personagens::Jogador* getJogador2() { return jogador2; }
     };
 }

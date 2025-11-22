@@ -365,8 +365,8 @@ namespace Estados
                             estadoAtualMenu = EstadoMenu::MenuModoJogo;
                             set_values_modo_jogo();
                             return -1;
-                        case 2: // Load
-                            return -1;
+                                case 2: // Load
+                                    return 30; // Special code: request to load saved game
                         case 3: // Levels
                             estadoAtualMenu = EstadoMenu::MenuNiveis;
                             set_values_niveis();

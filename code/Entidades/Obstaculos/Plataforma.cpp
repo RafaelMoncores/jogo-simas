@@ -60,5 +60,17 @@ namespace Entidades
         {
             pJogador->colidir(this, getBoundingBox());
         }
+
+        void Plataforma::salvarDataBuffer()
+        {
+            Obstaculo::salvarDataBuffer();
+            if (!buffer) return;
+            (*buffer) << "Plataforma" << std::endl;
+            sf::FloatRect b = getBoundingBox();
+            (*buffer) << "posX " << b.position.x << std::endl;
+            (*buffer) << "posY " << b.position.y << std::endl;
+            (*buffer) << "sizeX " << b.size.x << std::endl;
+            (*buffer) << "sizeY " << b.size.y << std::endl;
+        }
     }
 }
