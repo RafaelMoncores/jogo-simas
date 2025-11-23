@@ -36,11 +36,9 @@ void Jogo::inicializar()
     pGE = Gerenciadores::GerenciadorEventos::getInstance();
     
     Ente::setGerenciadorGrafico(pGG);
-<<<<<<< HEAD
 
     // Define o Menu como o primeiro ouvinte
     pGE->setOuvinte(&menu);
-=======
     // Do not auto-load save on startup anymore; Load must be explicitly
     // requested through the menu. This avoids unexpected continuation after
     // recompiles/runs.
@@ -133,7 +131,6 @@ bool Jogo::carregarSave()
     }
 
     return true;
->>>>>>> origin/main
 }
 
 void Jogo::executar()

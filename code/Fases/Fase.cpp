@@ -6,13 +6,10 @@
 #include "../Entidades/Obstaculos/Obstaculo.hpp" 
 #include <iostream>
 #include <string>
-<<<<<<< HEAD
 #include <cstdint>
 #include <cctype>
-=======
 #include <fstream>
 #include <sstream>
->>>>>>> origin/main
 
 namespace Fases
 {
