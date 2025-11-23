@@ -1,6 +1,7 @@
 #include "BolaDeFogo.hpp"
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 
 namespace Entidades
 {
@@ -14,8 +15,7 @@ namespace Entidades
     {
         if (!textura.loadFromFile("tileSets/bola_de_fogo.png"))
         {
-            std::cerr << "ERRO FATAL: Nao foi possivel carregar 'bola_de_fogo.png'" << std::endl;
-            exit(1);
+            throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'bola_de_fogo.png'");
         }
         
         shape.emplace(textura);

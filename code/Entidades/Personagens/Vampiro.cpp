@@ -1,6 +1,7 @@
 #include "Vampiro.hpp"
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 namespace Entidades
 {
     namespace Personagens
@@ -18,8 +19,7 @@ namespace Entidades
         {
             if (!textura.loadFromFile("tileSets/vampiro.png"))
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'vampiro.png'" << std::endl;
-                exit(1);
+                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'vampiro.png'");
             }
             
             sprite.emplace(textura); 

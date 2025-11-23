@@ -7,6 +7,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace Entidades
 {
@@ -43,10 +44,9 @@ namespace Entidades
                 teclaAtaque = sf::Keyboard::Key::Space;
             }
 
-            if (!textura.loadFromFile(texturaPath))
+            if (!textura.loadFromFile(texturaPath)) //lança o erro para a main
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar '" << texturaPath << "'" << std::endl;
-                exit(1);
+                throw std::runtime_error("Erro: Nao foi possivel carregar a textura do Jogador: " + texturaPath);
             }
             
             sprite.emplace(textura); 

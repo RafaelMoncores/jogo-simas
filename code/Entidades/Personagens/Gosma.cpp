@@ -2,6 +2,7 @@
 #include <math.h>
 #include <iostream>
 #include <stdlib.h>
+#include <stdexcept>
 
 namespace Entidades
 {
@@ -19,8 +20,7 @@ namespace Entidades
         {
             if (!textura.loadFromFile("tileSets/gosma.png"))
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'Gosma.png'" << std::endl;
-                exit(1);
+                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'Gosma.png'");
             }
             
             sprite.emplace(textura); 

@@ -3,6 +3,7 @@
 #include "../Obstaculos/Obstaculo.hpp"
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 namespace Entidades
 {
@@ -22,8 +23,7 @@ namespace Entidades
         {
             if (!textura.loadFromFile("tileSets/dragao.png"))
             {
-                std::cerr << "ERRO FATAL: Nao foi possivel carregar 'dragao.png'" << std::endl;
-                exit(1);
+                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'dragao.png'");
             }
             
             sprite.emplace(textura); 

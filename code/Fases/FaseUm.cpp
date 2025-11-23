@@ -11,6 +11,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <stdexcept>
 
 namespace Fases
 {
@@ -25,7 +26,7 @@ namespace Fases
 
         if (!texFase.loadFromFile("tileSets/fase1/fase_background.png"))
         {
-            std::cerr << "Erro: FaseUm nao carregou background\n";
+            throw std::runtime_error("Erro: Nao foi possivel carregar a imagem de background fase um");
         }
         else
         {
