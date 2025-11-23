@@ -7,6 +7,7 @@
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
 #include "../Entidades/Personagens/Dragao.hpp"
+#include "../Gerenciadores/GerenciadorRecursos.hpp"
 
 #include <iostream>
 #include <cstdlib>

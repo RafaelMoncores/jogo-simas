@@ -1,8 +1,8 @@
 #include "Gosma.hpp"
+#include "../../Gerenciadores/GerenciadorRecursos.hpp"
 #include <math.h>
 #include <iostream>
 #include <stdlib.h>
-#include <stdexcept>
 
 namespace Entidades
 {
@@ -18,12 +18,7 @@ namespace Entidades
             VELOCIDADE_LATERAL_INIMIGO(100.0f),
             raio_deteccao(250.0f)
         {
-            if (!textura.loadFromFile("tileSets/gosma.png"))
-            {
-                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'Gosma.png'");
-            }
-            
-            sprite.emplace(textura); 
+            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/gosma.png")); 
             sprite->setPosition(posInicial);
 
             nivel_maldade = 1;

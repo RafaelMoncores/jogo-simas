@@ -12,7 +12,6 @@ namespace Entidades
         {
         private:
             sf::RectangleShape corpo;
-            sf::Texture textura;
             
             const float FORCA_REBOTE; 
 

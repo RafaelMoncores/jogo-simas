@@ -1,7 +1,7 @@
 #include "BolaDeFogo.hpp"
+#include "../Gerenciadores/GerenciadorRecursos.hpp"
 #include <cmath>
 #include <iostream>
-#include <stdexcept>
 
 namespace Entidades
 {
@@ -13,12 +13,8 @@ namespace Entidades
         ativo(true),
         pertenceAoJogador(doJogador)
     {
-        if (!textura.loadFromFile("tileSets/bola_de_fogo.png"))
-        {
-            throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'bola_de_fogo.png'");
-        }
         
-        shape.emplace(textura);
+        shape.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/bola_de_fogo.png"));
         shape->setPosition(pos);
         float mag = std::sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
         if (mag != 0.f)

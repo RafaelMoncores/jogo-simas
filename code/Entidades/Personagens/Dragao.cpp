@@ -1,9 +1,10 @@
 #include "Dragao.hpp"
 #include "../BolaDeFogo.hpp"
 #include "../Obstaculos/Obstaculo.hpp"
+#include "../../Gerenciadores/GerenciadorRecursos.hpp"
 #include <iostream>
 #include <cmath>
-#include <stdexcept>
+
 
 namespace Entidades
 {
@@ -21,12 +22,8 @@ namespace Entidades
             tempoMovimentoRestante(0.f),
             ignorandoObstaculos(false)
         {
-            if (!textura.loadFromFile("tileSets/dragao.png"))
-            {
-                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'dragao.png'");
-            }
             
-            sprite.emplace(textura); 
+            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/dragao.png")); 
             sprite->setPosition(posInicial);
             sprite->setScale({3,3});
             

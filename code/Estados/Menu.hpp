@@ -7,6 +7,8 @@
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
 #include "../Gerenciadores/GerenciadorEventos.hpp"
 
+//referência de código do canal Terminal Root do vídeo https://www.youtube.com/watch?v=h8-Q4eu3Qt4
+
 struct RankingEntry;
 
 namespace Estados

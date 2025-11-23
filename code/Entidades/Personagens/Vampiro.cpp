@@ -1,7 +1,7 @@
 #include "Vampiro.hpp"
 #include <iostream>
 #include <cmath>
-#include <stdexcept>
+#include "../../Gerenciadores/GerenciadorRecursos.hpp"
 namespace Entidades
 {
     namespace Personagens
@@ -17,12 +17,8 @@ namespace Entidades
             LIMITE_ESQUERDA(50.0f),
             LIMITE_DIREITA(1870.0f)
         {
-            if (!textura.loadFromFile("tileSets/vampiro.png"))
-            {
-                throw std::runtime_error("Erro: Nao foi possivel carregar a textura: 'vampiro.png'");
-            }
             
-            sprite.emplace(textura); 
+            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/vampiro.png")); 
             sprite->setPosition(posInicial);
             sprite->setScale({tamanho, tamanho});
             
