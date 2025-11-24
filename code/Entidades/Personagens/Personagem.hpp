@@ -45,6 +45,9 @@ namespace Entidades
                 virtual void fazerBounce(float forcaBounce);
                 virtual void aplicarRepel(sf::Vector2f forcaRepel);
 
+                // Retorna a posição inicial (spawn) deste personagem
+                sf::Vector2f getPosInicial() const;
+
                 virtual void salvar() override;
 
                 virtual void executar(float delta) override = 0;

@@ -1,38 +1,20 @@
 Fase 2
-modoDoisJogadores 1
+modoDoisJogadores 0
 Entidade
-posX 278.574
+posX 57.7892
 posY 994
 velX 0
-velY 0
+velY 0.2568
 Personagem
-vidas 3
-podePular 1
+vidas 2
+podePular 0
 posInicialX 0
 posInicialY 1000
-spritePosX 254.574
+spritePosX 33.7892
 spritePosY 994
 Jogador
 idJogador 1
-pontos 832.347
-completouFase 0
-direcao 1
----
-Entidade
-posX 104
-posY 997
-velX 0
-velY 0
-Personagem
-vidas 3
-podePular 1
-posInicialX 80
-posInicialY 1000
-spritePosX 80
-spritePosY 997
-Jogador
-idJogador 2
-pontos 332.345
+pontos 140.004
 completouFase 0
 direcao 1
 ---
@@ -132,6 +114,12 @@ posY 300
 sizeX 100
 sizeY 50
 ---
+Plataforma
+posX 400
+posY 950
+sizeX 150
+sizeY 44
+---
 Parede
 posX 948.75
 posY 295
@@ -168,7 +156,7 @@ sizeY 52.5
 danoso 1
 ---
 Entidade
-posX 1835.43
+posX 1748.27
 posY 928
 velX 0
 velY 0
@@ -177,18 +165,18 @@ vidas 1
 podePular 1
 posInicialX 1750
 posInicialY 900
-spritePosX 1837.33
+spritePosX 1750.17
 spritePosY 929
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.4937
-direcaoPulo 1
+tempoTotal 0.007724
+direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 1835.43
+posX 1748.27
 posY 728
 velX 0
 velY 0
@@ -197,38 +185,18 @@ vidas 1
 podePular 1
 posInicialX 1750
 posInicialY 700
-spritePosX 1837.33
+spritePosX 1750.17
 spritePosY 729
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.4937
-direcaoPulo 1
-raio_deteccao 250
----
-Entidade
-posX 100.183
-posY 478
-velX 0
-velY 0
-Personagem
-vidas 1
-podePular 1
-posInicialX 150
-posInicialY 450
-spritePosX 102.083
-spritePosY 479
-Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 1.4937
+tempoTotal 0.007724
 direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 735.207
+posX 735.581
 posY 1028
 velX 0
 velY 0
@@ -237,18 +205,18 @@ vidas 1
 podePular 1
 posInicialX 650
 posInicialY 950
-spritePosX 737.107
+spritePosX 737.481
 spritePosY 1029
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.9377
+tempoTotal 0.091566
 direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 785.419
+posX 785.654
 posY 1028
 velX 0
 velY 0
@@ -257,13 +225,61 @@ vidas 1
 podePular 1
 posInicialX 1050
 posInicialY 950
-spritePosX 787.319
+spritePosX 787.554
 spritePosY 1029
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.9377
+tempoTotal 0.091566
 direcaoPulo 1
 raio_deteccao 250
+---
+Entidade
+posX 1225
+posY -34
+velX 0
+velY 1.03936e-06
+Personagem
+vidas 9
+podePular 0
+posInicialX 1000
+posInicialY 100
+spritePosX 1225
+spritePosY -34
+Inimigo
+nivel_maldade 3
+Dragao
+forca 2
+estaAtacando 0
+temporizadorMovimento 4.99892
+temporizadorAtaque 2.99815
+tirosDisparados 0
+tempoMovimentoRestante 0
+---
+Entidade
+posX 1153.04
+posY 1664.4
+velX 0
+velY 0
+BolaDeFogo
+dirX -0.150021
+dirY 0.988683
+velProjetil 400
+dano 1
+ativo 1
+pertenceAoJogador 0
+---
+Entidade
+posX 1213.06
+posY 1268.83
+velX 0
+velY 0
+BolaDeFogo
+dirX -0.150021
+dirY 0.988683
+velProjetil 400
+dano 1
+ativo 1
+pertenceAoJogador 0
 ---

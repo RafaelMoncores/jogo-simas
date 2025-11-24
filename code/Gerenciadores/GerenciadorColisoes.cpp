@@ -194,6 +194,14 @@ namespace Gerenciadores
                     pInim->perderVida(pFogo->getDano());
                     pFogo->setAtivo(false);
 
+                    // Se for um Dragao atingido por um projetil do jogador, reposiciona
+                    // o dragao para sua posição de spawn imediatamente e zera velocidade
+                    if (auto* pDrag = dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
+                    {
+                        pDrag->setPosition(pDrag->getPosInicial());
+                        pDrag->aplicarRepel({0.f, 0.f});
+                    }
+
                     if (pInim->getVidas() <= 0)
                     {
                         if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
