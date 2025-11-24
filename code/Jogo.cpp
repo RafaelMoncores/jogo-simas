@@ -26,6 +26,8 @@ Jogo::Jogo() :
 
 Jogo::~Jogo()
 {
+    // Persist ranking on exit
+    salvar();
     delete GerenciadorGrafico::getInstance();
     if(pFaseAtual) delete pFaseAtual;
 }
@@ -42,6 +44,32 @@ void Jogo::inicializar()
     // Do not auto-load save on startup anymore; Load must be explicitly
     // requested through the menu. This avoids unexpected continuation after
     // recompiles/runs.
+
+    // Carrega ranking persistido (se existir)
+    std::ifstream ifs("ranking.txt");
+    if (ifs.is_open()) {
+        // Reuse carregar logic below
+        std::string line;
+        int section = 0; // 1 = fase1, 2 = fase2
+        while (std::getline(ifs, line)) {
+            if (line.empty()) continue;
+            if (line == "---") { section = 0; continue; }
+            if (line == "RankingFase1") { section = 1; continue; }
+            if (line == "RankingFase2") { section = 2; continue; }
+
+            std::istringstream iss(line);
+            std::string nome; int pts;
+            if (!(iss >> nome >> pts)) continue;
+            if (section == 1) rankingFase1.push_back({nome, pts});
+            else if (section == 2) rankingFase2.push_back({nome, pts});
+        }
+        // Ensure ordering and size
+        std::sort(rankingFase1.begin(), rankingFase1.end(), std::greater<RankingEntry>());
+        if (rankingFase1.size() > 10) rankingFase1.resize(10);
+        std::sort(rankingFase2.begin(), rankingFase2.end(), std::greater<RankingEntry>());
+        if (rankingFase2.size() > 10) rankingFase2.resize(10);
+        ifs.close();
+    }
 }
 
 bool Jogo::carregarSave()
@@ -431,6 +459,32 @@ void Jogo::adicionarAoRanking(int faseNum, std::string nome, int pontuacao)
     {
         pRanking->resize(10);
     }
+
+    // Salva imediatamente o ranking atualizado
+    salvar();
+}
+
+void Jogo::salvarDataBuffer(std::ostream& os)
+{
+    // Formato simples legível: seção header + linhas "nome pontuacao"
+    os << "RankingFase1" << std::endl;
+    for (const auto& e : rankingFase1) {
+        os << e.nome << " " << e.pontuacao << std::endl;
+    }
+    os << "---" << std::endl;
+    os << "RankingFase2" << std::endl;
+    for (const auto& e : rankingFase2) {
+        os << e.nome << " " << e.pontuacao << std::endl;
+    }
+    os << "---" << std::endl;
+}
+
+void Jogo::salvar()
+{
+    std::ofstream ofs("ranking.txt", std::ios::trunc);
+    if (!ofs.is_open()) return;
+    salvarDataBuffer(ofs);
+    ofs.close();
 }
 
 const std::vector<RankingEntry>& Jogo::getRankingFase1() const

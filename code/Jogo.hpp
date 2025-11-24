@@ -48,6 +48,9 @@ class Jogo
         void renderizar();
         void inicializar();
         bool carregarSave();
+        // Persistência do ranking
+        void salvar();
+        void salvarDataBuffer(std::ostream& os);
 
     public:
         Jogo();
