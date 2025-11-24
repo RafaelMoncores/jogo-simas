@@ -82,18 +82,37 @@ namespace Entidades
         {
             if (num_vidas <= 0) return;
 
+            // Quando recebe dano de outro personagem (normalmente um Jogador),
+            // devemos reduzir a vida deste Vampiro e, se morrer, conceder
+            // a pontuação ao jogador que causou o dano.
             if (pOutro)
             {
-                pOutro->perderVida(1); 
+                // Reduz a vida do vampiro
+                perderVida(1);
+
+                // Se morreu, recompensa quem causou (se for um Jogador)
+                if (num_vidas <= 0)
+                {
+                    if (auto* pAlvo = dynamic_cast<Jogador*>(pOutro))
+                    {
+                        pAlvo->addPontos(300);
+                    }
+                    else
+                    {
+                        // Fallback: recompensa o jogador mais próximo
+                        Jogador* pProx = getJogadorMaisProximo();
+                        if (pProx) pProx->addPontos(300);
+                    }
+                }
             }
-            else 
+            else
             {
-                perderVida(1); 
-                
+                // Sem atacante explícito (por exemplo dano ambiental): ainda reduz a vida
+                perderVida(1);
                 Jogador* pAlvo = getJogadorMaisProximo();
                 if (pAlvo)
                 {
-                    pAlvo->addPontos(300); 
+                    pAlvo->addPontos(300);
                 }
             }
         }

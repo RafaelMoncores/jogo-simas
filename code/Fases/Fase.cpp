@@ -621,6 +621,19 @@ namespace Fases
                     inputIniciaisText->setString("Iniciais (3): " + iniciais);
                 }
             }
+            // Também aceitamos Enter via KeyPressed (algumas plataformas/teclados
+            // podem não enviar TextEntered para a tecla Enter em certos contextos)
+            else if (const auto* kp = evento.getIf<sf::Event::KeyPressed>())
+            {
+                if (kp->code == sf::Keyboard::Key::Enter)
+                {
+                    if (iniciais.length() == 3)
+                    {
+                        if (pJogo) pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
+                        faseConcluida = true;
+                    }
+                }
+            }
         }
 
         // -----------------------------------------------

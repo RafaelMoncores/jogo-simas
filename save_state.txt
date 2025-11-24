@@ -1,219 +1,269 @@
-Fase 1
-modoDoisJogadores 0
+Fase 2
+modoDoisJogadores 1
 Entidade
-posX 24
-posY 544
+posX 278.574
+posY 994
 velX 0
 velY 0
 Personagem
 vidas 3
 podePular 1
 posInicialX 0
-posInicialY 550
-spritePosX 0
-spritePosY 544
+posInicialY 1000
+spritePosX 254.574
+spritePosY 994
 Jogador
 idJogador 1
-pontos 883.545
+pontos 832.347
+completouFase 0
+direcao 1
+---
+Entidade
+posX 104
+posY 997
+velX 0
+velY 0
+Personagem
+vidas 3
+podePular 1
+posInicialX 80
+posInicialY 1000
+spritePosX 80
+spritePosY 997
+Jogador
+idJogador 2
+pontos 332.345
 completouFase 0
 direcao 1
 ---
 Plataforma
 posX 0
-posY 600
-sizeX 300
-sizeY 124
+posY 1050
+sizeX 1550
+sizeY 50
 ---
 Plataforma
-posX 0
-posY 724
-sizeX 300
-sizeY 376
+posX 550
+posY 200
+sizeX 1400
+sizeY 50
+---
+Plataforma
+posX 550
+posY 250
+sizeX 1400
+sizeY 50
 ---
 Plataforma
 posX 1700
-posY 350
-sizeX 220
-sizeY 124
----
-Plataforma
-posX 1700
-posY 474
-sizeX 220
-sizeY 626
----
-Plataforma
-posX 500
-posY 500
-sizeX 200
-sizeY 50
----
-Plataforma
-posX 1050
-posY 350
-sizeX 200
-sizeY 50
----
-Plataforma
-posX 1450
-posY 450
-sizeX 200
-sizeY 50
----
-Plataforma
-posX 750
-posY 700
+posY 950
 sizeX 250
 sizeY 50
 ---
 Plataforma
-posX 1100
-posY 600
+posX 1700
+posY 1000
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 1700
+posY 750
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 1700
+posY 800
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 0
+posY 500
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 0
+posY 550
+sizeX 250
+sizeY 50
+---
+Plataforma
+posX 0
+posY 400
 sizeX 100
+sizeY 50
+---
+Plataforma
+posX 0
+posY 450
+sizeX 100
+sizeY 50
+---
+Plataforma
+posX 0
+posY 600
+sizeX 1150
+sizeY 50
+---
+Plataforma
+posX 0
+posY 650
+sizeX 1150
+sizeY 50
+---
+Plataforma
+posX 1450
+posY 850
+sizeX 150
 sizeY 50
 ---
 Plataforma
 posX 1450
 posY 650
-sizeX 200
+sizeX 150
 sizeY 50
 ---
 Plataforma
-posX 1600
-posY 600
-sizeX 50
+posX 250
+posY 300
+sizeX 100
 sizeY 50
 ---
-Trampolim
-posX 798.75
-posY 448.75
-sizeX 52.5
-sizeY 52.5
-forcaRebote 600
----
-Trampolim
+Parede
 posX 948.75
-posY 448.75
+posY 295
 sizeX 52.5
-sizeY 52.5
-forcaRebote 600
+sizeY 210
+danoso 1
 ---
-Trampolim
-posX 1348.75
-posY 498.75
-sizeX 52.5
-sizeY 52.5
-forcaRebote 600
----
-Trampolim
-posX 1298.75
-posY 498.75
-sizeX 52.5
-sizeY 52.5
-forcaRebote 600
----
-Trampolim
-posX 1648.75
+Parede
+posX 1048.75
 posY 548.75
 sizeX 52.5
 sizeY 52.5
-forcaRebote 600
+danoso 1
+---
+Parede
+posX 748.75
+posY 295
+sizeX 52.5
+sizeY 210
+danoso 1
+---
+Parede
+posX 848.75
+posY 548.75
+sizeX 52.5
+sizeY 52.5
+danoso 1
+---
+Parede
+posX 648.75
+posY 548.75
+sizeX 52.5
+sizeY 52.5
+danoso 1
 ---
 Entidade
-posX 1718.1
-posY 328
+posX 1835.43
+posY 928
 velX 0
 velY 0
 Personagem
 vidas 1
 podePular 1
-posInicialX 1720
-posInicialY 300
-spritePosX 1720
-spritePosY 329
+posInicialX 1750
+posInicialY 900
+spritePosX 1837.33
+spritePosY 929
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.55397
+tempoTotal 1.4937
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 518.1
+posX 1835.43
+posY 728
+velX 0
+velY 0
+Personagem
+vidas 1
+podePular 1
+posInicialX 1750
+posInicialY 700
+spritePosX 1837.33
+spritePosY 729
+Inimigo
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 1.4937
+direcaoPulo 1
+raio_deteccao 250
+---
+Entidade
+posX 100.183
 posY 478
 velX 0
 velY 0
 Personagem
 vidas 1
 podePular 1
-posInicialX 520
+posInicialX 150
 posInicialY 450
-spritePosX 520
+spritePosX 102.083
 spritePosY 479
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.55397
-direcaoPulo 1
+tempoTotal 1.4937
+direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 768.1
-posY 678
+posX 735.207
+posY 1028
 velX 0
 velY 0
 Personagem
 vidas 1
 podePular 1
-posInicialX 770
-posInicialY 650
-spritePosX 770
-spritePosY 679
+posInicialX 650
+posInicialY 950
+spritePosX 737.107
+spritePosY 1029
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.495491
-direcaoPulo 1
+tempoTotal 1.9377
+direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 223.407
-posY 406.106
-velX 150
-velY -1.49012e-08
+posX 785.419
+posY 1028
+velX 0
+velY 0
 Personagem
-vidas 2
-podePular 0
-posInicialX 100
-posInicialY 300
-spritePosX 223.407
-spritePosY 406.106
+vidas 1
+podePular 1
+posInicialX 1050
+posInicialY 950
+spritePosX 787.319
+spritePosY 1029
 Inimigo
-nivel_maldade 2
-Vampiro
-tamanho 2
-tempoTotal 0.822712
-direcao 1
----
-Entidade
-posX 1123.41
-posY 356.106
-velX 150
-velY -1.49012e-08
-Personagem
-vidas 2
-podePular 0
-posInicialX 1000
-posInicialY 250
-spritePosX 1123.41
-spritePosY 356.106
-Inimigo
-nivel_maldade 2
-Vampiro
-tamanho 2.8
-tempoTotal 0.822712
-direcao 1
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 1.9377
+direcaoPulo 1
+raio_deteccao 250
 ---

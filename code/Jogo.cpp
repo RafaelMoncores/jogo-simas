@@ -138,7 +138,6 @@ void Jogo::executar()
     while (pGG->isWindowOpen())
     {
         pGG->limpar(sf::Color::Black);
-        pGE->processarEventos();
 
         float delta = relogio.restart().asSeconds();
 
@@ -146,7 +145,10 @@ void Jogo::executar()
         {
             case EstadoJogo::NoMenu:
             {
+                // Let the event manager forward events to the menu listener
                 pGE->setOuvinte(&menu);
+                // Process accumulated events now (only for menu)
+                pGE->processarEventos();
                 int acaoMenu = menu.executar(rankingFase1, rankingFase2);
                 Fases::Fase* proximaFase = nullptr;
 
@@ -226,7 +228,9 @@ void Jogo::executar()
             {
                 // Quando pausado, não executamos atualizações das entidades.
                 // Apenas processamos eventos de menu de pausa e desenhamos o estado atual.
-                processarEventosJogando(); // this will early-return if ESC was pressed again
+                // NÃO chamar `processarEventosJogando()` aqui pois ele consome todos os
+                // eventos (incluindo teclas/mouse) antes do loop de pausa; em vez disso
+                // usamos o loop local abaixo para tratar eventos de pausa.
 
                 // Desenha a cena atual como pano de fundo
                 renderizar();
@@ -392,7 +396,7 @@ void Jogo::processarEventosJogando()
 
         if (pFaseAtual)
         {
-            pFaseAtual->processarEvento(event);
+            pFaseAtual->tratarEvento(event);
         }
     }
 }
