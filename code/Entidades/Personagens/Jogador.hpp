@@ -48,6 +48,7 @@ namespace Entidades
                 virtual void executar(float delta) override;
                 virtual sf::FloatRect getBoundingBox() const override;
                 virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
+                int getId() const;
                 
         };
     }

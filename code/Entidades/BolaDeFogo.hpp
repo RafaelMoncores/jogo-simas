@@ -14,9 +14,10 @@ namespace Entidades
             int dano;
             bool ativo;
             bool pertenceAoJogador;
+            int ownerId; // 0 = nenhum, 1 = jogador1, 2 = jogador2
 
         public:
-            BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel = 600.f, bool doJogador = false);
+            BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel = 600.f, bool doJogador = false, int owner = 0);
             ~BolaDeFogo();
 
             virtual void executar(float delta) override;
@@ -30,6 +31,8 @@ namespace Entidades
             void rebater();
             bool getPertenceAoJogador() const;
             int getDano() const;
+            void setOwnerId(int id);
+            int getOwnerId() const;
             virtual void salvarDataBuffer() override;
     };
 }

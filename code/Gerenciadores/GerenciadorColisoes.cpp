@@ -174,6 +174,12 @@ namespace Gerenciadores
                 if (boundsFogo.findIntersection(boundsAtaque).has_value())
                 {
                     pFogo->rebater();
+                    // marca que o projétil agora pertence ao jogador que rebateu
+                    if (pJog1) {
+                        // assume-se que o gerenciador foi configurado para o jogador
+                        // atual (setJogador) antes desta chamada
+                        pFogo->setOwnerId(pJog1->getId());
+                    }
                     continue;
                 }
             }
@@ -210,9 +216,13 @@ namespace Gerenciadores
 
                     if (pInim->getVidas() <= 0)
                     {
-                        if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
-                        else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
-                        else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
+                        // Só credita pontos ao jogador dono do projetil
+                        int owner = pFogo->getOwnerId();
+                        if (pJog1 && owner == pJog1->getId()) {
+                            if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
+                            else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
+                            else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
+                        }
                     }
 
                     break; // projetil consumido

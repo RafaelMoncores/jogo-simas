@@ -78,20 +78,19 @@ namespace Entidades
 
             if (pOutro)
             {
-                // Quem causou o dano recebe os pontos se o vampiro morrer
-                perderVida(1);
-                if (num_vidas <= 0)
-                {
-                    if (auto* pAlvo = dynamic_cast<Jogador*>(pOutro)) pAlvo->addPontos(300);
-                    else if (auto* pProx = getJogadorMaisProximo()) pProx->addPontos(300);
-                }
+                // Quando um personagem (ex: jogador) encosta lateralmente
+                // no vampiro, o vampiro causa dano ao personagem.
+                pOutro->perderVida(1);
             }
             else
             {
-                // Dano ambiental: reduz vida e premia jogador mais próximo
+                // Dano ambiental: vampiro perde vida e premia jogador mais próximo
                 perderVida(1);
-                Jogador* pAlvo = getJogadorMaisProximo();
-                if (pAlvo) pAlvo->addPontos(300);
+                if (num_vidas <= 0)
+                {
+                    Jogador* pAlvo = getJogadorMaisProximo();
+                    if (pAlvo) pAlvo->addPontos(300);
+                }
             }
         }
 

@@ -10,6 +10,8 @@
 #include "../Listas/ListaEntidades.hpp"
 #include <SFML/Graphics.hpp>
 #include <optional>
+#include <map>
+#include <string>
 
 class Jogo;
 
@@ -79,6 +81,11 @@ namespace Fases
             virtual void salvarComNome(const std::string& caminho);
             // Produz um snapshot textual da fase em memória (rápido, evita I/O bloqueante)
             virtual std::string salvarParaString();
+            
+            // Restauracao: limpa entidades dinâmicas (projeteis e inimigos)
+            // e permite que blocos de salvamento sejam aplicados à fase.
+            void limparEntidadesDinamicas();
+            void restaurarEntidade(const std::string& tipo, const std::map<std::string, std::string>& kv);
                 // Acesso público aos jogadores para operações de carga/restauração
                 Entidades::Personagens::Jogador* getJogador1() { return jogador1; }
                 Entidades::Personagens::Jogador* getJogador2() { return jogador2; }

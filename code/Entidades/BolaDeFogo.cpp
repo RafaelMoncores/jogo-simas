@@ -11,13 +11,14 @@ namespace Entidades
 {
 
     // Construtor: inicializa direção, velocidade e propriedade (do jogador ou inimigo)
-    BolaDeFogo::BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel, bool doJogador) :
+    BolaDeFogo::BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel, bool doJogador, int owner) :
         Entidade(),
         direcao(dir),
         velocidadeProjetil(vel),
         dano(1),
         ativo(true),
-        pertenceAoJogador(doJogador)
+        pertenceAoJogador(doJogador),
+        ownerId(owner)
     {
         // Carrega textura via gerenciador de recursos (centraliza carregamento)
         shape.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/bola_de_fogo.png"));
@@ -42,6 +43,13 @@ namespace Entidades
         if (!shape) return;
 
         sf::Vector2f pos = shape->getPosition();
+        // Aplica "gravidade" e a força oposta (requisito do trabalho).
+        // A ideia é registrar a ação da gravidade e então aplicar a força
+        // contrária, permanecendo consistente com o comportamento de
+        // `Plataforma::executar`.
+        velocidade.y -= G_ACCEL.y * delta;
+        velocidade.y += G_ACCEL.y * delta;
+
         pos += direcao * velocidadeProjetil * delta;
         shape->setPosition(pos);
 
@@ -98,6 +106,9 @@ namespace Entidades
         }
     }
 
+    void BolaDeFogo::setOwnerId(int id) { ownerId = id; }
+    int BolaDeFogo::getOwnerId() const { return ownerId; }
+
     // Serializa estado do projetil para snapshot/save
     void BolaDeFogo::salvarDataBuffer()
     {
@@ -110,6 +121,7 @@ namespace Entidades
         (*buffer) << "dano " << dano << std::endl;
         (*buffer) << "ativo " << (ativo ? 1 : 0) << std::endl;
         (*buffer) << "pertenceAoJogador " << (pertenceAoJogador ? 1 : 0) << std::endl;
+        (*buffer) << "ownerId " << ownerId << std::endl;
     }
 
 } // namespace Entidades

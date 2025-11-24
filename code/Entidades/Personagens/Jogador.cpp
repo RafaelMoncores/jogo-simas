@@ -306,6 +306,11 @@ namespace Entidades
                 podePular = false;
             }
         }
+
+        int Jogador::getId() const
+        {
+            return idJogador;
+        }
     
     }
 }

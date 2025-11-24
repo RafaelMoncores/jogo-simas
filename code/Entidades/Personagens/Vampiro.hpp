@@ -37,6 +37,9 @@ namespace Entidades
 
             virtual void salvarDataBuffer() override;
             virtual void salvar() override;
+            // Allow restoring saved state
+            void setTempoTotal(float t) { tempoTotal = t; }
+            void setDirecao(int d) { direcao = d; }
         };
     }
 }

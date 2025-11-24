@@ -105,6 +105,8 @@ bool Jogo::carregarSave()
     if (pFaseAtual) delete pFaseAtual;
     pFaseAtual = proxima;
     pFaseAtual->inicializar();
+    // Limpa entidades dinâmicas (criaremos a cena a partir do arquivo salvo)
+    pFaseAtual->limparEntidadesDinamicas();
 
     // Lê blocos de entidade separados por '---'
     std::vector<std::string> block;
@@ -148,6 +150,10 @@ bool Jogo::carregarSave()
                         pj->setVidas(std::stoi(kv["vidas"]));
                     }
                 }
+            }
+            else {
+                // Delegate restoration of other entity types to the phase
+                pFaseAtual->restaurarEntidade(type, kv);
             }
 
             block.clear();
