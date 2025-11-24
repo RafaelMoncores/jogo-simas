@@ -6,6 +6,7 @@
 #include "../Entidades/Obstaculos/Trampolim.hpp"      
 #include "../Entidades/Obstaculos/Obstaculo.hpp"  
 #include "../Entidades/Personagens/Inimigo.hpp"
+#include "../Gerenciadores/GerenciadorEventos.hpp"
 #include "../Listas/ListaEntidades.hpp"
 #include <SFML/Graphics.hpp>
 #include <optional>
@@ -14,7 +15,7 @@ class Jogo;
 
 namespace Fases
 {
-    class Fase : public Entidades::Ente
+    class Fase : public Entidades::Ente, public OuvinteEventos
     {
         protected: 
             Jogo* pJogo;
@@ -26,7 +27,6 @@ namespace Fases
             sf::Vector2f posJogador2Inicial;
             sf::Vector2f posJogadorInicial;
 
-            // --- Apenas uma lista genérica ---
             Listas::ListaEntidades listaEntidades;
 
             // O Gerenciador agora armazena seus próprios vetores/listas STL
@@ -74,6 +74,7 @@ namespace Fases
             virtual sf::FloatRect getBoundingBox() const override;
             void processarEvento(const sf::Event& evento);
             virtual void salvar();
+            virtual void tratarEvento(const sf::Event& evento) override;
             // Salva para um arquivo específico (usado por pause/save-as)
             virtual void salvarComNome(const std::string& caminho);
             // Produz um snapshot textual da fase em memória (rápido, evita I/O bloqueante)

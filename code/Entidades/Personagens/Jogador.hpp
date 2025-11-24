@@ -42,11 +42,13 @@ namespace Entidades
                 void addPontos(int p);
                 void setPontos(float p);
 
+                void pular();
                 virtual void salvarDataBuffer() override;
 
                 virtual void executar(float delta) override;
                 virtual sf::FloatRect getBoundingBox() const override;
                 virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
+                
         };
     }
 }

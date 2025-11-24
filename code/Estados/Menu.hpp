@@ -5,18 +5,20 @@
 #include <vector>
 #include <string>
 #include "../Gerenciadores/GerenciadorGrafico.hpp"
+#include "../Gerenciadores/GerenciadorEventos.hpp"
 
 struct RankingEntry;
 
 namespace Estados
 {
-    class Menu {
+    class Menu : public OuvinteEventos {
         public:
             Menu();
             ~Menu() = default;
 
             int executar(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2);
             void resetInput();
+            virtual void tratarEvento(const sf::Event& evento) override;
 
         private:
             enum class EstadoMenu { MenuPrincipal, MenuNiveis, MenuRanking, MenuModoJogo };
