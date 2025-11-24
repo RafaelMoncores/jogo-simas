@@ -1,7 +1,7 @@
 Fase 1
 modoDoisJogadores 0
 Entidade
-posX 1745.77
+posX 1745.64
 posY 294.002
 velX 0
 velY 0
@@ -10,11 +10,11 @@ vidas 3
 podePular 0
 posInicialX 0
 posInicialY 550
-spritePosX 1721.77
+spritePosX 1721.64
 spritePosY 294.002
 Jogador
 idJogador 1
-pontos 757.375
+pontos 781.916
 completouFase 1
 direcao 1
 ---
@@ -66,6 +66,24 @@ posY 700
 sizeX 250
 sizeY 50
 ---
+Plataforma
+posX 1100
+posY 600
+sizeX 100
+sizeY 50
+---
+Plataforma
+posX 1450
+posY 650
+sizeX 200
+sizeY 50
+---
+Plataforma
+posX 1600
+posY 600
+sizeX 50
+sizeY 50
+---
 Trampolim
 posX 798.75
 posY 448.75
@@ -102,60 +120,80 @@ sizeY 52.5
 forcaRebote 600
 ---
 Entidade
-posX 864.907
-posY 648.78
-velX 100
-velY -275.03
+posX 1805.49
+posY 328
+velX 0
+velY 0
 Personagem
 vidas 1
-podePular 0
-posInicialX 770
-posInicialY 650
-spritePosX 866.807
-spritePosY 649.78
+podePular 1
+posInicialX 1720
+posInicialY 300
+spritePosX 1807.39
+spritePosY 329
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0
-direcaoPulo 1
+tempoTotal 1.29855
+direcaoPulo -1
 raio_deteccao 250
 ---
 Entidade
-posX 1820.76
-posY 193.738
+posX 855.571
+posY 678
+velX 0
+velY 0
+Personagem
+vidas 1
+podePular 1
+posInicialX 770
+posInicialY 650
+spritePosX 857.471
+spritePosY 679
+Inimigo
+nivel_maldade 1
+Gosma
+tempoEspera 2
+tempoTotal 0.739105
+direcaoPulo -1
+raio_deteccao 250
+---
+Entidade
+posX 1254.79
+posY 405.845
 velX -150
-velY -4.84288e-08
+velY 1.86265e-08
 Personagem
 vidas 2
 podePular 0
 posInicialX 100
 posInicialY 300
-spritePosX 1820.76
-spritePosY 193.738
+spritePosX 1254.79
+spritePosY 405.845
 Inimigo
 nivel_maldade 2
 Vampiro
 tamanho 2
-tempoTotal 12.1313
+tempoTotal 15.9042
 direcao -1
 ---
 Entidade
-posX 920.507
-posY 143.738
+posX 354.942
+posY 355.845
 velX -150
-velY -4.84288e-08
+velY 1.86265e-08
 Personagem
 vidas 2
 podePular 0
 posInicialX 1000
 posInicialY 250
-spritePosX 920.507
-spritePosY 143.738
+spritePosX 354.942
+spritePosY 355.845
 Inimigo
 nivel_maldade 2
 Vampiro
 tamanho 2.8
-tempoTotal 12.1313
+tempoTotal 15.9042
 direcao -1
 ---

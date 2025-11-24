@@ -58,11 +58,6 @@ namespace Entidades
             return posInicial;
         }
 
-        sf::Vector2f Personagem::getPosInicial() const
-        {
-            return posInicial;
-        }
-
         void Personagem::setPosition(sf::Vector2f pos)
         {
             if (sprite)

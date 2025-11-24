@@ -589,12 +589,15 @@ namespace Fases
                 // --- 2. Lógica de Confirmar (Enter - ASCII 13) ---
                 else if (unicode == 13) 
                 {
-                    if (iniciais.length() == 3) // Só aceita se tiver 3 letras
+                    // Debounce: evita múltiplas gravações se o Enter gerar
+                    // tanto TextEntered quanto KeyPressed no mesmo frame.
+                    if (iniciais.length() == 3 && !enterPressionado) // Só aceita se tiver 3 letras
                     {
                         if (pJogo) {
                             pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
                         }
                         faseConcluida = true;
+                        enterPressionado = true;
                     }
                 }
                 // --- 3. Lógica de Digitar (Caracteres Normais) ---
@@ -628,10 +631,13 @@ namespace Fases
             {
                 if (kp->code == sf::Keyboard::Key::Enter)
                 {
-                    if (iniciais.length() == 3)
+                    // Usar debouncing para o Enter: só grava se não estiver marcado
+                    // como "pressionado" anteriormente.
+                    if (iniciais.length() == 3 && !enterPressionado)
                     {
                         if (pJogo) pJogo->adicionarAoRanking(faseNum, iniciais, pontuacaoFinalCache);
                         faseConcluida = true;
+                        enterPressionado = true;
                     }
                 }
             }
@@ -656,8 +662,12 @@ namespace Fases
                 {
                     if (posBotaoFim == 0) // Salvar
                     {
+                        // Ao entrar no modo de digitar iniciais, garantimos que o
+                        // debounce do Enter esteja liberado para permitir a primeira
+                        // confirmação.
                         estadoFim = EstadoFim::PedindoIniciais;
                         iniciais = "";
+                        enterPressionado = false;
                         // Atualiza o texto visual para limpar
                         if (inputIniciaisText) inputIniciaisText->setString("Iniciais (3): ");
                     }
