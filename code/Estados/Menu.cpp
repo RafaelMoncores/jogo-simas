@@ -6,6 +6,7 @@
 
 namespace Estados
 {
+    // Construtor: obtém gerenciador gráfico e inicializa o menu principal
     Menu::Menu() :
         pGG(Gerenciadores::GerenciadorGrafico::getInstance()),
         enterDebounce(false),
@@ -15,15 +16,17 @@ namespace Estados
         set_values_principal();
     }
 
+    // Centraliza um `sf::Text` em coordenadas fornecidas
     void Menu::centralizarTexto(sf::Text& texto, float x, float y) {
         sf::FloatRect bounds = texto.getLocalBounds();
         texto.setOrigin({
-            bounds.position.x + bounds.size.x / 2.0f, 
+            bounds.position.x + bounds.size.x / 2.0f,
             bounds.position.y + bounds.size.y / 2.0f
         });
         texto.setPosition({x, y});
     }
 
+    // Prepara textos e background para o Menu Principal
     void Menu::set_values_principal()
     {
         pos = (estadoAtualMenu == EstadoMenu::MenuPrincipal && pos == 0) ? 1 : pos;

@@ -14,41 +14,39 @@ using Entidades::Ente;
 using Estados::Menu;
 using Fases::Fase;
 
+// Construtor: inicializa subsistemas e carrega ranking salvo
 Jogo::Jogo() :
     pGG(nullptr),
     pGE(nullptr),
     menu(),
     pFaseAtual(nullptr),
-    estadoAtual(EstadoJogo::NoMenu) 
+    estadoAtual(EstadoJogo::NoMenu)
 {
     inicializar();
 }
 
+// Destrutor: persiste ranking antes de liberar recursos
 Jogo::~Jogo()
 {
-    // Persist ranking on exit
     salvar();
     delete GerenciadorGrafico::getInstance();
-    if(pFaseAtual) delete pFaseAtual;
+    if (pFaseAtual) delete pFaseAtual;
 }
 
+// Inicializa gerenciadores e tenta carregar ranking salvo
 void Jogo::inicializar()
 {
     pGG = GerenciadorGrafico::getInstance();
     pGE = Gerenciadores::GerenciadorEventos::getInstance();
-    
+
     Ente::setGerenciadorGrafico(pGG);
 
     // Define o Menu como o primeiro ouvinte
     pGE->setOuvinte(&menu);
-    // Do not auto-load save on startup anymore; Load must be explicitly
-    // requested through the menu. This avoids unexpected continuation after
-    // recompiles/runs.
 
     // Carrega ranking persistido (se existir)
     std::ifstream ifs("ranking.txt");
     if (ifs.is_open()) {
-        // Reuse carregar logic below
         std::string line;
         int section = 0; // 1 = fase1, 2 = fase2
         while (std::getline(ifs, line)) {
@@ -63,7 +61,8 @@ void Jogo::inicializar()
             if (section == 1) rankingFase1.push_back({nome, pts});
             else if (section == 2) rankingFase2.push_back({nome, pts});
         }
-        // Ensure ordering and size
+
+        // Ordena e limita a Top 10
         std::sort(rankingFase1.begin(), rankingFase1.end(), std::greater<RankingEntry>());
         if (rankingFase1.size() > 10) rankingFase1.resize(10);
         std::sort(rankingFase2.begin(), rankingFase2.end(), std::greater<RankingEntry>());

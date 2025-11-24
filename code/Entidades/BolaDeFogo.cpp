@@ -1,3 +1,7 @@
+// BolaDeFogo.cpp
+// Implementação do projetil de fogo usado por inimigos e jogadores.
+// Usa SFML 3.0.2 para renderização e input. Textura: "tileSets/bola_de_fogo.png".
+
 #include "BolaDeFogo.hpp"
 #include "../Gerenciadores/GerenciadorRecursos.hpp"
 #include <cmath>
@@ -5,6 +9,8 @@
 
 namespace Entidades
 {
+
+    // Construtor: inicializa direção, velocidade e propriedade (do jogador ou inimigo)
     BolaDeFogo::BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel, bool doJogador) :
         Entidade(),
         direcao(dir),
@@ -13,22 +19,24 @@ namespace Entidades
         ativo(true),
         pertenceAoJogador(doJogador)
     {
-        
+        // Carrega textura via gerenciador de recursos (centraliza carregamento)
         shape.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/bola_de_fogo.png"));
         shape->setPosition(pos);
+
+        // Normaliza direção para assegurar velocidade correta
         float mag = std::sqrt(direcao.x * direcao.x + direcao.y * direcao.y);
         if (mag != 0.f)
         {
             direcao /= mag;
         }
-        
+
         pFig = &(*shape);
     }
 
-    BolaDeFogo::~BolaDeFogo()
-    {
-    }
+    // Destrutor padrão (sem recursos alocados além de optinals)
+    BolaDeFogo::~BolaDeFogo() { }
 
+    // Atualiza posição do projetil; desativa se fora da área de jogo
     void BolaDeFogo::executar(float delta)
     {
         if (!shape) return;
@@ -37,21 +45,23 @@ namespace Entidades
         pos += direcao * velocidadeProjetil * delta;
         shape->setPosition(pos);
 
+        // Limites absolutos para limpeza de projéteis
         if (pos.y > 2000.f || pos.x < -500.f || pos.x > 3000.f)
         {
             ativo = false;
         }
     }
 
+    // Renderiza o projetil na tela
     void BolaDeFogo::desenhar()
     {
-        // pGG é o GerenciadorGrafico estático de Ente
-        if (pGG && shape) 
+        if (pGG && shape)
         {
             pGG->desenhar(*shape);
         }
     }
 
+    // Retorna caixa de colisão para checagens de interseção
     sf::FloatRect BolaDeFogo::getBoundingBox() const
     {
         if (shape)
@@ -61,6 +71,7 @@ namespace Entidades
         return {};
     }
 
+    // Se colidir com jogador (quando pertence a inimigo), aplica dano e desativa
     void BolaDeFogo::colidirComJogador(Personagens::Jogador* pJogador)
     {
         if (pJogador && !pertenceAoJogador)
@@ -70,37 +81,24 @@ namespace Entidades
         }
     }
 
-    bool BolaDeFogo::getAtivo() const
-    {
-        return ativo;
-    }
+    // Getters/Setters simples
+    bool BolaDeFogo::getAtivo() const { return ativo; }
+    void BolaDeFogo::setAtivo(bool af) { ativo = af; }
+    bool BolaDeFogo::getPertenceAoJogador() const { return pertenceAoJogador; }
+    int BolaDeFogo::getDano() const { return dano; }
 
+    // Rebate o projetil para o lado oposto e marca como pertencente ao jogador
     void BolaDeFogo::rebater()
     {
-        direcao *= -1.f; 
+        direcao *= -1.f;
         pertenceAoJogador = true;
-        
         if (shape)
         {
-            shape->setColor(sf::Color::Cyan); 
+            shape->setColor(sf::Color::Cyan);
         }
     }
 
-    void BolaDeFogo::setAtivo(bool af)
-    {
-        ativo = af;
-    }
-
-    bool BolaDeFogo::getPertenceAoJogador() const
-    {
-        return pertenceAoJogador;
-    }
-
-    int BolaDeFogo::getDano() const
-    {
-        return dano;
-    }
-
+    // Serializa estado do projetil para snapshot/save
     void BolaDeFogo::salvarDataBuffer()
     {
         Entidade::salvarDataBuffer();
@@ -114,4 +112,4 @@ namespace Entidades
         (*buffer) << "pertenceAoJogador " << (pertenceAoJogador ? 1 : 0) << std::endl;
     }
 
-}
+} // namespace Entidades

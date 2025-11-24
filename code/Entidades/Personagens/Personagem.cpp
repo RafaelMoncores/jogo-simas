@@ -29,7 +29,8 @@ namespace Entidades
             num_vidas -= dano;
             if (num_vidas < 0) num_vidas = 0;
             
-            if(num_vidas > 0)
+            // Se ainda tem vidas, teleporta de volta ao spawn e zera velocidade
+            if (num_vidas > 0)
             {
                 std::cout << "Um personagem perdeu " << dano << " vida(s)! Vidas restantes: " << getVidas() << std::endl;
                 setPosition(posInicial);
@@ -49,6 +50,12 @@ namespace Entidades
         sf::Vector2f Personagem::getVelocidade() const
         {
             return velocidade;
+        }
+
+        // Retorna a posição inicial (spawn) do personagem
+        sf::Vector2f Personagem::getPosInicial() const
+        {
+            return posInicial;
         }
 
         sf::Vector2f Personagem::getPosInicial() const

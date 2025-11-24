@@ -1,7 +1,12 @@
+// Vampiro.cpp
+// Implementação do inimigo "Vampiro" com movimento senoidal vertical.
+// Textura: "tileSets/vampiro.png"
+
 #include "Vampiro.hpp"
 #include <iostream>
 #include <cmath>
 #include "../../Gerenciadores/GerenciadorRecursos.hpp"
+
 namespace Entidades
 {
     namespace Personagens
@@ -17,56 +22,45 @@ namespace Entidades
             LIMITE_ESQUERDA(50.0f),
             LIMITE_DIREITA(1870.0f)
         {
-            
-            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/vampiro.png")); 
+            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/vampiro.png"));
             sprite->setPosition(posInicial);
             sprite->setScale({tamanho, tamanho});
-            
+
             nivel_maldade = 2;
         }
 
-        Vampiro::~Vampiro()
-        {
-        }
+        Vampiro::~Vampiro() { }
 
+        // Atualiza estado (AI + física)
         void Vampiro::executar(float delta)
         {
             if (num_vidas <= 0)
             {
-                if (sprite)
-                {
-                    sprite.reset();
-                }
+                if (sprite) sprite.reset();
                 return;
             }
 
             tempoTotal += delta;
-            
             processarAI(delta);
             velocidade.y -= G_ACCEL.y * delta;
             aplicarFisica(delta);
         }
-        
+
+        // IA: patrulha horizontal e inverte direção nos limites
         void Vampiro::processarAI(float delta)
         {
             if (num_vidas <= 0) return;
             if (!sprite) return;
 
             float posX = sprite->getPosition().x;
+            if (posX > LIMITE_DIREITA) direcao = -1;
+            else if (posX < LIMITE_ESQUERDA) direcao = 1;
 
-            if (posX > LIMITE_DIREITA)
-            {
-                direcao = -1;
-            }
-            else if (posX < LIMITE_ESQUERDA)
-            {
-                direcao = 1;
-            }
-            
             velocidade.x = VELOCIDADE_PATRULHA * direcao;
-            velocidade.y = 0; 
+            velocidade.y = 0;
         }
 
+        // Física: movimento horizontal + senóide vertical para o vampiro
         void Vampiro::aplicarFisica(float delta)
         {
             if (!sprite || num_vidas <= 0) return;
@@ -74,46 +68,30 @@ namespace Entidades
 
             float newX = sprite->getPosition().x + (velocidade.x * delta);
             float newY = posInicial.y + (AMPLITUDE_SENOIDE * std::sin(FREQUENCIA_SENOIDE * tempoTotal));
-
             sprite->setPosition({newX, newY});
         }
 
+        // Trata dano recebido: reduz vida e, se morto, recompensa o atacante
         void Vampiro::danificar(Personagem* pOutro)
         {
             if (num_vidas <= 0) return;
 
-            // Quando recebe dano de outro personagem (normalmente um Jogador),
-            // devemos reduzir a vida deste Vampiro e, se morrer, conceder
-            // a pontuação ao jogador que causou o dano.
             if (pOutro)
             {
-                // Reduz a vida do vampiro
+                // Quem causou o dano recebe os pontos se o vampiro morrer
                 perderVida(1);
-
-                // Se morreu, recompensa quem causou (se for um Jogador)
                 if (num_vidas <= 0)
                 {
-                    if (auto* pAlvo = dynamic_cast<Jogador*>(pOutro))
-                    {
-                        pAlvo->addPontos(300);
-                    }
-                    else
-                    {
-                        // Fallback: recompensa o jogador mais próximo
-                        Jogador* pProx = getJogadorMaisProximo();
-                        if (pProx) pProx->addPontos(300);
-                    }
+                    if (auto* pAlvo = dynamic_cast<Jogador*>(pOutro)) pAlvo->addPontos(300);
+                    else if (auto* pProx = getJogadorMaisProximo()) pProx->addPontos(300);
                 }
             }
             else
             {
-                // Sem atacante explícito (por exemplo dano ambiental): ainda reduz a vida
+                // Dano ambiental: reduz vida e premia jogador mais próximo
                 perderVida(1);
                 Jogador* pAlvo = getJogadorMaisProximo();
-                if (pAlvo)
-                {
-                    pAlvo->addPontos(300);
-                }
+                if (pAlvo) pAlvo->addPontos(300);
             }
         }
 
@@ -126,11 +104,7 @@ namespace Entidades
         sf::FloatRect Vampiro::getBoundingBox() const
         {
             if (num_vidas <= 0) return {};
-
-            if (sprite)
-            {
-                return sprite->getGlobalBounds();
-            }
+            if (sprite) return sprite->getGlobalBounds();
             return {};
         }
 
@@ -144,9 +118,6 @@ namespace Entidades
             (*buffer) << "direcao " << direcao << std::endl;
         }
 
-        void Vampiro::salvar()
-        {
-            Inimigo::salvar();
-        }
+        void Vampiro::salvar() { Inimigo::salvar(); }
     }
 }

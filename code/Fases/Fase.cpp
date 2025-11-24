@@ -43,6 +43,7 @@ namespace Fases
         jogador2 = nullptr;
     }
 
+    // Inicializa elementos de UI: textos de vidas, pontos, botões e input
     void Fase::inicializarUI()
     {
         const float W_BASE = 1920.0f;
@@ -105,7 +106,7 @@ namespace Fases
         pontuacaoFinalText->setPosition({W_BASE / 2.f, H_BASE / 2.f - 50.f}); 
         pontuacaoFinalText->setString("Pontuacao: ");
 
-        // Botão Salvar
+        // Botão Salvar (opção exibida no fim da fase)
         botaoSalvarText.emplace(uiFont);
         botaoSalvarText->setCharacterSize(FONT_SIZE_BUTTON);
         botaoSalvarText->setString("Salvar no Ranking");
@@ -113,7 +114,7 @@ namespace Fases
         botaoSalvarText->setOrigin({boundsSalvar.size.x / 2.f, boundsSalvar.size.y / 2.f});
         botaoSalvarText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 10.f}); 
 
-        // Botão Menu
+        // Botão Menu (leva de volta ao menu principal)
         botaoMenuText.emplace(uiFont);
         botaoMenuText->setCharacterSize(FONT_SIZE_BUTTON);
         botaoMenuText->setString("Menu");
@@ -121,7 +122,7 @@ namespace Fases
         botaoMenuText->setOrigin({boundsMenu.size.x / 2.f, boundsMenu.size.y / 2.f});
         botaoMenuText->setPosition({W_BASE / 2.f, (H_BASE / 2.f) + 70.f}); 
 
-        // Texto de Input
+        // Texto de Input para iniciais do ranking
         inputIniciaisText.emplace(uiFont);
         inputIniciaisText->setCharacterSize(FONT_SIZE_BUTTON);
         inputIniciaisText->setString("Iniciais (3): ___");
@@ -157,6 +158,8 @@ namespace Fases
         criarInimigos();
     }
 
+    // Encaminha eventos para o estado correto: entrada de iniciais quando pedindo
+    // ou ignora em outros momentos.
     void Fase::processarEvento(const sf::Event& evento)
     {
         bool p1Completo = (jogador1 && jogador1->getCompletouFase());
@@ -168,6 +171,7 @@ namespace Fases
         }
     }
 
+    // Trata entrada de texto para as iniciais do ranking (TextEntered + backspace)
     void Fase::processarInputIniciais(const sf::Event& evento)
     {
         if (evento.is<sf::Event::TextEntered>())
@@ -177,27 +181,24 @@ namespace Fases
 
             std::uint32_t valorUnicode = te->unicode;
 
+            // Backspace: apaga última letra
             if (valorUnicode == 8)
             {
-                if (!iniciais.empty())
-                {
-                    iniciais.pop_back();
-                }
+                if (!iniciais.empty()) iniciais.pop_back();
             }
+            // Caracter imprimível: adiciona se houver espaço (máx 3)
             else if (valorUnicode >= 32 && valorUnicode <= 126 && iniciais.length() < 3)
             {
                 char c = static_cast<char>(valorUnicode);
                 iniciais += std::toupper(c);
             }
-            
+
+            // Atualiza texto visual com placeholder
             if (inputIniciaisText)
             {
                 std::string placeholder = "___";
                 std::string textoAtual = iniciais;
-                if (textoAtual.length() < 3)
-                {
-                    textoAtual += placeholder.substr(textoAtual.length());
-                }
+                if (textoAtual.length() < 3) textoAtual += placeholder.substr(textoAtual.length());
                 inputIniciaisText->setString("Iniciais (3): " + textoAtual);
             }
         }

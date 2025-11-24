@@ -73,8 +73,11 @@ namespace Gerenciadores
             }
         }
 
+        // 1) Tratamento de colisões entre jogadores e obstáculos
         tratarColisoesJogsObstacs();
+        // 2) Tratamento de colisões entre jogadores e inimigos
         tratarColisoesJogsInimgs();
+        // 3) Tratamento de colisões envolvendo projéteis
         tratarColisoesJogsProjeteis();
     }
 
@@ -166,10 +169,12 @@ namespace Gerenciadores
                 sf::FloatRect boundsFogo = pFogo->getBoundingBox();
                 sf::FloatRect boundsAtaque = pJog1->getHitboxAtaque();
                 
+                // Se o jogador rebateu o projétil inimigo com seu ataque, inverter
+                // a direção e marcar como pertencente ao jogador.
                 if (boundsFogo.findIntersection(boundsAtaque).has_value())
                 {
-                    pFogo->rebater(); 
-                    continue; 
+                    pFogo->rebater();
+                    continue;
                 }
             }
 
@@ -190,12 +195,13 @@ namespace Gerenciadores
                     sf::FloatRect boundsInim = pInim->getBoundingBox();
                     if (!boundsInim.findIntersection(boundsFogo).has_value()) continue;
 
-                    // Acertou o inimigo
+                    // Acertou o inimigo: aplica dano e desativa o projetil
                     pInim->perderVida(pFogo->getDano());
                     pFogo->setAtivo(false);
 
-                    // Se for um Dragao atingido por um projetil do jogador, reposiciona
-                    // o dragao para sua posição de spawn imediatamente e zera velocidade
+                    // Caso especial: se o inimigo é um Dragao e foi atingido por
+                    // um projetil do jogador, evitar que ele fique embutido em
+                    // uma plataforma reposicionando-o imediatamente ao spawn.
                     if (auto* pDrag = dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
                     {
                         pDrag->setPosition(pDrag->getPosInicial());

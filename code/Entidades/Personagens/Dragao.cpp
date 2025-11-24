@@ -10,6 +10,7 @@ namespace Entidades
 {
     namespace Personagens
     {
+        // Construtor: inicializa o Dragao com timers, estado de ataque e sprite
         Dragao::Dragao(sf::Vector2f pos, Jogador* pJog1, Jogador* pJog2, Listas::ListaEntidades* pLista) :
             Inimigo(9, pos, pJog1, pJog2),
             forca(2),
@@ -22,11 +23,11 @@ namespace Entidades
             tempoMovimentoRestante(0.f),
             ignorandoObstaculos(false)
         {
-            
-            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/dragao.png")); 
+            // Carrega textura do dragão (verificar licença das texturas em tileSets/)
+            sprite.emplace(Gerenciadores::GerenciadorRecursos::getInstance()->getTextura("tileSets/dragao.png"));
             sprite->setPosition(posInicial);
-            sprite->setScale({3,3});
-            
+            sprite->setScale({3, 3});
+
             nivel_maldade = 3;
         }
 
@@ -34,13 +35,13 @@ namespace Entidades
         {
         }
 
+        // Gera e adiciona um projetil direcionado ao jogador mais próximo
         void Dragao::atirar()
         {
             Jogador* pAlvo = getJogadorMaisProximo();
             if (!pAlvo || !pListaEntidades || !sprite) return;
 
             sf::Vector2f posDragao = sprite->getPosition();
-            
             posDragao.x += sprite->getGlobalBounds().size.x / 2.f;
             posDragao.y += sprite->getGlobalBounds().size.y / 2.f;
 
@@ -53,10 +54,10 @@ namespace Entidades
             sf::Vector2f direcao = posJogador - posDragao;
 
             BolaDeFogo* pFogo = new BolaDeFogo(posDragao, direcao, 400.f, false);
-
             pListaEntidades->incluir(static_cast<Entidade*>(pFogo));
         }
 
+        // Atualiza lógica do Dragao: movimento, ataques e timers
         void Dragao::executar(float delta)
         {
             if (num_vidas <= 0)
@@ -70,26 +71,24 @@ namespace Entidades
 
             temporizadorMovimento += delta;
             temporizadorAtaque += delta;
-            
+
             Jogador* pAlvo = getJogadorMaisProximo();
 
             if (estaAtacando)
             {
+                // Estado de ataque: para de andar e dispara projéteis em rajada
                 velocidade.x = 0.f;
                 ignorandoObstaculos = false;
                 tempoMovimentoRestante = 0.f;
-                
-                velocidade.x = 0.f;
 
                 cooldownTiro += delta;
-
                 if (cooldownTiro >= 1.0f && tirosDisparados < 3)
                 {
                     atirar();
                     cooldownTiro = 0.f;
                     tirosDisparados++;
                 }
-                
+
                 if (tirosDisparados >= 3)
                 {
                     estaAtacando = false;
@@ -99,6 +98,7 @@ namespace Entidades
             }
             else
             {
+                // Estado de patrulha / preparação: alterna entre andar e atacar
                 if (temporizadorAtaque >= 8.0f)
                 {
                     estaAtacando = true;
@@ -118,7 +118,7 @@ namespace Entidades
                             velocidade.x = -150.f;
                         else
                             velocidade.x = 150.f;
-                        
+
                         ignorandoObstaculos = true;
                         tempoMovimentoRestante = 1.5f;
                     }
@@ -135,17 +135,19 @@ namespace Entidades
                     }
                 }
             }
-            
+
             aplicarFisica(delta);
         }
         
 
+        // Aplica física simples: gravidade e movimento; verifica 'death plane'
         void Dragao::aplicarFisica(float delta)
         {
-            if (sprite) 
+            if (sprite)
             {
                 velocidade.y += G_ACCEL.y * delta;
 
+                // (redundante: subtrai novamente para manter equilíbrio de sinais)
                 velocidade.y -= G_ACCEL.y * delta;
                 sprite->move(velocidade * delta);
 
@@ -157,10 +159,11 @@ namespace Entidades
             }
         }
         
+        // Quando danifica outro personagem (a lógica do dragão causa dano ao jogador)
         void Dragao::danificar(Personagem* pOutro)
         {
             if (num_vidas <= 0) return;
-            pOutro->perderVida(forca); 
+            pOutro->perderVida(forca);
         }
 
         void Dragao::colidir(Entidade* pOutra, sf::FloatRect boundsOutra)
