@@ -33,10 +33,10 @@ namespace Estados
         float h = static_cast<float>(windowSize.y);
 
         if (!font.openFromFile("font/PressStart2P-Regular.ttf")) {
-            std::cerr << "Erro: nao foi possivel carregar fonte PressStart2P-Regular.ttf\n";
+            throw std::runtime_error("Erro: Nao foi possivel carregar a fonte do menu");
         }
         if (!texture.loadFromFile("tileSets/menu.png")) {
-             std::cerr << "Erro: nao foi possivel carregar imagem menu.png\n";
+             throw std::runtime_error("Erro: Nao foi possivel carregar a imagem: menu.png");
         } else {
             bg.emplace(texture);
             sf::Vector2u texSize = texture.getSize();

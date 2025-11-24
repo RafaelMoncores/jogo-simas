@@ -1,5 +1,6 @@
 #include "Trampolim.hpp"
 #include "../Personagens/Jogador.hpp"
+#include "../../Gerenciadores/GerenciadorRecursos.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -13,15 +14,20 @@ namespace Entidades
         {
             danoso = false;
 
-            // Lógica do corpo (pode copiar/adaptar da Parede)
-            if (!textura.loadFromFile(caminhoTextura))
-            {
-                std::cerr << "ERRO: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
-            }
-            textura.setRepeated(true);
+            // 1. Pede a textura ao Gerenciador (se falhar, ele lança o throw para a main)
+            sf::Texture& tex = Gerenciadores::GerenciadorRecursos::getInstance()->getTextura(caminhoTextura);
+            
+            // 2. Garante que essa textura possa se repetir (tilling)
+            tex.setRepeated(true);
+
+            // 3. Configura o corpo
             corpo.setPosition(pos);
             corpo.setSize(size);
-            corpo.setTexture(&textura);
+            
+            // Passamos o endereço da textura que está lá no Gerenciador
+            corpo.setTexture(&tex);
+            
+            // 4. Define a área de repetição
             corpo.setTextureRect(sf::IntRect({0, 0}, {(int)size.x, (int)size.y}));
         }
 

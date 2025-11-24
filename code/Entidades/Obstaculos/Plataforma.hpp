@@ -12,9 +12,8 @@ namespace Entidades
         class Plataforma : public Obstaculo
         {
         private:
-            // Substituímos o Sprite pelo RectangleShape para permitir repetição
+            // Substituido o Sprite pelo RectangleShape para permitir repetição
             sf::RectangleShape corpo;
-            sf::Texture textura;
             
         public:
             Plataforma(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura);

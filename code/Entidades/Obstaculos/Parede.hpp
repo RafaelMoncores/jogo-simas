@@ -12,7 +12,6 @@ namespace Entidades
         {
             private:
                 sf::RectangleShape corpo;
-                sf::Texture textura;
 
             public:
                 Parede(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura);

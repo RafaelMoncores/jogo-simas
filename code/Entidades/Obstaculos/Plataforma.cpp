@@ -1,5 +1,6 @@
 #include "Plataforma.hpp"
 #include "../Personagens/Jogador.hpp"
+#include "../../Gerenciadores/GerenciadorRecursos.hpp"
 #include <iostream>
 
 namespace Entidades
@@ -10,24 +11,21 @@ namespace Entidades
             Obstaculo()
         {
             danoso = false;
+
+            // 1. Pede a textura ao Gerenciador (se falhar, ele lança o throw para a main)
+            sf::Texture& tex = Gerenciadores::GerenciadorRecursos::getInstance()->getTextura(caminhoTextura);
             
-            // 1. Carrega a textura
-            if (!textura.loadFromFile(caminhoTextura)) 
-            {
-                std::cerr << "ERRO: Nao foi possivel carregar '" << caminhoTextura << "'" << std::endl;
-                exit(1);
-            }
+            // 2. Garante que essa textura possa se repetir (tilling)
+            tex.setRepeated(true);
 
-            // 2. Ativa a repetição (O Segredo do "Azulejo")
-            textura.setRepeated(true);
-
-            // 3. Configura o corpo retangular
+            // 3. Configura o corpo
             corpo.setPosition(pos);
             corpo.setSize(size);
-            corpo.setTexture(&textura);
             
-            // 4. Define a área da textura igual ao tamanho do objeto
-            // Isso faz com que a textura se repita em vez de esticar
+            // Passamos o endereço da textura que está lá no Gerenciador
+            corpo.setTexture(&tex);
+            
+            // 4. Define a área de repetição
             corpo.setTextureRect(sf::IntRect({0, 0}, {(int)size.x, (int)size.y}));
         }
 
