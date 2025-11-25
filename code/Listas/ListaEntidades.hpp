@@ -5,24 +5,22 @@
 namespace Listas{
     class ListaEntidades {
     private:
-        // Atributo 'LEs' (Lista de Entidades) do snippet
+        // Composição: A ListaEntidades TEM UMA Lista genérica de Entidades
         Lista<Entidades::Entidade> LEs;
 
     public:
-        
         ListaEntidades();
         ~ListaEntidades();
 
-        // Métodos do snippet 
+        // Métodos de delegação (Facade)
         void incluir(Entidades::Entidade* pE);
         void limpar();
         void remover(Entidades::Entidade* pE);
 
-        // Métodos de iteração 
+        // Interface de iteração exposta
         void percorrer();
         void irParaPrimeiro();
         void irParaProximo();
         Entidades::Entidade* getAtual() const;
     };
-
 }

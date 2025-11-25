@@ -4,15 +4,15 @@ namespace Listas
 {
     ListaEntidades::ListaEntidades() :
     LEs() {
-        // O construtor de 'LEs' (Lista<Entidade>) é chamado aqui
     }
 
     ListaEntidades::~ListaEntidades() {
-        // O destrutor de 'LEs' é chamado aqui (que chama limpar())
+        // O destrutor de 'LEs' será chamado automaticamente
     }
 
+    // Todos os métodos abaixo apenas repassam a ordem para a lista interna (Delegate Pattern)
+    
     void ListaEntidades::incluir(Entidades::Entidade* pE) {
-        // Delega a chamada para o objeto Lista interno
         LEs.incluir(pE);
     }
 

@@ -1,69 +1,63 @@
 #pragma once
 #include "Elemento.hpp"
-#include <cstddef> // Para NULL
+#include <cstddef> 
 
 namespace Listas{
-    // O snippet usa 'TL' como nome do template (Tipo da Lista)
+    // Template 'TL' define o tipo de dado que a lista vai gerenciar
     template <class TL>
     class Lista {
     private:
-        // Atributos do snippet
         Elemento<TL>* pPrimeiro;
         Elemento<TL>* pUltimo;
 
-        // Atributo do primeiro diagrama (essencial para iteração)
+        // Cursor interno para permitir iteração externa sem expor os Elementos
         Elemento<TL>* pAtual; 
 
     public:
-        
         Lista();
         ~Lista();
 
         void remover(TL* pInfo);
-
-        // --- Métodos do Snippet ---
         void incluir(TL* p);
         void limpar();
 
-        // --- MÉTODOS DE ITERAÇÃO (Do primeiro diagrama) ---
-        // Essenciais para substituir os loops 'for' do Fase.cpp
+        // --- Interface de Iteração ---
+        // Permite percorrer a lista estilo: irParaPrimeiro() -> while(getAtual()) -> irParaProximo()
         
-        // Move o cursor 'pAtual' para o início
         void irParaPrimeiro();
-        
-        // Avança o cursor 'pAtual'
         void irParaProximo();
-        
-        // Retorna a informação (pInfo) onde o cursor está
         TL* getAtual() const;
     };
 
-    // --- IMPLEMENTAÇÃO (Template) ---
+    // --- IMPLEMENTAÇÃO DO TEMPLATE ---
 
     template <class TL>
     Lista<TL>::Lista() :
     pPrimeiro(NULL), pUltimo(NULL), pAtual(NULL) {
     }
 
+    // Destrutor limpa a estrutura da lista (nós), mas não o conteúdo (pInfo)
     template <class TL>
     Lista<TL>::~Lista() {
         limpar();
     }
 
+    // Adiciona um novo item sempre ao final da lista (Complexidade O(1))
     template <class TL>
     void Lista<TL>::incluir(TL* p) {
         Elemento<TL>* novoElemento = new Elemento<TL>();
-        novoElemento->incluir(p); // Usa o 'incluir' (setInfo) do Elemento
+        novoElemento->incluir(p); 
 
-        if (pPrimeiro == NULL) { // Se a lista está vazia
+        if (pPrimeiro == NULL) { 
             pPrimeiro = novoElemento;
             pUltimo = novoElemento;
-        } else { // Adiciona no final da lista
+        } else { 
             pUltimo->setProx(novoElemento);
             pUltimo = novoElemento;
         }
     }
 
+    // Percorre toda a lista deletando os Elementos (nós), esvaziando a estrutura
     template <class TL>
     void Lista<TL>::limpar() {
         Elemento<TL>* pAux = pPrimeiro;
@@ -71,7 +65,6 @@ namespace Listas{
 
         while (pAux != NULL) {
             pProximo = pAux->getPRoximo();
-        
             delete pAux; 
             pAux = pProximo;
         }
@@ -81,20 +74,24 @@ namespace Listas{
         pAtual = NULL;
     }
 
+    // Remove um nó específico baseado no ponteiro de informação
     template <class TL>
     void Lista<TL>::remover(TL* pInfo)
     {
         Elemento<TL>* pAnt = NULL;
         Elemento<TL>* pAux = pPrimeiro;
 
+        // Busca linear pelo elemento a ser removido
         while (pAux != NULL && pAux->getInfo() != pInfo)
         {
             pAnt = pAux;
             pAux = pAux->getPRoximo();
         }
 
+        // Se não encontrou, retorna
         if (pAux == NULL) return;
 
+        // Ajuste de ponteiros (Remoção clássica de Lista Encadeada)
         if (pAux == pPrimeiro)
         {
             pPrimeiro = pAux->getPRoximo();
@@ -109,6 +106,7 @@ namespace Listas{
             pUltimo = pAnt;
         }
 
+        // Se o iterador estava no elemento removido, avança para evitar crash
         if (pAux == pAtual)
         {
             pAtual = pAux->getPRoximo();
@@ -138,5 +136,4 @@ namespace Listas{
         }
         return NULL;
     }
-
 }

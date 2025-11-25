@@ -1,51 +1,45 @@
 #pragma once
-#include <cstddef> // Para NULL
+#include <cstddef> 
 
 namespace Listas{
-    // O snippet usa 'TE' como nome do template (Tipo do Elemento)
+    // Template genérico 'TE' (Tipo do Elemento), permitindo reutilização para qualquer tipo de dado
     template <class TE>
     class Elemento {
     private:
-        TE* pInfo;
-        Elemento<TE>* pProx;
+        TE* pInfo;             // Ponteiro para o dado armazenado (ex: um Inimigo, um Obstáculo)
+        Elemento<TE>* pProx;   // Ponteiro para o próximo elo da corrente
 
     public:
-        // Construtor e Destrutor 
         Elemento();
         ~Elemento();
 
-        // Métodos do snippet UML
-        void incluir(TE* p); // No snippet, 'incluir' está no Elemento
+        // Define o dado que este elemento vai segurar
+        void incluir(TE* p); 
+        
+        // Define quem é o próximo elemento na fila
         void setProx(Elemento<TE>* pe);
         
-        // O snippet mostra 'const getPRoximo() const'
-        // Interpretado como um método const que retorna um ponteiro
+        // Acesso ao próximo elemento (para navegação)
         Elemento<TE>* getPRoximo() const; 
 
-        // Método essencial (implícito por +...() no UML)
-        // Necessário para ler a informação de dentro do nó
+        // Acesso ao dado armazenado
         TE* getInfo() const; 
     };
 
-    // --- IMPLEMENTAÇÃO (Template) ---
+    // --- IMPLEMENTAÇÃO DO TEMPLATE ---
     
-
     template <class TE>
     Elemento<TE>::Elemento() :
     pInfo(NULL), pProx(NULL) {
-        
     }
 
     template <class TE>
     Elemento<TE>::~Elemento() {
-        // O destrutor não deleta 'pInfo'.
-        // A Fase é responsável por deletar as Entidades.
+        // Não deletamos pInfo aqui. Quem gerencia a vida útil do objeto (Entidade) é a Fase, não a Lista.
     }
 
     template <class TE>
     void Elemento<TE>::incluir(TE* p) {
-        // O método 'incluir' no Elemento 
-        // funciona como um 'setInfo'.
         pInfo = p;
     }
 
@@ -61,7 +55,6 @@ namespace Listas{
 
     template <class TE>
     TE* Elemento<TE>::getInfo() const {
-        // Método adicionado para permitir a leitura do dado
         return pInfo;
     }
 }
