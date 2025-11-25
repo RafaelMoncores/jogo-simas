@@ -7,6 +7,8 @@
 class OuvinteEventos {
 public:
     virtual void tratarEvento(const sf::Event& evento) = 0;
+    virtual void tratarEvento(const sf::Event& evento, Gerenciadores::GerenciadorGrafico* pGG) {}
+    virtual void tratarEvento() {}
     virtual ~OuvinteEventos() {}
 };
 
