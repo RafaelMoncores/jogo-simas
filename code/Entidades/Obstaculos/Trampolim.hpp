@@ -17,7 +17,7 @@ namespace Entidades
 
         public:
             Trampolim(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura, float forca);
-            Trampolim(float forca = 0);
+            Trampolim();
             ~Trampolim();
 
             virtual void executar(float delta) override;

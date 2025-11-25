@@ -26,7 +26,7 @@ namespace Entidades
 
         public:
             Vampiro(sf::Vector2f pos, float tamanho, Jogador* pJ1, Jogador* pJ2);
-            Vampiro(sf::Vector2f pos ={0.f,0.f}, float tamanho = 0, Jogador* pJ1 = nullptr, Jogador* pJ2 = nullptr);
+            Vampiro();
             ~Vampiro();
 
             virtual void executar(float delta) override;

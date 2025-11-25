@@ -24,8 +24,8 @@ namespace Entidades
             nivel_maldade = 1;
         }
 
-        Gosma::Gosma(sf::Vector2f pos ={0.f,0.f}, Obstaculos::Plataforma* pPlat = nullptr, Jogador* pJ1 = nullptr, Jogador* pJ2 = nullptr):
-            Inimigo(1, pos, pJ1, pJ2),
+        Gosma::Gosma():
+            Inimigo(1, {0.f,0.f}, nullptr, nullptr),
             FORCA_PULO_INIMIGO(350.0f),
             VELOCIDADE_LATERAL_INIMIGO(100.0f),
             raio_deteccao(250.0f)
