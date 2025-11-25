@@ -480,10 +480,7 @@ namespace Fases
                             // Lógica de Destaque para "Salvar"
                             if (botaoSalvarText)
                             {
-                                sf::FloatRect boundsSalvar = botaoSalvarText->getLocalBounds();
-                                botaoSalvarText->setOrigin({boundsSalvar.size.x / 2.f, boundsSalvar.size.y / 2.f});
-                                botaoSalvarText->setPosition({centerX, centerY + 10.f});
-
+                                // Ajusta o estilo primeiro (pode afetar bounds)
                                 if (posBotaoFim == 0) { // Se "Salvar" está selecionado
                                     botaoSalvarText->setOutlineThickness(4.f);
                                     botaoSalvarText->setFillColor(sf::Color::White);
@@ -491,16 +488,19 @@ namespace Fases
                                     botaoSalvarText->setOutlineThickness(0.f);
                                     botaoSalvarText->setFillColor(sf::Color::White);
                                 }
+
+                                // Recalcula bounds após ajustar estilo e centraliza corretamente
+                                sf::FloatRect boundsSalvar = botaoSalvarText->getLocalBounds();
+                                botaoSalvarText->setOrigin({boundsSalvar.size.x / 2.f, boundsSalvar.size.y / 2.f});
+                                botaoSalvarText->setPosition({centerX, centerY + 10.f});
+
                                 pGG->desenhar(*botaoSalvarText);
                             }
                     
                     // Lógica de Destaque para "Menu"
                     if (botaoMenuText)
                     {
-                        sf::FloatRect boundsMenu = botaoMenuText->getLocalBounds();
-                        botaoMenuText->setOrigin({boundsMenu.size.x / 2.f, boundsMenu.size.y / 2.f});
-                        botaoMenuText->setPosition({centerX, centerY + 70.f});
-
+                        // Ajusta estilo primeiro
                         if (posBotaoFim == 1) { // Se "Menu" está selecionado
                             botaoMenuText->setOutlineThickness(4.f);
                             botaoMenuText->setFillColor(sf::Color::White);
@@ -508,13 +508,27 @@ namespace Fases
                             botaoMenuText->setOutlineThickness(0.f);
                             botaoMenuText->setFillColor(sf::Color::White);
                         }
+
+                        sf::FloatRect boundsMenu = botaoMenuText->getLocalBounds();
+                        botaoMenuText->setOrigin({boundsMenu.size.x / 2.f, boundsMenu.size.y / 2.f});
+                        botaoMenuText->setPosition({centerX, centerY + 70.f});
+
                         pGG->desenhar(*botaoMenuText);
                     }
                     break;
                 }
                 
                 case EstadoFim::PedindoIniciais:
-                    if (inputIniciaisText) pGG->desenhar(*inputIniciaisText);
+                    if (inputIniciaisText) {
+                        // Recalcula bounds e centraliza após possíveis alterações de texto
+                        sf::Vector2u winSize = pGG->getWindow().getSize();
+                        float centerX_local = static_cast<float>(winSize.x) / 2.f;
+                        float centerY_local = static_cast<float>(winSize.y) / 2.f;
+                        sf::FloatRect boundsInput = inputIniciaisText->getLocalBounds();
+                        inputIniciaisText->setOrigin({boundsInput.size.x / 2.f, boundsInput.size.y / 2.f});
+                        inputIniciaisText->setPosition({centerX_local, centerY_local + 10.f});
+                        pGG->desenhar(*inputIniciaisText);
+                    }
                     break;
             }
         }

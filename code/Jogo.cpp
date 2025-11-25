@@ -183,6 +183,12 @@ void Jogo::processarBlocoEntidade(const std::vector<std::string>& block)
             if (kv.find("podePular") != kv.end()) {
                 pj->setPodePular(kv["podePular"] != "0");
             }
+            if (kv.find("completouFase") != kv.end()) {
+                pj->setCompletouFase(kv["completouFase"] != "0");
+            }
+            if (kv.find("direcao") != kv.end()) {
+                pj->setDirecao(std::stoi(kv["direcao"]));
+            }
             if (kv.find("velX") != kv.end() && kv.find("velY") != kv.end()) {
                 // Restaurar velocidade se foi salva
                 float vx = std::stof(kv["velX"]);
@@ -249,7 +255,9 @@ void Jogo::executar()
                         break;
                        case 30: // Load
                            if (carregarSave()) {
-                               estadoAtual = EstadoJogo::Jogando;
+                              estadoAtual = EstadoJogo::Jogando;
+                              // Certifica que o gerenciador de eventos saiba ouvir a fase carregada
+                              if (pFaseAtual) pGE->setOuvinte(pFaseAtual);
                            } else {
                                // Falha ao carregar; permanece no menu
                                estadoAtual = EstadoJogo::NoMenu;

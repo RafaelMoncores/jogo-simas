@@ -1,7 +1,10 @@
 RankingFase1
 JMS 825
+AYO 808
 RAF 781
 RAF 757
+J1D 722
+INI 405
 ---
 RankingFase2
 ---

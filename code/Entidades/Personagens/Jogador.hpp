@@ -49,6 +49,8 @@ namespace Entidades
                 virtual sf::FloatRect getBoundingBox() const override;
                 virtual void colidir(Entidade* pOutra, sf::FloatRect boundsOutra) override;
                 int getId() const;
+                void setCompletouFase(bool v) { completouFase = v; }
+                void setDirecao(int d) { direcao = d; }
                 
         };
     }

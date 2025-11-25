@@ -1,232 +1,167 @@
-Fase 2
-modoDoisJogadores 1
+Fase 1
+modoDoisJogadores 0
 Entidade
-posX 24
-posY 994
+posX 1745.59
+posY 294.002
 velX 0
-velY 0.1656
+velY 0
 Personagem
-vidas 2
+vidas 3
 podePular 0
 posInicialX 0
-posInicialY 1000
-spritePosX 0
-spritePosY 994
+posInicialY 550
+spritePosX 1721.59
+spritePosY 294.002
 Jogador
 idJogador 1
-pontos 735.459
-completouFase 0
+pontos 803.556
+completouFase 1
 direcao 1
----
-Entidade
-posX 104
-posY 997
-velX 0
-velY 0.1656
-Personagem
-vidas 0
-podePular 0
-posInicialX 80
-posInicialY 1000
-spritePosX 80
-spritePosY 997
-Jogador
-idJogador 2
-pontos 748.12
-completouFase 0
-direcao 1
----
-Plataforma
-posX 0
-posY 1050
-sizeX 1550
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 550
-posY 200
-sizeX 1400
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 550
-posY 250
-sizeX 1400
-sizeY 50
-textura tileSets/fase2/pedra.png
----
-Plataforma
-posX 1700
-posY 950
-sizeX 250
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 1700
-posY 1000
-sizeX 250
-sizeY 50
-textura tileSets/fase2/pedra.png
----
-Plataforma
-posX 1700
-posY 750
-sizeX 250
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 1700
-posY 800
-sizeX 250
-sizeY 50
-textura tileSets/fase2/pedra.png
----
-Plataforma
-posX 0
-posY 500
-sizeX 250
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 0
-posY 550
-sizeX 250
-sizeY 50
-textura tileSets/fase2/pedra.png
----
-Plataforma
-posX 0
-posY 400
-sizeX 100
-sizeY 50
-textura tileSets/fase2/plataforma.png
----
-Plataforma
-posX 0
-posY 450
-sizeX 100
-sizeY 50
-textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 0
 posY 600
-sizeX 1150
-sizeY 50
-textura tileSets/fase2/plataforma.png
+sizeX 300
+sizeY 124
+textura tileSets/fase1/plataforma.png
 ---
 Plataforma
 posX 0
-posY 650
-sizeX 1150
+posY 724
+sizeX 300
+sizeY 376
+textura tileSets/fase1/terra.png
+---
+Plataforma
+posX 1700
+posY 350
+sizeX 220
+sizeY 124
+textura tileSets/fase1/plataforma.png
+---
+Plataforma
+posX 1700
+posY 474
+sizeX 220
+sizeY 626
+textura tileSets/fase1/terra.png
+---
+Plataforma
+posX 500
+posY 500
+sizeX 200
 sizeY 50
-textura tileSets/fase2/pedra.png
+textura tileSets/fase1/plataforma.png
+---
+Plataforma
+posX 1050
+posY 350
+sizeX 200
+sizeY 50
+textura tileSets/fase1/plataforma.png
 ---
 Plataforma
 posX 1450
-posY 850
-sizeX 150
+posY 450
+sizeX 200
 sizeY 50
-textura tileSets/fase2/plataforma.png
+textura tileSets/fase1/plataforma.png
 ---
-Plataforma
-posX 1450
-posY 650
-sizeX 150
-sizeY 50
-textura tileSets/fase2/plataforma.png
+Trampolim
+posX 797.438
+posY 447.438
+sizeX 55.125
+sizeY 55.125
+forcaRebote 600
+textura tileSets/trampolim.png
 ---
-Plataforma
-posX 250
-posY 300
-sizeX 100
-sizeY 50
-textura tileSets/fase2/plataforma.png
+Trampolim
+posX 947.438
+posY 447.438
+sizeX 55.125
+sizeY 55.125
+forcaRebote 600
+textura tileSets/trampolim.png
+---
+Trampolim
+posX 1347.44
+posY 497.438
+sizeX 55.125
+sizeY 55.125
+forcaRebote 600
+textura tileSets/trampolim.png
+---
+Trampolim
+posX 1297.44
+posY 497.438
+sizeX 55.125
+sizeY 55.125
+forcaRebote 600
+textura tileSets/trampolim.png
+---
+Trampolim
+posX 1647.44
+posY 547.438
+sizeX 55.125
+sizeY 55.125
+forcaRebote 600
+textura tileSets/trampolim.png
 ---
 Entidade
-posX 385.098
-posY 578
+posX 1805.51
+posY 328
 velX 0
 velY 0
 Personagem
 vidas 1
-podePular 1
-posInicialX 100
-posInicialY 478
-spritePosX 386.998
-spritePosY 579
+podePular 0
+posInicialX 1805.51
+posInicialY 328
+spritePosX 1807.41
+spritePosY 329
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.26118
+tempoTotal 0
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 823.021
-posY 1028
+posX 1416.81
+posY 228.026
 velX 0
-velY 0.1656
+velY 0
 Personagem
-vidas 1
+vidas 2
 podePular 0
-posInicialX 648.1
-posInicialY 1028
-spritePosX 824.921
-spritePosY 1029
+posInicialX 1416.81
+posInicialY 228.026
+spritePosX 1416.81
+spritePosY 228.026
 Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 0.041552
-direcaoPulo 1
-raio_deteccao 250
+nivel_maldade 2
+Vampiro
+tamanho 2
+tempoTotal 14.8224
+direcao -1
 ---
 Entidade
-posX 1223.03
-posY 1028
+posX 516.759
+posY 178.026
 velX 0
-velY 0.1656
+velY 0
 Personagem
-vidas 1
+vidas 2
 podePular 0
-posInicialX 1048.1
-posInicialY 1028
-spritePosX 1224.93
-spritePosY 1029
+posInicialX 516.759
+posInicialY 178.026
+spritePosX 516.759
+spritePosY 178.026
 Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 0.041552
-direcaoPulo 1
-raio_deteccao 250
----
-Entidade
-posX 822.824
-posY -34
-velX -150
-velY -4.93601e-07
-Personagem
-vidas 9
-podePular 0
-posInicialX 1000
-posInicialY -34
-spritePosX 822.824
-spritePosY -34
-Inimigo
-nivel_maldade 3
-Dragao
-forca 2
-estaAtacando 0
-temporizadorMovimento 1.1809
-temporizadorAtaque 4.1806
-tirosDisparados 0
-tempoMovimentoRestante 0.318841
+nivel_maldade 2
+Vampiro
+tamanho 2.8
+tempoTotal 14.8224
+direcao -1
 ---
