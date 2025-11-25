@@ -1,21 +1,21 @@
 Fase 1
 modoDoisJogadores 0
 Entidade
-posX 1746.27
-posY 294.286
+posX 206.743
+posY 544
 velX 0
 velY 0
 Personagem
 vidas 3
-podePular 0
+podePular 1
 posInicialX 0
 posInicialY 550
-spritePosX 1722.27
-spritePosY 294.286
+spritePosX 182.743
+spritePosY 544
 Jogador
 idJogador 1
-pontos 506.944
-completouFase 1
+pontos 570.777
+completouFase 0
 direcao 1
 ---
 Plataforma
@@ -67,112 +67,85 @@ sizeX 200
 sizeY 50
 textura tileSets/fase1/plataforma.png
 ---
-Plataforma
-posX 750
-posY 700
-sizeX 250
-sizeY 50
-textura tileSets/fase1/plataforma.png
----
 Trampolim
-posX 798.75
-posY 448.75
-sizeX 52.5
-sizeY 52.5
+posX 794.613
+posY 444.613
+sizeX 60.7753
+sizeY 60.7753
 forcaRebote 600
 textura tileSets/trampolim.png
 ---
 Trampolim
-posX 948.75
-posY 448.75
-sizeX 52.5
-sizeY 52.5
+posX 944.613
+posY 444.613
+sizeX 60.7753
+sizeY 60.7753
 forcaRebote 600
 textura tileSets/trampolim.png
 ---
 Trampolim
-posX 1348.75
-posY 498.75
-sizeX 52.5
-sizeY 52.5
+posX 1344.61
+posY 494.613
+sizeX 60.7753
+sizeY 60.7753
 forcaRebote 600
 textura tileSets/trampolim.png
 ---
 Entidade
-posX 1805.45
-posY 328
+posX 518.271
+posY 478
 velX 0
 velY 0
 Personagem
 vidas 1
 podePular 1
-posInicialX 1720
-posInicialY 300
-spritePosX 1807.35
-spritePosY 329
+posInicialX 518.271
+posInicialY 477.405
+spritePosX 520.171
+spritePosY 479
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.002768
-direcaoPulo -1
-raio_deteccao 250
----
-Entidade
-posX 942.804
-posY 678
-velX 0
-velY 0
-Personagem
-vidas 1
-podePular 1
-posInicialX 770
-posInicialY 650
-spritePosX 944.704
-spritePosY 679
-Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 1.61184
+tempoTotal 1.99938
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 1442.54
-posY 194.922
-velX -150
-velY -9.68575e-08
+posX 1069.16
+posY -22.1543
+velX 150
+velY 2.98023e-08
 Personagem
 vidas 2
 podePular 0
-posInicialX 100
-posInicialY 300
-spritePosX 1442.54
-spritePosY 194.922
+posInicialX 754.949
+posInicialY 29.4672
+spritePosX 1069.16
+spritePosY -22.1543
 Inimigo
 nivel_maldade 2
 Vampiro
 tamanho 2
-tempoTotal 14.6529
-direcao -1
+tempoTotal 6.46106
+direcao 1
 ---
 Entidade
-posX 542.427
-posY 144.922
+posX 1770.89
+posY -72.1541
 velX -150
-velY -9.68575e-08
+velY 2.98023e-08
 Personagem
 vidas 2
 podePular 0
-posInicialX 1000
-posInicialY 250
-spritePosX 542.427
-spritePosY 144.922
+posInicialX 1654.95
+posInicialY -20.5326
+spritePosX 1770.89
+spritePosY -72.1541
 Inimigo
 nivel_maldade 2
 Vampiro
 tamanho 2.8
-tempoTotal 14.6529
+tempoTotal 6.46106
 direcao -1
 ---

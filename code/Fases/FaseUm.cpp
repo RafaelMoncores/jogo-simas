@@ -7,7 +7,6 @@
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
 
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
