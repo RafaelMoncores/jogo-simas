@@ -4,7 +4,7 @@ Markdown
 
 # Jogo de Plataforma - C++ e SFML
 
-Este projeto é um jogo de plataforma 2D desenvolvido em C++ como parte de um trabalho acadêmico. O jogo utiliza a biblioteca gráfica SFML na sua versão mais recente (3.0+).
+Este projeto é um jogo de plataforma 2D desenvolvido em C++ como parte de um trabalho acadêmico da matéria de Técnicas de Programação com o professor Dr. Jean Marcelo Simão. O jogo utiliza a biblioteca gráfica SFML na sua versão mais recente (3.0+).
 
 ## 📋 Pré-requisitos
 
