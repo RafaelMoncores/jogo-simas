@@ -29,16 +29,9 @@ namespace Entidades
             nivel_maldade = 2;
         }
 
-        Vampiro::Vampiro(sf::Vector2f pos ={0.f,0.f}, float tamanho = 0, Jogador* pJ1 = nullptr, Jogador* pJ2 = nullptr):
-            Inimigo(2, pos, pJ1, pJ2),
-            VELOCIDADE_PATRULHA(150.0f),
-            AMPLITUDE_SENOIDE(120.0f),
-            FREQUENCIA_SENOIDE(2.5f),
-            LIMITE_ESQUERDA(50.0f),
-            LIMITE_DIREITA(1870.0f)
-        {
-            
-        }
+        // The defaultable constructor is represented by the main constructor
+        // defined above (with matching parameter types). No separate
+        // empty/default constructor definition is required here.
 
         Vampiro::~Vampiro() { }
 

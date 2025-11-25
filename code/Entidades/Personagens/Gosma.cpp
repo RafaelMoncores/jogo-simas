@@ -24,12 +24,9 @@ namespace Entidades
             nivel_maldade = 1;
         }
 
-        Gosma::Gosma(sf::Vector2f pos ={0.f,0.f}, Obstaculos::Plataforma* pPlat = nullptr, Jogador* pJ1 = nullptr, Jogador* pJ2 = nullptr):
-            Inimigo(1, pos, pJ1, pJ2),
-            FORCA_PULO_INIMIGO(350.0f),
-            VELOCIDADE_LATERAL_INIMIGO(100.0f),
-            raio_deteccao(250.0f)
-        {}
+        // Defaultable constructor is declared in the header and defined
+        // by the main constructor above (with the same signature types).
+        // No separate empty/default constructor definition is necessary here.
 
         Gosma::~Gosma()
         {

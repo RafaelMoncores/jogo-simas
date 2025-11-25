@@ -26,7 +26,6 @@ namespace Entidades
             virtual void aplicarFisica(float delta) override;
 
         public:
-            Gosma(sf::Vector2f pos, Obstaculos::Plataforma* pPlat, Jogador* pJ1, Jogador* pJ2);
             Gosma(sf::Vector2f pos ={0.f,0.f}, Obstaculos::Plataforma* pPlat = nullptr, Jogador* pJ1 = nullptr, Jogador* pJ2 = nullptr);
             ~Gosma();
 
