@@ -12,7 +12,7 @@ namespace Entidades
         {
         private:
             sf::RectangleShape corpo;
-            
+            std::string caminhoTextura;  // Armazena a textura para restauração
             const float FORCA_REBOTE; 
 
         public:

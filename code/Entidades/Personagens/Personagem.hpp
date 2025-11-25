@@ -41,6 +41,7 @@ namespace Entidades
                 void setPodePular(bool pode);
                 void setVidas(int v);
                 sf::Vector2f getVelocidade() const;
+                void setVelocidade(sf::Vector2f v) { velocidade = v; }
 
                 virtual void fazerBounce(float forcaBounce);
                 virtual void aplicarRepel(sf::Vector2f forcaRepel);

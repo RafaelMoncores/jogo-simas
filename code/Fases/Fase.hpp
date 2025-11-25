@@ -55,6 +55,7 @@ namespace Fases
             std::optional<sf::Text> botaoMenuText;
             std::optional<sf::Text> inputIniciaisText;
             bool faseConcluida;
+            int jogadorQueFinalizar; // 1 ou 2: qual jogador terminou a fase
 
             void inicializarUI();
             void processarInputIniciais(const sf::Event& evento);
@@ -70,6 +71,7 @@ namespace Fases
             virtual ~Fase();
 
             void inicializar();
+            void inicializarParaLoad(); // Inicializa SEM chamar criarObstaculos()
             virtual void executar(float delta) override;
             bool getFaseConcluida() const;
             virtual void desenhar() override;
@@ -83,9 +85,13 @@ namespace Fases
             virtual std::string salvarParaString();
             
             // Restauracao: limpa entidades dinâmicas (projeteis e inimigos)
-            // e permite que blocos de salvamento sejam aplicados à fase.
             void limparEntidadesDinamicas();
-            void restaurarEntidade(const std::string& tipo, const std::map<std::string, std::string>& kv);
+            void restaurarPlataforma(const std::map<std::string, std::string>& kv);
+            void restaurarTrampolim(const std::map<std::string, std::string>& kv);
+            void restaurarBolaDeFogo(const std::map<std::string, std::string>& kv);
+            void restaurarVampiro(const std::map<std::string, std::string>& kv);
+            void restaurarGosma(const std::map<std::string, std::string>& kv);
+            void restaurarDragao(const std::map<std::string, std::string>& kv);
                 // Acesso público aos jogadores para operações de carga/restauração
                 Entidades::Personagens::Jogador* getJogador1() { return jogador1; }
                 Entidades::Personagens::Jogador* getJogador2() { return jogador2; }

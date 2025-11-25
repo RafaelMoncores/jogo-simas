@@ -6,7 +6,9 @@
 #include "../Entidades/Personagens/Vampiro.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Dragao.hpp"
-#include "../Entidades/Obstaculos/Obstaculo.hpp" 
+#include "../Entidades/Obstaculos/Obstaculo.hpp"
+#include "../Entidades/Obstaculos/Plataforma.hpp"
+#include "../Entidades/Obstaculos/Trampolim.hpp"
 #include <iostream>
 #include <string>
 #include <cstdint>
@@ -32,7 +34,8 @@ namespace Fases
         iniciais(""),
         faseNum(num),
         numTentativas(1),
-        enterPressionado(true)
+        enterPressionado(true),
+        jogadorQueFinalizar(0)
     {
         inicializarUI();
     }
@@ -161,6 +164,33 @@ namespace Fases
         criarInimigos();
     }
 
+    void Fase::inicializarParaLoad()
+    {
+        listaEntidades.limpar();
+        gerenciadorColisoes.limpar();
+        
+        jogador1 = nullptr;
+        jogador2 = nullptr;
+
+        Gerenciadores::GerenciadorGrafico::getInstance()->setViewBounds(0.f, 0.f, 1920.f, 1080.f);
+
+        posJogador2Inicial = posJogadorInicial + sf::Vector2f(80.f, 0.f);
+
+        jogador1 = new Entidades::Personagens::Jogador(posJogadorInicial, 1);
+        jogador1->setPosition(posJogadorInicial);
+        listaEntidades.incluir(jogador1); 
+
+        if (modoDoisJogadores)
+        {
+            jogador2 = new Entidades::Personagens::Jogador(posJogador2Inicial, 2);
+            jogador2->setPosition(posJogador2Inicial);
+            listaEntidades.incluir(jogador2);
+        }
+
+        // NOTE: NÃO chamar criarObstaculos() - plataformas serão restauradas do snapshot
+        // NOTA: Também não chamar criarInimigos() - serão restaurados do snapshot
+    }
+
     // Encaminha eventos para o estado correto: entrada de iniciais quando pedindo
     // ou ignora em outros momentos.
     void Fase::processarEvento(const sf::Event& evento)
@@ -229,10 +259,13 @@ namespace Fases
         {
             if (pontuacaoFinalCache == -1) 
             {
-                if (p1Completo)
+                if (p1Completo) {
                     pontuacaoFinalCache = jogador1->getPontos();
-                else
+                    jogadorQueFinalizar = 1;
+                } else {
                     pontuacaoFinalCache = jogador2->getPontos();
+                    jogadorQueFinalizar = 2;
+                }
             
                 if (pontuacaoFinalText)
                 {
@@ -603,99 +636,160 @@ namespace Fases
         }
     }
 
-    // Restaura uma entidade com base no bloco salvo (tipo e pares chave/valor)
-    void Fase::restaurarEntidade(const std::string& tipo, const std::map<std::string, std::string>& kv)
+    void Fase::restaurarPlataforma(const std::map<std::string, std::string>& kv)
     {
         using namespace Entidades;
 
-        if (tipo == "BolaDeFogo")
-        {
-            float x = 0.f, y = 0.f;
-            if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
-            if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+        float x = 0.f, y = 0.f, w = 100.f, h = 20.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+        if (kv.find("sizeX") != kv.end()) w = std::stof(kv.at("sizeX"));
+        if (kv.find("sizeY") != kv.end()) h = std::stof(kv.at("sizeY"));
 
-            sf::Vector2f pos{x, y};
-            sf::Vector2f dir{1.f, 0.f};
-            if (kv.find("dirX") != kv.end()) dir.x = std::stof(kv.at("dirX"));
-            if (kv.find("dirY") != kv.end()) dir.y = std::stof(kv.at("dirY"));
-
-            float velProj = 600.f;
-            if (kv.find("velProjetil") != kv.end()) velProj = std::stof(kv.at("velProjetil"));
-
-            bool pertence = false;
-            if (kv.find("pertenceAoJogador") != kv.end()) pertence = (kv.at("pertenceAoJogador") != "0");
-
-            int owner = 0;
-            if (kv.find("ownerId") != kv.end()) owner = std::stoi(kv.at("ownerId"));
-
-            BolaDeFogo* pF = new BolaDeFogo(pos, dir, velProj, pertence, owner);
-            if (kv.find("ativo") != kv.end()) pF->setAtivo(kv.at("ativo") != "0");
-            listaEntidades.incluir(static_cast<Entidade*>(pF));
-            return;
+        // Usa a textura salva, ou padrão se não houver
+        std::string caminhoTextura = "tileSets/fase1/plataforma.png";
+        if (kv.find("textura") != kv.end()) {
+            caminhoTextura = kv.at("textura");
         }
 
-        if (tipo == "Vampiro")
-        {
-            float x = 0.f, y = 0.f;
-            if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
-            if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
-            float tam = 1.0f;
-            if (kv.find("tamanho") != kv.end()) tam = std::stof(kv.at("tamanho"));
+        Obstaculos::Plataforma* pPlat = new Obstaculos::Plataforma(
+            {x, y}, 
+            {w, h}, 
+            caminhoTextura
+        );
+        
+        pPlat->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pPlat));
+    }
 
-            Personagens::Vampiro* pV = new Personagens::Vampiro({x, y}, tam, jogador1, jogador2);
+    void Fase::restaurarTrampolim(const std::map<std::string, std::string>& kv)
+    {
+        using namespace Entidades;
 
-            if (kv.find("tempoTotal") != kv.end()) {
-                // usa a função pública se existir
-                pV->setTempoTotal(std::stof(kv.at("tempoTotal")));
-            }
-            if (kv.find("direcao") != kv.end()) {
-                pV->setDirecao(std::stoi(kv.at("direcao")));
-            }
-            if (kv.find("vidas") != kv.end()) pV->setVidas(std::stoi(kv.at("vidas")));
-            if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
-                float sx = std::stof(kv.at("spritePosX"));
-                float sy = std::stof(kv.at("spritePosY"));
-                pV->setPosition({sx, sy});
-            }
+        float x = 0.f, y = 0.f, w = 50.f, h = 50.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+        if (kv.find("sizeX") != kv.end()) w = std::stof(kv.at("sizeX"));
+        if (kv.find("sizeY") != kv.end()) h = std::stof(kv.at("sizeY"));
 
-            listaEntidades.incluir(static_cast<Entidade*>(pV));
-            return;
+        float forcaRebote = 600.f;
+        if (kv.find("forcaRebote") != kv.end()) {
+            forcaRebote = std::stof(kv.at("forcaRebote"));
         }
 
-        if (tipo == "Gosma")
-        {
-            float x = 0.f, y = 0.f;
-            if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
-            if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
-
-            // Cria uma gosma sem plataforma (pode estar no ar)
-            Personagens::Gosma* pG = new Personagens::Gosma({x, y}, nullptr, jogador1, jogador2);
-            if (kv.find("vidas") != kv.end()) pG->setVidas(std::stoi(kv.at("vidas")));
-            if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
-                float sx = std::stof(kv.at("spritePosX"));
-                float sy = std::stof(kv.at("spritePosY"));
-                pG->setPosition({sx, sy});
-            }
-            listaEntidades.incluir(static_cast<Entidade*>(pG));
-            return;
+        std::string caminhoTextura = "tileSets/trampolim.png";
+        if (kv.find("textura") != kv.end()) {
+            caminhoTextura = kv.at("textura");
         }
 
-        if (tipo == "Dragao")
-        {
-            float x = 0.f, y = 0.f;
-            if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
-            if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
-            Personagens::Dragao* pD = new Personagens::Dragao({x, y}, jogador1, jogador2, &listaEntidades);
-            if (kv.find("vidas") != kv.end()) pD->setVidas(std::stoi(kv.at("vidas")));
-            if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
-                float sx = std::stof(kv.at("spritePosX"));
-                float sy = std::stof(kv.at("spritePosY"));
-                pD->setPosition({sx, sy});
-            }
-            listaEntidades.incluir(static_cast<Entidade*>(pD));
-            return;
+        Obstaculos::Trampolim* pTramp = new Obstaculos::Trampolim(
+            {x, y},
+            {w, h},
+            caminhoTextura,
+            forcaRebote
+        );
+        
+        pTramp->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pTramp));
+    }
+
+    void Fase::restaurarBolaDeFogo(const std::map<std::string, std::string>& kv)
+    {
+        using namespace Entidades;
+
+        float x = 0.f, y = 0.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+
+        sf::Vector2f pos{x, y};
+        sf::Vector2f dir{1.f, 0.f};
+        if (kv.find("dirX") != kv.end()) dir.x = std::stof(kv.at("dirX"));
+        if (kv.find("dirY") != kv.end()) dir.y = std::stof(kv.at("dirY"));
+
+        float velProj = 600.f;
+        if (kv.find("velProjetil") != kv.end()) velProj = std::stof(kv.at("velProjetil"));
+
+        bool pertence = false;
+        if (kv.find("pertenceAoJogador") != kv.end()) pertence = (kv.at("pertenceAoJogador") != "0");
+
+        int owner = 0;
+        if (kv.find("ownerId") != kv.end()) owner = std::stoi(kv.at("ownerId"));
+
+        BolaDeFogo* pF = new BolaDeFogo(pos, dir, velProj, pertence, owner);
+        if (kv.find("ativo") != kv.end()) pF->setAtivo(kv.at("ativo") != "0");
+        pF->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pF));
+    }
+
+    void Fase::restaurarVampiro(const std::map<std::string, std::string>& kv)
+    {
+        using namespace Entidades;
+
+        float x = 0.f, y = 0.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+
+        float tam = 1.0f;
+        if (kv.find("tamanho") != kv.end()) tam = std::stof(kv.at("tamanho"));
+
+        Personagens::Vampiro* pV = new Personagens::Vampiro({x, y}, tam, jogador1, jogador2);
+
+        if (kv.find("tempoTotal") != kv.end()) {
+            pV->setTempoTotal(std::stof(kv.at("tempoTotal")));
+        }
+        if (kv.find("direcao") != kv.end()) {
+            pV->setDirecao(std::stoi(kv.at("direcao")));
+        }
+        if (kv.find("vidas") != kv.end()) pV->setVidas(std::stoi(kv.at("vidas")));
+        if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
+            float sx = std::stof(kv.at("spritePosX"));
+            float sy = std::stof(kv.at("spritePosY"));
+            pV->setPosition({sx, sy});
         }
 
+        pV->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pV));
+    }
+
+    void Fase::restaurarGosma(const std::map<std::string, std::string>& kv)
+    {
+        using namespace Entidades;
+
+        float x = 0.f, y = 0.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+
+        // Cria uma gosma sem plataforma (pode estar no ar)
+        Personagens::Gosma* pG = new Personagens::Gosma({x, y}, nullptr, jogador1, jogador2);
+        if (kv.find("vidas") != kv.end()) pG->setVidas(std::stoi(kv.at("vidas")));
+        if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
+            float sx = std::stof(kv.at("spritePosX"));
+            float sy = std::stof(kv.at("spritePosY"));
+            pG->setPosition({sx, sy});
+        }
+
+        pG->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pG));
+    }
+
+    void Fase::restaurarDragao(const std::map<std::string, std::string>& kv)
+    {
+        using namespace Entidades;
+
+        float x = 0.f, y = 0.f;
+        if (kv.find("posX") != kv.end()) x = std::stof(kv.at("posX"));
+        if (kv.find("posY") != kv.end()) y = std::stof(kv.at("posY"));
+
+        Personagens::Dragao* pD = new Personagens::Dragao({x, y}, jogador1, jogador2, &listaEntidades);
+        if (kv.find("vidas") != kv.end()) pD->setVidas(std::stoi(kv.at("vidas")));
+        if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
+            float sx = std::stof(kv.at("spritePosX"));
+            float sy = std::stof(kv.at("spritePosY"));
+            pD->setPosition({sx, sy});
+        }
+
+        pD->setGerenciadorGrafico(Gerenciadores::GerenciadorGrafico::getInstance());
+        listaEntidades.incluir(static_cast<Entidade*>(pD));
     }
 
     void Fase::tratarEvento(const sf::Event& evento)

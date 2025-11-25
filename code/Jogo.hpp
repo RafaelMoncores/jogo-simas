@@ -9,7 +9,8 @@
 #include <vector>     
 #include <string>     
 #include <algorithm>  
-#include <functional> 
+#include <functional>
+#include <map> 
 
 struct RankingEntry {
     std::string nome;
@@ -48,6 +49,8 @@ class Jogo
         void renderizar();
         void inicializar();
         bool carregarSave();
+        void aplicarSnapshotAFase(const std::string& snapshot);
+        void processarBlocoEntidade(const std::vector<std::string>& block);
         // Persistência do ranking
         void salvar();
         void salvarDataBuffer(std::ostream& os);

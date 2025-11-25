@@ -1,10 +1,10 @@
 Fase 2
-modoDoisJogadores 0
+modoDoisJogadores 1
 Entidade
 posX 24
 posY 994
 velX 0
-velY 0.196
+velY 0.1656
 Personagem
 vidas 2
 podePular 0
@@ -14,7 +14,25 @@ spritePosX 0
 spritePosY 994
 Jogador
 idJogador 1
-pontos 852.961
+pontos 735.459
+completouFase 0
+direcao 1
+---
+Entidade
+posX 104
+posY 997
+velX 0
+velY 0.1656
+Personagem
+vidas 0
+podePular 0
+posInicialX 80
+posInicialY 1000
+spritePosX 80
+spritePosY 997
+Jogador
+idJogador 2
+pontos 748.12
 completouFase 0
 direcao 1
 ---
@@ -23,161 +41,116 @@ posX 0
 posY 1050
 sizeX 1550
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 550
 posY 200
 sizeX 1400
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 550
 posY 250
 sizeX 1400
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 1700
 posY 950
 sizeX 250
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 1700
 posY 1000
 sizeX 250
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 1700
 posY 750
 sizeX 250
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 1700
 posY 800
 sizeX 250
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 0
 posY 500
 sizeX 250
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 0
 posY 550
 sizeX 250
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 0
 posY 400
 sizeX 100
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 0
 posY 450
 sizeX 100
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 0
 posY 600
 sizeX 1150
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 0
 posY 650
 sizeX 1150
 sizeY 50
+textura tileSets/fase2/pedra.png
 ---
 Plataforma
 posX 1450
 posY 850
 sizeX 150
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 1450
 posY 650
 sizeX 150
 sizeY 50
+textura tileSets/fase2/plataforma.png
 ---
 Plataforma
 posX 250
 posY 300
 sizeX 100
 sizeY 50
----
-Parede
-posX 948.75
-posY 295
-sizeX 52.5
-sizeY 210
-danoso 1
----
-Parede
-posX 1048.75
-posY 548.75
-sizeX 52.5
-sizeY 52.5
-danoso 1
----
-Parede
-posX 848.75
-posY 548.75
-sizeX 52.5
-sizeY 52.5
-danoso 1
+textura tileSets/fase2/plataforma.png
 ---
 Entidade
-posX 1922.99
-posY 928
-velX 0
-velY 0
-Personagem
-vidas 1
-podePular 1
-posInicialX 1835.56
-posInicialY 928
-spritePosX 1924.89
-spritePosY 929
-Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 0.15934
-direcaoPulo 1
-raio_deteccao 250
----
-Entidade
-posX 1922.99
-posY 728
-velX 0
-velY 0
-Personagem
-vidas 1
-podePular 1
-posInicialX 1835.56
-posInicialY 728
-spritePosX 1924.89
-spritePosY 729
-Inimigo
-nivel_maldade 1
-Gosma
-tempoEspera 2
-tempoTotal 0.15934
-direcaoPulo 1
-raio_deteccao 250
----
-Entidade
-posX 187.496
-posY 478
+posX 385.098
+posY 578
 velX 0
 velY 0
 Personagem
@@ -185,103 +158,75 @@ vidas 1
 podePular 1
 posInicialX 100
 posInicialY 478
-spritePosX 189.396
-spritePosY 479
+spritePosX 386.998
+spritePosY 579
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 0.461418
+tempoTotal 0.26118
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 648.1
+posX 823.021
 posY 1028
 velX 0
-velY 0
+velY 0.1656
 Personagem
 vidas 1
-podePular 1
+podePular 0
 posInicialX 648.1
 posInicialY 1028
-spritePosX 650
+spritePosX 824.921
 spritePosY 1029
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.73798
+tempoTotal 0.041552
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 1048.1
+posX 1223.03
 posY 1028
 velX 0
-velY 0
+velY 0.1656
 Personagem
 vidas 1
-podePular 1
+podePular 0
 posInicialX 1048.1
 posInicialY 1028
-spritePosX 1050
+spritePosX 1224.93
 spritePosY 1029
 Inimigo
 nivel_maldade 1
 Gosma
 tempoEspera 2
-tempoTotal 1.73798
+tempoTotal 0.041552
 direcaoPulo 1
 raio_deteccao 250
 ---
 Entidade
-posX 1000
+posX 822.824
 posY -34
-velX 0
-velY -1.16974e-06
+velX -150
+velY -4.93601e-07
 Personagem
 vidas 9
 podePular 0
 posInicialX 1000
 posInicialY -34
-spritePosX 1000
+spritePosX 822.824
 spritePosY -34
 Inimigo
 nivel_maldade 3
 Dragao
 forca 2
-estaAtacando 1
-temporizadorMovimento 0.347191
-temporizadorAtaque 8.3473
-tirosDisparados 1
-tempoMovimentoRestante 0
----
-Entidade
-posX -64.3362
-posY 1311.51
-velX 0
-velY 1.16974e-06
-BolaDeFogo
-dirX -0.708207
-dirY 0.706004
-velProjetil 400
-dano 1
-ativo 1
-pertenceAoJogador 0
-ownerId 0
----
-Entidade
-posX 1069.17
-posY 180.554
-velX 0
-velY 4.54485e-07
-BolaDeFogo
-dirX -0.711727
-dirY 0.702456
-velProjetil 400
-dano 1
-ativo 1
-pertenceAoJogador 0
-ownerId 0
+estaAtacando 0
+temporizadorMovimento 1.1809
+temporizadorAtaque 4.1806
+tirosDisparados 0
+tempoMovimentoRestante 0.318841
 ---

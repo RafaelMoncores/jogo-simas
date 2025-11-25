@@ -8,7 +8,8 @@ namespace Entidades
     namespace Obstaculos
     {
         Plataforma::Plataforma(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura) :
-            Obstaculo()
+            Obstaculo(),
+            caminhoTextura(caminhoTextura)
         {
             danoso = false;
 
@@ -69,6 +70,7 @@ namespace Entidades
             (*buffer) << "posY " << b.position.y << std::endl;
             (*buffer) << "sizeX " << b.size.x << std::endl;
             (*buffer) << "sizeY " << b.size.y << std::endl;
+            (*buffer) << "textura " << caminhoTextura << std::endl;
         }
     }
 }

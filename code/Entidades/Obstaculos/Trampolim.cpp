@@ -10,6 +10,7 @@ namespace Entidades
     {
         Trampolim::Trampolim(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura, float forca) :
             Obstaculo(),
+            caminhoTextura(caminhoTextura),
             FORCA_REBOTE(forca)
         {
             danoso = false;
@@ -127,6 +128,7 @@ namespace Entidades
             (*buffer) << "sizeX " << b.size.x << std::endl;
             (*buffer) << "sizeY " << b.size.y << std::endl;
             (*buffer) << "forcaRebote " << FORCA_REBOTE << std::endl;
+            (*buffer) << "textura " << caminhoTextura << std::endl;
         }
     }
 }

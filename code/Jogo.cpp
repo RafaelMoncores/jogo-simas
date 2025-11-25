@@ -73,28 +73,36 @@ void Jogo::inicializar()
 
 bool Jogo::carregarSave()
 {
+    // Carrega snapshot salvo (exatamente como pause usa pauseSnapshot)
     std::ifstream ifs("save_state.txt");
     if (!ifs.is_open()) return false;
 
+    std::string snapshot((std::istreambuf_iterator<char>(ifs)),
+                         std::istreambuf_iterator<char>());
+    ifs.close();
+
+    if (snapshot.empty()) return false;
+
+    // Parse primeira linha para obter fase
+    std::istringstream iss(snapshot);
     std::string line;
     int faseNum = -1;
     bool modoDois = false;
 
-    // Lê cabeçalho
-    if (std::getline(ifs, line)) {
-        std::istringstream iss(line);
+    if (std::getline(iss, line)) {
+        std::istringstream lineStream(line);
         std::string key;
-        if (iss >> key >> faseNum) {
-            // parsed
-        }
+        lineStream >> key >> faseNum;
     }
-    if (std::getline(ifs, line)) {
-        std::istringstream iss(line);
-        std::string key; int v;
-        if (iss >> key >> v) {
-            if (key == "modoDoisJogadores") modoDois = (v != 0);
-        }
+    if (std::getline(iss, line)) {
+        std::istringstream lineStream(line);
+        std::string key;
+        int v;
+        lineStream >> key >> v;
+        if (key == "modoDoisJogadores") modoDois = (v != 0);
     }
+
+    if (faseNum < 1 || faseNum > 2) return false;
 
     // Cria a fase correta
     Fase* proxima = nullptr;
@@ -104,66 +112,103 @@ bool Jogo::carregarSave()
 
     if (pFaseAtual) delete pFaseAtual;
     pFaseAtual = proxima;
-    pFaseAtual->inicializar();
-    // Limpa entidades dinâmicas (criaremos a cena a partir do arquivo salvo)
+    pFaseAtual->inicializarParaLoad(); // USO DO NOVO MÉTODO: sem criarObstaculos()
+
+    // Aplica snapshot: limpa entidades dinâmicas e restaura do arquivo
+    // usando a mesma estratégia que pause/continue
     pFaseAtual->limparEntidadesDinamicas();
-
-    // Lê blocos de entidade separados por '---'
-    std::vector<std::string> block;
-    while (std::getline(ifs, line)) {
-        if (line == "---") {
-            // process block
-            std::string type;
-            std::map<std::string, std::string> kv;
-            for (auto &l : block) {
-                std::istringstream iss(l);
-                std::string a, b;
-                if (!(iss >> a)) continue;
-                if (!(iss >> b)) {
-                    // line with single token might be the class name (e.g., "Jogador")
-                    type = a;
-                    continue;
-                }
-                kv[a] = b;
-            }
-
-            if (type == "Jogador") {
-                int id = 1;
-                if (kv.find("idJogador") != kv.end()) id = std::stoi(kv["idJogador"]);
-                Entidades::Personagens::Jogador* pj = (id == 2) ? pFaseAtual->getJogador2() : pFaseAtual->getJogador1();
-                if (pj) {
-                    // Prefer the exact sprite position if present (saved by Personagem::salvarDataBuffer)
-                    if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
-                        float x = std::stof(kv["spritePosX"]);
-                        float y = std::stof(kv["spritePosY"]);
-                        pj->setPosition({x, y});
-                    }
-                    else if (kv.find("posX") != kv.end() && kv.find("posY") != kv.end()) {
-                        float x = std::stof(kv["posX"]);
-                        float y = std::stof(kv["posY"]);
-                        pj->setPosition({x, y});
-                    }
-                    if (kv.find("pontos") != kv.end()) {
-                        pj->setPontos(std::stof(kv["pontos"]));
-                    }
-                    if (kv.find("vidas") != kv.end()) {
-                        pj->setVidas(std::stoi(kv["vidas"]));
-                    }
-                }
-            }
-            else {
-                // Delegate restoration of other entity types to the phase
-                pFaseAtual->restaurarEntidade(type, kv);
-            }
-
-            block.clear();
-        }
-        else {
-            if (!line.empty()) block.push_back(line);
-        }
-    }
+    aplicarSnapshotAFase(snapshot);
 
     return true;
+}
+
+void Jogo::aplicarSnapshotAFase(const std::string& snapshot)
+{
+    if (!pFaseAtual) return;
+
+    // Parse blocos (idêntico ao que está em pause/continue)
+    std::istringstream iss(snapshot);
+    std::string line;
+    std::vector<std::string> block;
+
+    while (std::getline(iss, line)) {
+        if (line == "---") {
+            if (!block.empty()) {
+                processarBlocoEntidade(block);
+            }
+            block.clear();
+        } else if (!line.empty()) {
+            block.push_back(line);
+        }
+    }
+    if (!block.empty()) {
+        processarBlocoEntidade(block);
+    }
+}
+
+void Jogo::processarBlocoEntidade(const std::vector<std::string>& block)
+{
+    if (!pFaseAtual) return;
+
+    std::string tipo;
+    std::map<std::string, std::string> kv;
+
+    for (const auto& l : block) {
+        std::istringstream iss(l);
+        std::string a, b;
+        if (!(iss >> a)) continue;
+        if (!(iss >> b)) {
+            tipo = a;
+            continue;
+        }
+        kv[a] = b;
+    }
+
+    if (tipo == "Jogador") {
+        int id = 1;
+        if (kv.find("idJogador") != kv.end()) id = std::stoi(kv["idJogador"]);
+        Entidades::Personagens::Jogador* pj = (id == 2) ? pFaseAtual->getJogador2() : pFaseAtual->getJogador1();
+        if (pj) {
+            if (kv.find("spritePosX") != kv.end() && kv.find("spritePosY") != kv.end()) {
+                float x = std::stof(kv["spritePosX"]);
+                float y = std::stof(kv["spritePosY"]);
+                pj->setPosition({x, y});
+            }
+            if (kv.find("pontos") != kv.end()) {
+                pj->setPontos(std::stof(kv["pontos"]));
+            }
+            if (kv.find("vidas") != kv.end()) {
+                pj->setVidas(std::stoi(kv["vidas"]));
+            }
+            if (kv.find("podePular") != kv.end()) {
+                pj->setPodePular(kv["podePular"] != "0");
+            }
+            if (kv.find("velX") != kv.end() && kv.find("velY") != kv.end()) {
+                // Restaurar velocidade se foi salva
+                float vx = std::stof(kv["velX"]);
+                float vy = std::stof(kv["velY"]);
+                pj->setVelocidade({vx, vy});
+            }
+        }
+    }
+    else if (tipo == "Plataforma") {
+        pFaseAtual->restaurarPlataforma(kv);
+    }
+    else if (tipo == "Trampolim") {
+        pFaseAtual->restaurarTrampolim(kv);
+    }
+    else if (tipo == "BolaDeFogo") {
+        pFaseAtual->restaurarBolaDeFogo(kv);
+    }
+    else if (tipo == "Vampiro") {
+        pFaseAtual->restaurarVampiro(kv);
+    }
+    else if (tipo == "Gosma") {
+        pFaseAtual->restaurarGosma(kv);
+    }
+    else if (tipo == "Dragao") {
+        pFaseAtual->restaurarDragao(kv);
+    }
 }
 
 void Jogo::executar()
@@ -245,6 +290,15 @@ void Jogo::executar()
 
                 if (pFaseAtual && pFaseAtual->getFaseConcluida())
                 {
+                    // Salva snapshot ANTES de descartar a fase (mesmo que com save finalizado)
+                    // Isso garante que posições atualizadas sejam salvas
+                    std::string snapshotFinal = pFaseAtual->salvarParaString();
+                    std::ofstream ofs("save_state.txt", std::ios::trunc);
+                    if (ofs.is_open()) {
+                        ofs << snapshotFinal;
+                        ofs.close();
+                    }
+
                     estadoAtual = EstadoJogo::NoMenu;
                     pGE->setOuvinte(&menu); // <--- TROCA O OUVINTE DE VOLTA PRO MENU
                     menu.resetInput();

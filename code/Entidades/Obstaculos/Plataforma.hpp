@@ -14,6 +14,7 @@ namespace Entidades
         private:
             // Substituido o Sprite pelo RectangleShape para permitir repetição
             sf::RectangleShape corpo;
+            std::string caminhoTextura;  // Armazena a textura para restauração
             
         public:
             Plataforma(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura);
