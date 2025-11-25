@@ -15,6 +15,7 @@ namespace Entidades
             bool ativo;
             bool pertenceAoJogador;
             int ownerId; // 0 = nenhum, 1 = jogador1, 2 = jogador2
+            BolaDeFogo();
 
         public:
             BolaDeFogo(sf::Vector2f pos, sf::Vector2f dir, float vel = 600.f, bool doJogador = false, int owner = 0);

@@ -30,6 +30,7 @@ namespace Entidades
             
             public:
                 Personagem(int vidas, sf::Vector2f pos);
+                Personagem();
                 virtual ~Personagem();
 
                 void perderVida(int dano = 1);

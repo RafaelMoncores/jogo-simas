@@ -23,6 +23,7 @@ namespace Fases
 
         public:
             FaseDois(Jogo* pJogo, bool doisJogadores);
+            FaseDois();
             ~FaseDois();
 
             const int maxChefoes;

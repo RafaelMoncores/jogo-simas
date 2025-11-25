@@ -21,6 +21,7 @@ namespace Fases
 
         public:
             FaseUm(Jogo* pJogo, bool doisJogadores);
+            FaseUm();
             ~FaseUm();
 
             const int maxInimMedios;

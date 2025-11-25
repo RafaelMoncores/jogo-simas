@@ -36,6 +36,12 @@ namespace Fases
         }
     }
 
+    FaseDois::FaseDois(): 
+        maxChefoes(1)
+    {
+
+    }
+
     FaseDois::~FaseDois()
     {
     }

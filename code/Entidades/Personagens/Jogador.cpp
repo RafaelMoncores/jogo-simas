@@ -53,6 +53,12 @@ namespace Entidades
             sprite->setPosition(posInicial);
         }
 
+        Jogador::Jogador():
+            FORCA_PULO(420.0f),
+            MULTIPLICADOR_PULO_CURTO(3.0f),
+            COOLDOWN_ATAQUE(0.3f)
+        {}
+
         Jogador::~Jogador()
         {
         }

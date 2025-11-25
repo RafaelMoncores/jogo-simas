@@ -68,6 +68,7 @@ namespace Fases
 
         public:
             Fase(Jogo* pJogo, int num, bool doisJogadores);
+            Fase() {};
             virtual ~Fase();
 
             void inicializar();

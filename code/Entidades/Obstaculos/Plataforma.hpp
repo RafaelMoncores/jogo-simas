@@ -18,6 +18,7 @@ namespace Entidades
             
         public:
             Plataforma(sf::Vector2f pos, sf::Vector2f size, std::string caminhoTextura);
+            Plataforma(){};
             ~Plataforma();
 
             virtual void executar(float delta) override;
