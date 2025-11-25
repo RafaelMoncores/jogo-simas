@@ -42,6 +42,8 @@ void Jogo::inicializar()
     pGE->setOuvinte(&menu);
 
     // Leitura e parse do arquivo de ranking (formato texto simples)
+    // ref:https://stackoverflow.com/questions/46719183/c-using-ifstream-to-read-file
+    // ref:https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
     std::ifstream ifs("ranking.txt");
     if (ifs.is_open()) {
         std::string line;

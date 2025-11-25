@@ -8,9 +8,9 @@ namespace Gerenciadores {
 
     class GerenciadorRecursos {
     private:
-        
         static GerenciadorRecursos* pInstancia;
         
+        // Cache: Mapa que associa o caminho do arquivo à textura carregada
         std::map<std::string, sf::Texture> mapaTexturas;
 
         GerenciadorRecursos() {}
@@ -23,23 +23,20 @@ namespace Gerenciadores {
             return pInstancia;
         }
 
+        // Método principal de acesso a assets
         sf::Texture& getTextura(const std::string& caminho) {
-            // 1. Verifica se já carregamos essa imagem antes
+            // Verifica se a textura já está em memória para evitar reload (Otimização)
             if (mapaTexturas.find(caminho) == mapaTexturas.end()) {
-                // 2. Se não achou, carrega do disco
                 sf::Texture tex;
                 if (!tex.loadFromFile(caminho)) {
                     std::cerr << "ERRO: Textura nao encontrada: " << caminho << std::endl;
-                    // Aqui entraria seu tratamento de exceção (Item 2)
                     throw std::runtime_error("Textura nao encontrada: " + caminho);
                 }
-                // 3. Salva no mapa para o futuro
+                // Armazena no mapa para usos futuros
                 mapaTexturas[caminho] = tex;
             }
 
-            // 4. Retorna a textura já carregada
             return mapaTexturas[caminho];
         }
     };
-
 }

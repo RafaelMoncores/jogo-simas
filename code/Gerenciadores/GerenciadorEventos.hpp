@@ -3,7 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include "GerenciadorGrafico.hpp"
 
-// Interface que Menu e Fase terão que assinar
+// Interface (Observer) que define quem pode responder a inputs
 class OuvinteEventos {
 public:
     virtual void tratarEvento(const sf::Event& evento) = 0;
@@ -18,7 +18,7 @@ namespace Gerenciadores {
     private:
         static GerenciadorEventos* pInstancia;
         GerenciadorGrafico* pGG;
-        OuvinteEventos* pOuvinteAtual; // Quem está recebendo os inputs agora?
+        OuvinteEventos* pOuvinteAtual; // Ponteiro para a tela ativa (Menu ou Fase)
 
         GerenciadorEventos();
 
@@ -26,7 +26,7 @@ namespace Gerenciadores {
         ~GerenciadorEventos();
         static GerenciadorEventos* getInstance();
 
-        // Define quem vai receber os cliques e teclas (Menu ou Fase)
+        // Troca o contexto de input (ex: ao sair do menu e entrar no jogo)
         void setOuvinte(OuvinteEventos* ouvinte);
 
         void processarEventos();

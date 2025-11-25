@@ -1,11 +1,8 @@
 #include "GerenciadorColisoes.hpp"
-
-// Inclusões necessárias para reconhecer os tipos completos
 #include "../Entidades/Personagens/Inimigo.hpp"
 #include "../Entidades/Personagens/Jogador.hpp"
 #include "../Entidades/Obstaculos/Obstaculo.hpp"
 #include "../Entidades/BolaDeFogo.hpp" 
-// Includes de inimigos específicos para pontuação
 #include "../Entidades/Personagens/Dragao.hpp"
 #include "../Entidades/Personagens/Gosma.hpp"
 #include "../Entidades/Personagens/Vampiro.hpp"
@@ -26,7 +23,7 @@ namespace Gerenciadores
         limpar();
     }
 
-    // --- Métodos de Inclusão STL ---
+    // --- Métodos de preenchimento das listas de física ---
     void GerenciadorColisoes::incluirInimigo(Entidades::Personagens::Inimigo* pi) {
         if (pi) LIs.push_back(pi); 
     }
@@ -50,6 +47,7 @@ namespace Gerenciadores
         pJog1 = nullptr;
     }
 
+    // Algoritmo AABB (Axis-Aligned Bounding Box) padrão do SFML
     const bool GerenciadorColisoes::verificarColisao(Entidades::Entidade* pe1, Entidades::Entidade* pe2) const {
         if (!pe1 || !pe2) return false;
         sf::FloatRect bounds1 = pe1->getBoundingBox();
@@ -58,14 +56,14 @@ namespace Gerenciadores
         return bounds1.findIntersection(bounds2).has_value();
     }
 
+    // Loop principal da física: reseta estados e verifica todas as interações
     void GerenciadorColisoes::executar(bool resetInimigos)
     {
         if (!pJog1) return;
 
-        // Sempre resetamos o estado de pulo do jogador atual
         pJog1->setPodePular(false);
 
-        // Reset apenas na primeira passagem por frame (quando solicitado).
+        // Otimização: reseta inimigos apenas uma vez por frame
         if (resetInimigos)
         {
             for (auto* inimigo : LIs) {
@@ -73,11 +71,8 @@ namespace Gerenciadores
             }
         }
 
-        // 1) Tratamento de colisões entre jogadores e obstáculos
         tratarColisoesJogsObstacs();
-        // 2) Tratamento de colisões entre jogadores e inimigos
         tratarColisoesJogsInimgs();
-        // 3) Tratamento de colisões envolvendo projéteis
         tratarColisoesJogsProjeteis();
     }
 
@@ -85,19 +80,24 @@ namespace Gerenciadores
     {
         for (auto* obstaculo : LOs) 
         {
+            // Se colidir, delega para o obstáculo decidir como bloquear o jogador (Visitor Pattern)
             if (verificarColisao(pJog1, obstaculo)) {
                 obstaculo->obstaculizar(pJog1);
             }
         }
     }
 
+    /*
+     * Referência Lógica: Detecção de colisão baseada em SAT (Separating Axis Theorem) simplificado
+     * para retângulos, calculando o "Overlap" (interseção) nos eixos X e Y.
+     */
     void GerenciadorColisoes::tratarColisoesJogsInimgs()
     {
         for (auto* pInim : LIs)
         {
             if (!pInim) continue;
 
-            // 1. Inimigo vs Obstáculos
+            // Física Inimigo vs Cenário (para eles não caírem do chão)
             for (auto* obstaculo : LOs)
             {
                 if (verificarColisao(pInim, obstaculo)) {
@@ -106,40 +106,32 @@ namespace Gerenciadores
                 }
             }
 
-            // 2. Jogador vs Inimigo
+            // Lógica de Combate: Jogador vs Inimigo
             if (verificarColisao(pJog1, pInim))
             {
                 sf::FloatRect boundsJogador = pJog1->getBoundingBox();
                 sf::FloatRect boundsInim = pInim->getBoundingBox();
 
-                float velJogadorY = pJog1->getVelocidade().y;
-                
-                // Centro Jogador
+                // Cálculos vetoriais para determinar o centro e distâncias
                 sf::Vector2f centroJogador(
                     boundsJogador.position.x + boundsJogador.size.x / 2.f, 
                     boundsJogador.position.y + boundsJogador.size.y / 2.f
                 );
-                
-                // Centro Inimigo
                 sf::Vector2f centroInimigo(
                     boundsInim.position.x + boundsInim.size.x / 2.f, 
                     boundsInim.position.y + boundsInim.size.y / 2.f
                 );
                 
                 sf::Vector2f distCentros(centroJogador.x - centroInimigo.x, centroJogador.y - centroInimigo.y);
-                
-                // Meias Larguras/Alturas
-                float somaMeiasLarguras = boundsJogador.size.x / 2.f + boundsInim.size.x / 2.f;
-                float somaMeiasAlturas = boundsJogador.size.y / 2.f + boundsInim.size.y / 2.f;
-                
-                float overlapX = somaMeiasLarguras - std::abs(distCentros.x);
-                float overlapY = somaMeiasAlturas - std::abs(distCentros.y);
+                float overlapX = (boundsJogador.size.x / 2.f + boundsInim.size.x / 2.f) - std::abs(distCentros.x);
+                float overlapY = (boundsJogador.size.y / 2.f + boundsInim.size.y / 2.f) - std::abs(distCentros.y);
 
-                // Lógica de "Pular na cabeça"
-                if (velJogadorY > 0 && overlapY < overlapX && distCentros.y < 0)
+                // Detecta se o jogador está caindo em cima do inimigo (Mecânica estilo Mario)
+                if (pJog1->getVelocidade().y > 0 && overlapY < overlapX && distCentros.y < 0)
                 {
                     pInim->perderVida(1);
 
+                    // Sistema de pontuação baseado em polimorfismo (RTTI)
                     if (pInim->getVidas() <= 0)
                     {
                         if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
@@ -147,11 +139,12 @@ namespace Gerenciadores
                         else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
                     }
 
-                    pJog1->fazerBounce(250.0f);
-                    pJog1->colidir(pInim, boundsInim);
+                    pJog1->fazerBounce(250.0f); // Impulso para cima
+                    pJog1->colidir(pInim, boundsInim); // Resolve a física para não atravessar
                 }
                 else
                 {
+                    // Colisão lateral ou inferior causa dano ao jogador
                     pInim->danificar(pJog1);
                 }
             }
@@ -164,26 +157,21 @@ namespace Gerenciadores
         {
             if (!pFogo || !pFogo->getAtivo()) continue;
 
+            // Mecânica de Rebater (Parry): Se atacar o projétil inimigo, ele vira seu
             if (!pFogo->getPertenceAoJogador() && pJog1->getEstaAtacando())
             {
                 sf::FloatRect boundsFogo = pFogo->getBoundingBox();
                 sf::FloatRect boundsAtaque = pJog1->getHitboxAtaque();
                 
-                // Se o jogador rebateu o projétil inimigo com seu ataque, inverter
-                // a direção e marcar como pertencente ao jogador.
                 if (boundsFogo.findIntersection(boundsAtaque).has_value())
                 {
                     pFogo->rebater();
-                    // marca que o projétil agora pertence ao jogador que rebateu
-                    if (pJog1) {
-                        // assume-se que o gerenciador foi configurado para o jogador
-                        // atual (setJogador) antes desta chamada
-                        pFogo->setOwnerId(pJog1->getId());
-                    }
+                    if (pJog1) pFogo->setOwnerId(pJog1->getId());
                     continue;
                 }
             }
 
+            // Colisão Jogador vs Projétil Inimigo
             if (!pFogo->getPertenceAoJogador())
             {
                 if (verificarColisao(pJog1, pFogo))
@@ -191,9 +179,9 @@ namespace Gerenciadores
                     pFogo->colidirComJogador(pJog1);
                 }
             }
+            // Colisão Projétil Jogador vs Inimigos
             else
             {
-                // Projetil pertence ao jogador: checar colisão com inimigos
                 sf::FloatRect boundsFogo = pFogo->getBoundingBox();
                 for (auto* pInim : LIs)
                 {
@@ -201,31 +189,24 @@ namespace Gerenciadores
                     sf::FloatRect boundsInim = pInim->getBoundingBox();
                     if (!boundsInim.findIntersection(boundsFogo).has_value()) continue;
 
-                    // Acertou o inimigo: aplica dano e desativa o projetil
                     pInim->perderVida(pFogo->getDano());
-                    pFogo->setAtivo(false);
+                    pFogo->setAtivo(false); // Destrói o projétil
 
-                    // Caso especial: se o inimigo é um Dragao e foi atingido por
-                    // um projetil do jogador, evitar que ele fique embutido em
-                    // uma plataforma reposicionando-o imediatamente ao spawn.
+                    // Correção de Bug: Evita que Dragão fique preso em plataforma ao ser atingido
                     if (auto* pDrag = dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
                     {
                         pDrag->setPosition(pDrag->getPosInicial());
                         pDrag->aplicarRepel({0.f, 0.f});
                     }
 
-                    if (pInim->getVidas() <= 0)
+                    // Pontuação por morte via projétil
+                    if (pInim->getVidas() <= 0 && pJog1 && pFogo->getOwnerId() == pJog1->getId())
                     {
-                        // Só credita pontos ao jogador dono do projetil
-                        int owner = pFogo->getOwnerId();
-                        if (pJog1 && owner == pJog1->getId()) {
-                            if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
-                            else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
-                            else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
-                        }
+                        if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
+                        else if (dynamic_cast<Entidades::Personagens::Vampiro*>(pInim)) pJog1->addPontos(300);
+                        else if (dynamic_cast<Entidades::Personagens::Dragao*>(pInim)) pJog1->addPontos(500);
                     }
-
-                    break; // projetil consumido
+                    break; 
                 }
             }
         }

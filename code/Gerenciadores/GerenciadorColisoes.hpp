@@ -5,7 +5,7 @@
 #include <set>
 #include <cmath> 
 
-// Forward Declarations
+// Forward Declarations para evitar dependências circulares no header
 namespace Entidades {
     class Entidade;
     class BolaDeFogo;
@@ -23,17 +23,17 @@ namespace Gerenciadores
     class GerenciadorColisoes
     {
     private:
-        // Atributos seguindo o Modelo UML (STL)
+        // Estruturas STL distintas para cada tipo de entidade
         std::vector<Entidades::Personagens::Inimigo*> LIs;
         std::list<Entidades::Obstaculos::Obstaculo*> LOs;
         std::set<Entidades::BolaDeFogo*> LPs; 
 
         Entidades::Personagens::Jogador* pJog1;
 
-        // Método auxiliar
+        // Verifica interseção de retângulos (AABB)
         const bool verificarColisao(Entidades::Entidade* pe1, Entidades::Entidade* pe2) const;
 
-        // Métodos de tratamento divididos
+        // Separação lógica dos tipos de colisão
         void tratarColisoesJogsObstacs();
         void tratarColisoesJogsInimgs();
         void tratarColisoesJogsProjeteis(); 
@@ -42,7 +42,7 @@ namespace Gerenciadores
         GerenciadorColisoes();
         ~GerenciadorColisoes();
 
-        // Métodos para popular as listas STL
+        // Métodos para registrar entidades na simulação física
         void incluirInimigo(Entidades::Personagens::Inimigo* pi);
         void incluirObstaculo(Entidades::Obstaculos::Obstaculo* po);
         void incluirProjetil(Entidades::BolaDeFogo* pj);

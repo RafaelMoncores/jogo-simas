@@ -11,43 +11,43 @@ namespace Gerenciadores{
     class GerenciadorGrafico
     {
         private:
-            // Instância estática para o Singleton
+            // Padrão Singleton: única instância compartilhada por todo o jogo
             static GerenciadorGrafico* pInstancia;
             sf::RenderWindow window;
-
             sf::View camera;
 
-            // Construtor privado para impedir instanciação externa
+            // Construtor privado evita que outras classes criem novas janelas
             GerenciadorGrafico();
 
         public:
             ~GerenciadorGrafico();
 
-            // Método de acesso à instância
+            // Ponto de acesso global à instância
             static GerenciadorGrafico* getInstance();
 
-            // Prevenção de cópia
+            // Remove construtor de cópia e atribuição para garantir unicidade
             GerenciadorGrafico(const GerenciadorGrafico&) = delete;
             GerenciadorGrafico& operator=(const GerenciadorGrafico&) = delete;
 
-            // Métodos de controle da janela
+            // Wrappers para controle da janela SFML
             bool isWindowOpen() const;
             void fecharWindow();
+            
+            // Retorna um optional (novidade SFML 3) para eventos
             std::optional<sf::Event> pollEvent();
 
             sf::RenderWindow& getWindow();
             sf::Vector2f mapPixelToCoords(sf::Vector2i pixelPos);
 
-            // Métodos de renderização
+            // Wrappers de renderização para desacoplar a lógica do jogo da biblioteca gráfica
             void limpar(sf::Color cor = sf::Color::Black);
             void desenhar(const sf::Drawable& desenhavel);
             void exibir();
             void desenha(Entidades::Ente* pE);
 
-            // Configura a câmera para mostrar uma região específica do mundo
+            // Controle de Câmera (View)
             void setViewBounds(float left, float top, float width, float height);
             void aplicarView();
-            // Reseta a câmera para a padrão (para o Menu/UI)
             void resetarView();
     };
 }

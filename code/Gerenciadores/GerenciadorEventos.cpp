@@ -26,17 +26,17 @@ namespace Gerenciadores {
         pOuvinteAtual = ouvinte;
     }
 
+    // Loop de polling de eventos centralizado
     void GerenciadorEventos::processarEventos() {
-        // Usa o pollEvent do GerenciadorGrafico
         while (auto optEvent = pGG->pollEvent()) {
             const auto& evento = *optEvent;
 
-            // Tratamento Global (Fechar Janela)
+            // Tratamento prioritário: Fechar janela (funciona em qualquer tela)
             if (evento.is<sf::Event::Closed>()) {
                 pGG->fecharWindow();
             }
 
-            // Repassa para o ouvinte atual (Menu ou Fase)
+            // Delegação: Repassa o evento específico para a tela atual lidar
             if (pOuvinteAtual) {
                 pOuvinteAtual->tratarEvento(evento);
             }
