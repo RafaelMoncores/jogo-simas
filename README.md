@@ -1,5 +1,3 @@
-Aqui está o arquivo README.md completo e unificado. Basta copiar o bloco abaixo inteiro e salvar.
-
 Markdown
 
 # Jogo de Plataforma - C++ e SFML
