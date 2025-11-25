@@ -18,6 +18,7 @@ namespace Entidades
 
             public:
                 Inimigo(int vidas, sf::Vector2f pos, Jogador* pJ1, Jogador* pJ2);
+                Inimigo(){};
                 virtual ~Inimigo();
 
                 virtual void danificar(Personagem* pOutro) = 0;

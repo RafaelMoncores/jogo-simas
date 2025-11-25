@@ -37,6 +37,12 @@ namespace Fases
         }
     }
 
+    FaseUm::FaseUm(): 
+        maxInimMedios(10)
+    {
+
+    }
+
     FaseUm::~FaseUm()
     {
     }

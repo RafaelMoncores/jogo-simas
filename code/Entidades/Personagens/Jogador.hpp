@@ -31,6 +31,7 @@ namespace Entidades
 
             public:
                 Jogador(sf::Vector2f pos, int id);
+                Jogador();
                 ~Jogador();
 
                 bool getEstaAtacando() const;

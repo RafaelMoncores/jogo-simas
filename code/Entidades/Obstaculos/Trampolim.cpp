@@ -32,6 +32,12 @@ namespace Entidades
             corpo.setTextureRect(sf::IntRect({0, 0}, {(int)size.x, (int)size.y}));
         }
 
+        Trampolim::Trampolim(float forca = 0):
+            FORCA_REBOTE(forca)
+        {
+
+        }
+
         Trampolim::~Trampolim() {}
 
         void Trampolim::executar(float delta) 

@@ -29,6 +29,7 @@ namespace Entidades
 
         public:
             Dragao(sf::Vector2f pos, Jogador* pJog1, Jogador* pJog2, Listas::ListaEntidades* pLista);
+            Dragao(){};
             ~Dragao();
 
             virtual void executar(float delta) override;

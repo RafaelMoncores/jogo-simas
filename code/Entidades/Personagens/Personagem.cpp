@@ -20,6 +20,12 @@ namespace Entidades
         {
         }
 
+        Personagem::Personagem():
+            VELOCIDADE_MAXIMA_LATERAL(350.0f),
+            ACELERACAO_LATERAL(900.0f),
+            FRICCAO_LATERAL(1200.0f)
+        {}
+
         Personagem::~Personagem()
         {
         }
