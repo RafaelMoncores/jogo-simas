@@ -1,21 +1,22 @@
 #include "Jogo.hpp"
 #include <iostream>
-#include <stdexcept> // Necessário para std::exception
+#include <stdexcept>
 
 int main()
 {
+    // Garante que qualquer falha crítica no jogo seja capturada antes de fechar o programa
     try 
     {
-        // Tenta rodar o jogo
         Jogo jogo_la_em_simao;
         jogo_la_em_simao.executar();
     }
+    // Tratamento de exceções padrão do C++ (std::exception e derivadas)
     catch (const std::exception& e)
     {
-        // Se algo der errado (imagem faltando, erro de lógica), cai aqui
         std::cerr << "[ERRO CRITICO] O jogo travou: " << e.what() << std::endl;
-        return 1; // Retorna código de erro para o SO
+        return 1; 
     }
+    // Tratamento genérico para exceções não padronizadas
     catch (...)
     {
         std::cerr << "[ERRO DESCONHECIDO] Ocorreu um erro nao identificado." << std::endl;
