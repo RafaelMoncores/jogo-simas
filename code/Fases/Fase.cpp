@@ -865,8 +865,7 @@ namespace Fases
                     inputIniciaisText->setString("Iniciais (3): " + iniciais);
                 }
             }
-            // Também aceitamos Enter via KeyPressed (algumas plataformas/teclados
-            // podem não enviar TextEntered para a tecla Enter em certos contextos)
+            //aceitando Enter via KeyPressed
             else if (const auto* kp = evento.getIf<sf::Event::KeyPressed>())
             {
                 if (kp->code == sf::Keyboard::Key::Enter)

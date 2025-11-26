@@ -3,12 +3,10 @@
 #include <SFML/Window/Event.hpp>
 #include "GerenciadorGrafico.hpp"
 
-// Interface (Observer) que define quem pode responder a inputs
+// Interface que define quem pode responder a inputs
 class OuvinteEventos {
 public:
-    virtual void tratarEvento(const sf::Event& evento) = 0;
-    virtual void tratarEvento(const sf::Event& evento, Gerenciadores::GerenciadorGrafico* pGG) {}
-    virtual void tratarEvento() {}
+    virtual void tratarEvento(const sf::Event& evento) = 0; // Processa eventos da fila da SFML (ex: KeyPressed, KeyReleased, Closed).
     virtual ~OuvinteEventos() {}
 };
 
