@@ -189,18 +189,18 @@ void Jogo::processarBlocoEntidade(const std::vector<std::string>& block)
 // Loop principal do jogo (Pattern: Game Loop)
 void Jogo::executar()
 {
-    while (pGG->isWindowOpen())
+    while (pGG->isWindowOpen()) //enquanto a janela estiver aberta
     {
-        pGG->limpar(sf::Color::Black);
-        float delta = relogio.restart().asSeconds();
+        pGG->limpar(sf::Color::Black); //limpa a tela antes de desenhar
+        float delta = relogio.restart().asSeconds(); //reseta o tempo como segundos
 
         switch (estadoAtual)
         {
             // --- Estado: Menu Principal ---
             case EstadoJogo::NoMenu:
             {
-                pGE->setOuvinte(&menu);
-                pGE->processarEventos(); // Processa input para o menu
+                pGE->setOuvinte(&menu); //seta o ouvinte dos eventos como o Menu
+                pGE->processarEventos(); // Processa input para o Menu
                 
                 int acaoMenu = menu.executar(rankingFase1, rankingFase2);
                 Fases::Fase* proximaFase = nullptr;
@@ -223,7 +223,7 @@ void Jogo::executar()
                         break;
                 }
 
-                // Transição de estado: Menu -> Fase
+                // Transição de estado: 
                 if (proximaFase != nullptr)
                 {
                     if (pFaseAtual) delete pFaseAtual;
@@ -286,7 +286,7 @@ void Jogo::executar()
                         std::cerr << "Aviso: nao conseguiu carregar a fonte de pause" << std::endl;
                     }
                 }
-
+                //centro independente to tamanho da tela
                 float centerX = ws.x / 2.f;
                 float centerY = ws.y / 2.f;
 

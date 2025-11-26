@@ -85,7 +85,7 @@ namespace Estados
         float w = static_cast<float>(windowSize.x);
         float h = static_cast<float>(windowSize.y);
 
-        // --- INÍCIO DA MUDANÇA ---
+        
         texts.clear();
         
         // 1. ADICIONA O TÍTULO FIXO (Valen)
@@ -93,7 +93,7 @@ namespace Estados
         sf::Text titulo(font, "Valen", fontSizeTitle);
         centralizarTexto(titulo, w / 2.0f, h * 0.14f);
         texts.push_back(titulo);
-        // --- FIM DA MUDANÇA ---
+        
 
 
         options = {"Level 1", "Level 2", "Back"};
@@ -109,7 +109,7 @@ namespace Estados
             0.61f  // Posição do "Levels"
         };
 
-        // texts.clear() foi movido
+        
         texts.reserve(options.size() + 1); // +1 para o título
         
         for (std::size_t i = 0; i < options.size(); ++i) {
@@ -137,7 +137,7 @@ namespace Estados
         if (!texture.loadFromFile("tileSets/menu_ranking.png")) {
             std::cout << "Erro: nao foi possivel carregar imagem menu_ranking.png\n" << std::endl;
         } 
-        bg.emplace(texture);
+        bg.emplace(texture); //constroi o sprite no vetor
         sf::Vector2u texSize = texture.getSize();
         bg->setScale({w / texSize.x, h / texSize.y});
 
@@ -211,25 +211,25 @@ namespace Estados
         float w = static_cast<float>(windowSize.x);
         float h = static_cast<float>(windowSize.y);
 
-        // --- INÍCIO DA MUDANÇA ---
-        texts.clear();
+        
+        texts.clear();//limpa os textos do menu principal
         
         // 1. ADICIONA O TÍTULO FIXO (Valen)
         unsigned int fontSizeTitle = static_cast<unsigned int>(h * 0.06f); 
         sf::Text titulo(font, "Valen", fontSizeTitle);
         centralizarTexto(titulo, w / 2.0f, h * 0.14f);
         texts.push_back(titulo);
-        // --- FIM DA MUDANÇA ---
+        
 
         options = {"1 player", "2 players", "Voltar"};
         
         // Aumentei sizes para 4, o índice 0 é o título
-        unsigned int fontSizePlayer = static_cast<unsigned int>(h * 0.018f); 
-        unsigned int fontSizeItem = static_cast<unsigned int>(h * 0.022f);
+        unsigned int fontSizePlayer = static_cast<unsigned int>(h * 0.018f); //tamanho da fonte do texto ocupa 1,8% da altura total da tela
+        unsigned int fontSizeItem = static_cast<unsigned int>(h * 0.022f); //back
         sizes = {fontSizeTitle, fontSizePlayer, fontSizePlayer, fontSizeItem}; // Título no índice 0
 
         // Usa os mesmos slots das placas pequenas (1, 2 e 3)
-        std::vector<float> y_ratios = {
+        std::vector<float> y_ratios = { //proporcoes (telas diferentes)
             0.35f, 
             0.48f, 
             0.61f  
@@ -237,7 +237,7 @@ namespace Estados
 
         texts.reserve(options.size() + 1); // +1 para o título
         
-        for (std::size_t i = 0; i < options.size(); ++i) {
+        for (std::size_t i = 0; i < options.size(); ++i) { //alterar de opcao com W e S
             texts.emplace_back(font);
             texts[i + 1].setString(options[i]); // Pula o índice 0 (título)
             texts[i + 1].setCharacterSize(sizes[i + 1]);
@@ -255,24 +255,24 @@ namespace Estados
 
     int Menu::executar(const std::vector<RankingEntry>& ranking1, const std::vector<RankingEntry>& ranking2)
     {
-        sf::Vector2u windowSize = pGG->getWindow().getSize();
-        static sf::Vector2u tamanhoAntigo = windowSize; 
+        sf::Vector2u windowSize = pGG->getWindow().getSize(); //pega o tamanho da janela e coloca em vetor de coordenadas unsigned int
+        static sf::Vector2u tamanhoAntigo = windowSize; //auxiliar para tamanho de telas distintas
 
-        if (windowSize != tamanhoAntigo)
+        if (windowSize != tamanhoAntigo) //se o tamanho da janela alterou
         {
-            tamanhoAntigo = windowSize;
-            switch (estadoAtualMenu) {
+            tamanhoAntigo = windowSize; //reajusta a auxiliar
+            switch (estadoAtualMenu) { //verifica em que estado está o Menu
                 case EstadoMenu::MenuPrincipal: set_values_principal(); break;
                 case EstadoMenu::MenuNiveis:    set_values_niveis(); break;
                 case EstadoMenu::MenuRanking:   set_values_ranking(ranking1, ranking2); break;
-                case EstadoMenu::MenuModoJogo:  set_values_modo_jogo(); break;
+                case EstadoMenu::MenuModoJogo:  set_values_modo_jogo(); break; //1 player ou 2 players
             }
         }
 
         pos_mouse = sf::Mouse::getPosition(pGG->getWindow());
         mouse_coord = pGG->mapPixelToCoords(pos_mouse);
 
-        if (theselect) {
+        if (theselect) { //debounce do enter
             theselect = false;
 
             switch (estadoAtualMenu)
@@ -281,11 +281,11 @@ namespace Estados
                     switch (pos) {
                         case 1: // Play
                             nivelSelecionado = 1; 
-                            estadoAtualMenu = EstadoMenu::MenuModoJogo;
+                            estadoAtualMenu = EstadoMenu::MenuModoJogo; //1 ou 2 players
                             set_values_modo_jogo();
                             return -1;
-                                case 2: // Load
-                                    return 30; // Special code: request to load saved game
+                        case 2: // Load
+                            return 30; // Special code: request to load saved game
                         case 3: // Levels
                             estadoAtualMenu = EstadoMenu::MenuNiveis;
                             set_values_niveis();
@@ -301,7 +301,7 @@ namespace Estados
                 
                 case EstadoMenu::MenuNiveis:
                     switch (pos) {
-                        case 1: // Level 1 (Corrigido para índice 1)
+                        case 1: // Level 1 
                             nivelSelecionado = 1;
                             estadoAtualMenu = EstadoMenu::MenuModoJogo;
                             set_values_modo_jogo();
@@ -320,7 +320,7 @@ namespace Estados
 
                 case EstadoMenu::MenuModoJogo:
                     switch (pos) {
-                        case 1: // 1 Jogador (Corrigido para índice 1)
+                        case 1: // 1 Jogador
                             if (nivelSelecionado == 1) return 10;
                             if (nivelSelecionado == 2) return 20;
                             break;

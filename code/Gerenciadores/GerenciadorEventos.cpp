@@ -28,7 +28,9 @@ namespace Gerenciadores {
 
     // Loop de polling de eventos centralizado
     void GerenciadorEventos::processarEventos() {
+        //Pede ao Gerenciador Gráfico para verificar se tem eventos na fila da janela
         while (auto optEvent = pGG->pollEvent()) {
+            //Extrai o evento de dentro do "optional"
             const auto& evento = *optEvent;
 
             // Tratamento prioritário: Fechar janela (funciona em qualquer tela)

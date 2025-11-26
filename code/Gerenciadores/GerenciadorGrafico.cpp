@@ -30,7 +30,7 @@ namespace Gerenciadores{
     // Wrappers simples para encapsular métodos da janela
     bool GerenciadorGrafico::isWindowOpen() const
     {
-        return window.isOpen();
+        return window.isOpen(); //retorna true or false
     }
 
     void GerenciadorGrafico::fecharWindow()
@@ -61,7 +61,7 @@ namespace Gerenciadores{
     
     void GerenciadorGrafico::limpar(sf::Color cor)
     {
-        window.clear(cor);
+        window.clear(cor); //com a janela já criada, limpa e seta uma cor sólida antes de desenhar algo
     }
 
     void GerenciadorGrafico::desenhar(const sf::Drawable& desenhavel)

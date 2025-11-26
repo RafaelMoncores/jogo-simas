@@ -87,10 +87,6 @@ namespace Gerenciadores
         }
     }
 
-    /*
-     * Referência Lógica: Detecção de colisão baseada em SAT (Separating Axis Theorem) simplificado
-     * para retângulos, calculando o "Overlap" (interseção) nos eixos X e Y.
-     */
     void GerenciadorColisoes::tratarColisoesJogsInimgs()
     {
         for (auto* pInim : LIs)
@@ -131,7 +127,7 @@ namespace Gerenciadores
                 {
                     pInim->perderVida(1);
 
-                    // Sistema de pontuação baseado em polimorfismo (RTTI)
+                    // Sistema de pontuação 
                     if (pInim->getVidas() <= 0)
                     {
                         if (dynamic_cast<Entidades::Personagens::Gosma*>(pInim)) pJog1->addPontos(100);
@@ -192,7 +188,7 @@ namespace Gerenciadores
                     pInim->perderVida(pFogo->getDano());
                     pFogo->setAtivo(false); // Destrói o projétil
 
-                    // Correção de Bug: Evita que Dragão fique preso em plataforma ao ser atingido
+                    //Evita que Dragão fique preso em plataforma ao ser atingido
                     if (auto* pDrag = dynamic_cast<Entidades::Personagens::Dragao*>(pInim))
                     {
                         pDrag->setPosition(pDrag->getPosInicial());
